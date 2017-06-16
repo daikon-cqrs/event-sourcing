@@ -1,0 +1,19 @@
+# composer
+composer.phar
+/vendor/
+
+# testing artefacts
+build/
+
+# general os and editors related stuff
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+*.tmp
+*.bak
+*.swp
+*~.nib
+nbproject/
+*.tmproj
+.idea
