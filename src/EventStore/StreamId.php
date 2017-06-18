@@ -58,7 +58,7 @@ class StreamId implements ValueObjectInterface
      */
     public function __toString(): string
     {
-        return $this->identifier;
+        return $this->identifier ?? '';
     }
 
     /**

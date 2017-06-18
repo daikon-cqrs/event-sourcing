@@ -61,7 +61,7 @@ class UnitOfWork implements UnitOfWorkInterface
         if ($this->trackedCommitStreams->has((string)$streamId)) {
             $stream = $this->trackedCommitStreams->get((string)$streamId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->remove($stream);
-        } else if ($tailRevision->isInitial()) {
+        } elseif ($tailRevision->isInitial()) {
             $stream = $this->streamImplementor::fromStreamId($streamId);
         } else {
             throw new \Exception("Existing aggregate-roots must be checked out before they may be comitted.");

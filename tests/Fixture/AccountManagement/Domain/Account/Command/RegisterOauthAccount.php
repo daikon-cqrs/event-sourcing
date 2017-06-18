@@ -83,8 +83,8 @@ final class RegisterOauthAccount extends Command
         Text $tokenId,
         Text $service,
         AccessRole $role,
-        Timestamp $expiresAt)
-    {
+        Timestamp $expiresAt
+    ) {
         parent::__construct($aggregateId);
         $this->tokenId = $tokenId;
         $this->service = $service;
