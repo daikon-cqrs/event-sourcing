@@ -5,8 +5,18 @@ namespace Accordia\Cqrs\Aggregate;
 use Assert\Assertion;
 use Accordia\Entity\ValueObject\ValueObjectInterface;
 
-final class Revision implements ValueObjectInterface
+final class AggregateRevision implements ValueObjectInterface
 {
+    /**
+     * @var int
+     */
+    private const INITIAL = 1;
+
+    /**
+     * @var int
+     */
+    private const NONE = 0;
+
     /**
      * @var int
      */
@@ -14,7 +24,7 @@ final class Revision implements ValueObjectInterface
 
     /**
      * @param int $revision
-     * @return Revision
+     * @return AggregateRevision
      */
     public static function fromNative($revision): ValueObjectInterface
     {
@@ -22,11 +32,11 @@ final class Revision implements ValueObjectInterface
     }
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
     public static function makeEmpty(): ValueObjectInterface
     {
-        return new static(0);
+        return new static(self::NONE);
     }
 
     /**
@@ -38,9 +48,9 @@ final class Revision implements ValueObjectInterface
     }
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function increment(): Revision
+    public function increment(): AggregateRevision
     {
         $copy = clone $this;
         $copy->revision++;
@@ -62,7 +72,7 @@ final class Revision implements ValueObjectInterface
      */
     public function isEmpty(): bool
     {
-        return $this->revision === 0;
+        return $this->revision === self::NONE;
     }
 
     /**
@@ -70,33 +80,33 @@ final class Revision implements ValueObjectInterface
      */
     public function isInitial(): bool
     {
-        return $this->revision === 1;
+        return $this->revision === self::INITIAL;
     }
 
     /**
-     * @param Revision $from
-     * @param Revision $to
+     * @param AggregateRevision $from
+     * @param AggregateRevision $to
      * @return bool
      */
-    public function isWithinRange(Revision $from, Revision $to)
+    public function isWithinRange(AggregateRevision $from, AggregateRevision $to)
     {
         return $this->isGreaterThanOrEqual($from) && $this->isLessThanOrEqual($to);
     }
 
     /**
-     * @param Revision $revision
+     * @param AggregateRevision $revision
      * @return bool
      */
-    public function isGreaterThanOrEqual(Revision $revision)
+    public function isGreaterThanOrEqual(AggregateRevision $revision)
     {
         return $this->revision >= $revision->toNative();
     }
 
     /**
-     * @param Revision $revision
+     * @param AggregateRevision $revision
      * @return bool
      */
-    public function isLessThanOrEqual(Revision $revision)
+    public function isLessThanOrEqual(AggregateRevision $revision)
     {
         return $this->revision <= $revision->toNative();
     }

@@ -5,7 +5,7 @@ namespace Accordia\Tests\Cqrs\Fixture;
 use Accordia\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Accordia\MessageBus\EnvelopeInterface;
 
-class LazyHandler implements MessageHandlerInterface
+final class LazyHandler implements MessageHandlerInterface
 {
     /**
      * @var callable

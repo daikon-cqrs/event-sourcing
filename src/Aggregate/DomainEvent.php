@@ -11,7 +11,7 @@ abstract class DomainEvent implements DomainEventInterface
     private $aggregateId;
 
     /**
-     * @var \Accordia\Cqrs\Aggregate\Revision
+     * @var \Accordia\Cqrs\Aggregate\AggregateRevision
      * @buzz::fromArray->fromNative
      */
     private $aggregateRevision;
@@ -25,18 +25,18 @@ abstract class DomainEvent implements DomainEventInterface
     }
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getAggregateRevision(): Revision
+    public function getAggregateRevision(): AggregateRevision
     {
         return $this->aggregateRevision;
     }
 
     /**
-     * @param Revision $aggregateRevision
+     * @param AggregateRevision $aggregateRevision
      * @return DomainEventInterface
      */
-    public function withAggregateRevision(Revision $aggregateRevision): DomainEventInterface
+    public function withAggregateRevision(AggregateRevision $aggregateRevision): DomainEventInterface
     {
         $copy = clone $this;
         $copy->aggregateRevision = $aggregateRevision;
@@ -45,11 +45,11 @@ abstract class DomainEvent implements DomainEventInterface
 
     /**
      * @param AggregateIdInterface $aggregateId
-     * @param Revision|null $aggregateRevision
+     * @param AggregateRevision|null $aggregateRevision
      */
-    protected function __construct(AggregateIdInterface $aggregateId, Revision $aggregateRevision = null)
+    protected function __construct(AggregateIdInterface $aggregateId, AggregateRevision $aggregateRevision = null)
     {
         $this->aggregateId = $aggregateId;
-        $this->aggregateRevision = $aggregateRevision ?? Revision::makeEmpty();
+        $this->aggregateRevision = $aggregateRevision ?? AggregateRevision::makeEmpty();
     }
 }

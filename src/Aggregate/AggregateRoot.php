@@ -5,7 +5,12 @@ namespace Accordia\Cqrs\Aggregate;
 abstract class AggregateRoot implements AggregateRootInterface
 {
     /**
-     * @var Revision
+     * @var AggregateIdInterface
+     */
+    private $identifier;
+
+    /**
+     * @var AggregateRevision
      */
     private $revision;
 
@@ -21,16 +26,24 @@ abstract class AggregateRoot implements AggregateRootInterface
     public static function reconstituteFromHistory(DomainEventList $history): AggregateRootInterface
     {
         $aggRoot = new static;
-        foreach ($history as $passedEventHappened) {
-            $aggRoot = $aggRoot->reflectThat($passedEventHappened, false);
+        foreach ($history as $eventOccured) {
+            $aggRoot = $aggRoot->reflectThat($eventOccured, false);
         }
         return $aggRoot;
     }
 
     /**
-     * @return Revision
+     * @return AggregateIdInterface
      */
-    public function getRevision(): Revision
+    public function getIdentifier(): AggregateIdInterface
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * @return AggregateRevision
+     */
+    public function getRevision(): AggregateRevision
     {
         return $this->revision;
     }
@@ -49,31 +62,44 @@ abstract class AggregateRoot implements AggregateRootInterface
     public function markClean(): AggregateRootInterface
     {
         $aggRoot = clone $this;
-        $aggRoot->trackedEvents = new DomainEventList;
+        $aggRoot->trackedEvents = DomainEventList::makeEmpty();
         return $aggRoot;
     }
 
-    protected function __construct()
+    /**
+     * @param AggregateIdInterface $aggregateId
+     */
+    protected function __construct(AggregateIdInterface $aggregateId)
     {
-        $this->revision = Revision::makeEmpty();
-        $this->trackedEvents = new DomainEventList;
+        $this->identifier = $aggregateId;
+        $this->revision = AggregateRevision::makeEmpty();
+        $this->trackedEvents = DomainEventList::makeEmpty();
     }
 
     /**
-     * @param DomainEventInterface $somethingHappened
+     * @param DomainEventInterface $eventOccured
      * @param bool $track
      * @return AggregateRoot
      */
-    protected function reflectThat(DomainEventInterface $somethingHappened, bool $track = true): self
+    protected function reflectThat(DomainEventInterface $eventOccured, bool $track = true): self
     {
         $aggRoot = clone $this;
-        $aggRoot->invokeEventHandler($somethingHappened);
-        $aggRoot->revision = $this->revision->increment();
         if ($track) {
-            $aggRoot->trackedEvents = $this->trackedEvents->push(
-                $somethingHappened->withAggregateRevision($aggRoot->getRevision())
-            );
+            $aggRoot->revision = $aggRoot->revision->increment();
+            $eventOccured = $eventOccured->withAggregateRevision($aggRoot->revision);
+            $aggRoot->trackedEvents = $aggRoot->trackedEvents->push($eventOccured);
+        } else {
+            $expectedAggregateRevision = $aggRoot->revision->increment();
+            if (!$expectedAggregateRevision->equals($eventOccured->getAggregateRevision())) {
+                throw new \Exception(sprintf(
+                    "Given event-revision %s does not match expected AR revision at %s",
+                    $eventOccured->getAggregateRevision(),
+                    $expectedAggregateRevision
+                ));
+            }
+            $aggRoot->revision = $expectedAggregateRevision;
         }
+        $aggRoot->invokeEventHandler($eventOccured);
         return $aggRoot;
     }
 

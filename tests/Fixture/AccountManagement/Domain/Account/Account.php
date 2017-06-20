@@ -17,18 +17,18 @@ use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\Verificat
 final class Account extends AggregateRoot
 {
     /**
-     * @var \Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEntity
+     * @var AccountEntity
      */
-    private $internalState;
+    private $accountState;
 
     /**
      * @param RegisterAccount $registerAccount
-     * @param AccountEntityType $internalStateType
+     * @param AccountEntityType $accountStateType
      * @return Account
      */
-    public static function register(RegisterAccount $registerAccount, AccountEntityType $internalStateType): self
+    public static function register(RegisterAccount $registerAccount, AccountEntityType $accountStateType): self
     {
-        return (new Account($internalStateType))
+        return (new Account($registerAccount->getAggregateId(), $accountStateType))
             ->reflectThat(AccountWasRegistered::viaCommand($registerAccount))
             ->reflectThat(AuthenticationTokenWasAdded::viaCommand($registerAccount))
             ->reflectThat(VerificationTokenWasAdded::viaCommand($registerAccount));
@@ -36,25 +36,17 @@ final class Account extends AggregateRoot
 
     /**
      * @param RegisterOauthAccount $registerOauthAccount
-     * @param AccountEntityType $internalStateType
+     * @param AccountEntityType $accountStateType
      * @return Account
      */
     public static function registerOauth(
         RegisterOauthAccount $registerOauthAccount,
-        AccountEntityType $internalStateType
+        AccountEntityType $accountStateType
     ): self {
-        return (new Account($internalStateType))
+        return (new Account($registerOauthAccount->getAggregateId(), $accountStateType))
             ->reflectThat(OauthAccountWasRegistered::viaCommand($registerOauthAccount))
             ->reflectThat(AuthenticationTokenWasAdded::viaCommand($registerOauthAccount))
             ->reflectThat(OauthTokenWasAdded::viaCommand($registerOauthAccount));
-    }
-
-    /**
-     * @return AggregateIdInterface
-     */
-    public function getIdentifier(): AggregateIdInterface
-    {
-        return $this->internalState->getIdentity();
     }
 
     /**
@@ -63,8 +55,8 @@ final class Account extends AggregateRoot
      */
     protected function whenAccountWasRegistered(AccountWasRegistered $accountWasRegistered)
     {
-        $this->internalState = $this->internalState
-            ->withId($accountWasRegistered->getAggregateId())
+        $this->accountState = $this->accountState
+            ->withIdentity($accountWasRegistered->getAggregateId())
             ->withLocale($accountWasRegistered->getLocale())
             ->withRole($accountWasRegistered->getRole());
     }
@@ -75,8 +67,8 @@ final class Account extends AggregateRoot
      */
     protected function whenOauthAccountWasRegistered(OauthAccountWasRegistered $oauthAccountWasRegistered)
     {
-        $this->internalState = $this->internalState
-            ->withId($oauthAccountWasRegistered->getAggregateId())
+        $this->accountState = $this->accountState
+            ->withIdentity($oauthAccountWasRegistered->getAggregateId())
             ->withRole($accountWasRegistered->getRole());
     }
 
@@ -86,7 +78,7 @@ final class Account extends AggregateRoot
      */
     protected function whenAuthenticationTokenWasAdded(AuthenticationTokenWasAdded $tokenWasAdded)
     {
-        $this->internalState = $this->internalState->addAuthenticationToken([
+        $this->accountState = $this->accountState->addAuthenticationToken([
             "id" => $tokenWasAdded->getId(),
             "token" => $tokenWasAdded->getToken(),
             "expires_at" => $tokenWasAdded->getExpiresAt()
@@ -99,7 +91,7 @@ final class Account extends AggregateRoot
      */
     protected function whenVerificationTokenWasAdded(VerificationTokenWasAdded $tokenWasAdded)
     {
-        $this->internalState = $this->internalState->addVerificationToken([
+        $this->accountState = $this->accountState->addVerificationToken([
             "id" => $tokenWasAdded->getId(),
             "token" => $tokenWasAdded->getToken()
         ]);
@@ -111,7 +103,7 @@ final class Account extends AggregateRoot
      */
     protected function whenOauthTokenWasAdded(OauthTokenWasAdded $tokenWasAdded)
     {
-        $this->internalState = $this->internalState->addOauthToken([
+        $this->accountState = $this->accountState->addOauthToken([
             "id" => $tokenWasAdded->getId(),
             "token" => $tokenWasAdded->getToken(),
             "token_id" => $tokenWasAdded->getTokenId(),
@@ -130,11 +122,12 @@ final class Account extends AggregateRoot
     }
 
     /**
-     * @param AccountEntityType $internalStateType
+     * @param AggregateIdInterface $aggregateId
+     * @param AccountEntityType $accountStateType
      */
-    protected function __construct(AccountEntityType $internalStateType)
+    protected function __construct(AggregateIdInterface $aggregateId, AccountEntityType $accountStateType)
     {
-        parent::__construct();
-        $this->internalState = $internalStateType->makeEntity();
+        parent::__construct($aggregateId);
+        $this->accountState = $accountStateType->makeEntity([ "identity" => $aggregateId ]);
     }
 }

@@ -12,12 +12,12 @@ interface CommandInterface extends MessageInterface
     public function getAggregateId(): AggregateIdInterface;
 
     /**
-     * @return Revision|null
+     * @return AggregateRevision|null
      */
-    public function getExpectedRevision(): ?Revision;
+    public function getKnownAggregateRevision(): ?AggregateRevision;
 
     /**
      * @return bool
      */
-    public function hasExpectedRevision(): bool;
+    public function hasKnownAggregateRevision(): bool;
 }

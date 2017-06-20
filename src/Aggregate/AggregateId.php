@@ -2,8 +2,8 @@
 
 namespace Accordia\Cqrs\Aggregate;
 
-use Assert\Assertion;
 use Accordia\Entity\ValueObject\ValueObjectInterface;
+use Assert\Assertion;
 
 class AggregateId implements AggregateIdInterface
 {
@@ -26,7 +26,7 @@ class AggregateId implements AggregateIdInterface
      */
     public static function makeEmpty(): ValueObjectInterface
     {
-        return new static(null);
+        throw new \Exception("Creating empty aggregate-ids is not supported.");
     }
 
     /**
@@ -52,7 +52,7 @@ class AggregateId implements AggregateIdInterface
      */
     public function isEmpty(): bool
     {
-        return empty($this->id);
+        return false;
     }
 
     /**
@@ -60,14 +60,15 @@ class AggregateId implements AggregateIdInterface
      */
     public function __toString(): string
     {
-        return $this->id ?? '';
+        return $this->id;
     }
 
     /**
-     * @param string|null $id
+     * @param string $id
      */
-    private function __construct(?string $id)
+    private function __construct(string $id)
     {
+        Assertion::notEmpty($id);
         $this->id = $id;
     }
 }

@@ -11,10 +11,10 @@ abstract class Command implements CommandInterface
     private $aggregateId;
 
     /**
-     * @var \Accordia\Cqrs\Aggregate\Revision
+     * @var \Accordia\Cqrs\Aggregate\AggregateRevision
      * @buzz::fromArray->fromNative
      */
-    private $expectedRevision;
+    private $knownAggregateRevision;
 
     /**
      * @return AggregateIdInterface
@@ -25,28 +25,28 @@ abstract class Command implements CommandInterface
     }
 
     /**
-     * @return Revision|null
+     * @return AggregateRevision|null
      */
-    public function getExpectedRevision(): ?Revision
+    public function getKnownAggregateRevision(): ?AggregateRevision
     {
-        return $this->expectedRevision;
+        return $this->knownAggregateRevision;
     }
 
     /**
      * @return bool
      */
-    public function hasExpectedRevision(): bool
+    public function hasKnownAggregateRevision(): bool
     {
-        return $this->expectedRevision !== null;
+        return $this->knownAggregateRevision !== null;
     }
 
     /**
      * @param AggregateIdInterface $aggregateId
-     * @param Revision|null $expectedRevision
+     * @param AggregateRevision|null $knownAggregateRevision
      */
-    protected function __construct(AggregateIdInterface $aggregateId, Revision $expectedRevision = null)
+    protected function __construct(AggregateIdInterface $aggregateId, AggregateRevision $knownAggregateRevision = null)
     {
         $this->aggregateId = $aggregateId;
-        $this->expectedRevision = $expectedRevision;
+        $this->knownAggregateRevision = $knownAggregateRevision;
     }
 }

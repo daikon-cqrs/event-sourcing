@@ -12,7 +12,7 @@ use Accordia\Entity\ValueObject\Text;
 use Accordia\Entity\ValueObject\Timestamp;
 use Accordia\Entity\ValueObject\Uuid;
 
-class OauthTokenType extends EntityType
+final class OauthTokenType extends EntityType
 {
     /**
      * @param AttributeInterface $parentAttribute
@@ -29,14 +29,14 @@ class OauthTokenType extends EntityType
     }
 
     /**
-     * @param array $entityState
+     * @param array $tokenState
      * @param TypedEntityInterface|null $parent
      * @return TypedEntityInterface
      */
-    public function makeEntity(array $entityState = [], TypedEntityInterface $parent = null): TypedEntityInterface
+    public function makeEntity(array $tokenState = [], TypedEntityInterface $parent = null): TypedEntityInterface
     {
-        $entityState["@type"] = $this;
-        $entityState["@parent"] = $parent;
-        return OauthToken::fromArray($entityState);
+        $tokenState["@type"] = $this;
+        $tokenState["@parent"] = $parent;
+        return OauthToken::fromArray($tokenState);
     }
 }

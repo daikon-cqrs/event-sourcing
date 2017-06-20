@@ -4,7 +4,7 @@ namespace Accordia\Cqrs\EventStore;
 
 use Accordia\Entity\ValueObject\ValueObjectInterface;
 
-class StreamId implements ValueObjectInterface
+final class CommitStreamId implements ValueObjectInterface
 {
     /**
      * @var string
@@ -13,7 +13,7 @@ class StreamId implements ValueObjectInterface
 
     /**
      * @param $identifier
-     * @return StreamId
+     * @return CommitStreamId
      */
     public static function fromNative($identifier): ValueObjectInterface
     {
@@ -21,7 +21,7 @@ class StreamId implements ValueObjectInterface
     }
 
     /**
-     * @return StreamId
+     * @return CommitStreamId
      */
     public static function makeEmpty(): ValueObjectInterface
     {

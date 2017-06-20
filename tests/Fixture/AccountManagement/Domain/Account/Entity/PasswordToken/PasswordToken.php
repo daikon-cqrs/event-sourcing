@@ -8,7 +8,7 @@ use Accordia\Entity\ValueObject\Timestamp;
 use Accordia\Entity\ValueObject\Uuid;
 use Accordia\Entity\ValueObject\ValueObjectInterface;
 
-class PasswordToken extends NestedEntity
+final class PasswordToken extends NestedEntity
 {
     /**
      * @return ValueObjectInterface

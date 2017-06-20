@@ -16,9 +16,9 @@ interface AggregateRootInterface
     public function getIdentifier(): AggregateIdInterface;
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getRevision(): Revision;
+    public function getRevision(): AggregateRevision;
 
     /**
      * @return DomainEventList

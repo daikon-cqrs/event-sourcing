@@ -2,10 +2,9 @@
 
 namespace Accordia\Cqrs\EventStore;
 
-use Accordia\Cqrs\Aggregate\Revision;
 use Accordia\DataStructures\TypedListTrait;
 
-class CommitSequence implements \IteratorAggregate, \Countable
+final class CommitSequence implements \IteratorAggregate, \Countable
 {
     use TypedListTrait;
 
@@ -26,11 +25,11 @@ class CommitSequence implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @param Revision $start
-     * @param Revision $end
+     * @param CommitStreamRevision $start
+     * @param CommitStreamRevision $end
      * @return CommitSequence
      */
-    public function getSlice(Revision $start, Revision $end): self
+    public function getSlice(CommitStreamRevision $start, CommitStreamRevision $end): self
     {
         return $this->compositeVector->reduce(
             function (CommitSequence $commits, CommitInterface $commit) use ($start, $end): CommitSequence {

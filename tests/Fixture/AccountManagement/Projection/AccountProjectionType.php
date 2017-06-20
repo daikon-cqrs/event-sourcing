@@ -18,12 +18,12 @@ use Accordia\Entity\Entity\TypedEntityInterface;
 use Accordia\Entity\ValueObject\Email;
 use Accordia\Entity\ValueObject\Text;
 
-class AccountProjectionType extends EntityType
+final class AccountProjectionType extends EntityType
 {
     public function __construct()
     {
         parent::__construct("AccountProjection", [
-            Attribute::define("id", AggregateId::class, $this),
+            Attribute::define("id", Text::class, $this),
             Attribute::define("username", Username::class, $this),
             Attribute::define("email", Email::class, $this),
             Attribute::define("role", AccessRole::class, $this),

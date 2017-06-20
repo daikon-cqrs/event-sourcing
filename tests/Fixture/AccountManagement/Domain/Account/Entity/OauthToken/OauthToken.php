@@ -10,7 +10,7 @@ use Accordia\Entity\ValueObject\Timestamp;
 use Accordia\Entity\ValueObject\Uuid;
 use Accordia\Entity\ValueObject\ValueObjectInterface;
 
-class OauthToken extends NestedEntity
+final class OauthToken extends NestedEntity
 {
     /**
      * @return ValueObjectInterface

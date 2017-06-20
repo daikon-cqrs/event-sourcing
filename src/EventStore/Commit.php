@@ -5,17 +5,17 @@ namespace Accordia\Cqrs\EventStore;
 use Accordia\MessageBus\MessageInterface;
 use Accordia\MessageBus\Metadata\Metadata;
 use Accordia\Cqrs\Aggregate\DomainEventList;
-use Accordia\Cqrs\Aggregate\Revision;
+use Accordia\Cqrs\Aggregate\AggregateRevision;
 
-class Commit implements CommitInterface
+final class Commit implements CommitInterface
 {
     /**
-     * @var StreamId
+     * @var CommitStreamId
      */
     private $streamId;
 
     /**
-     * @var Revision
+     * @var CommitStreamRevision
      */
     private $streamRevision;
 
@@ -30,15 +30,15 @@ class Commit implements CommitInterface
     private $metadata;
 
     /**
-     * @param StreamId $streamId
-     * @param Revision $streamRevision
+     * @param CommitStreamId $streamId
+     * @param CommitStreamRevision $streamRevision
      * @param DomainEventList $eventLog
      * @param Metadata $metadata
      * @return CommitInterface
      */
     public static function make(
-        StreamId $streamId,
-        Revision $streamRevision,
+        CommitStreamId $streamId,
+        CommitStreamRevision $streamRevision,
         DomainEventList $eventLog,
         Metadata $metadata
     ): CommitInterface {
@@ -52,33 +52,33 @@ class Commit implements CommitInterface
     public static function fromArray(array $state): MessageInterface
     {
         return new static(
-            StreamId::fromNative($state["streamId"]),
-            Revision::fromNative((int)$state["streamRevision"]),
+            CommitStreamId::fromNative($state["streamId"]),
+            CommitStreamRevision::fromNative((int)$state["streamRevision"]),
             DomainEventList::fromArray($state["eventLog"]),
             Metadata::fromArray($state["metadata"])
         );
     }
 
     /**
-     * @return StreamId
+     * @return CommitStreamId
      */
-    public function getStreamId(): StreamId
+    public function getStreamId(): CommitStreamId
     {
         return $this->streamId;
     }
 
     /**
-     * @return Revision
+     * @return CommitStreamRevision
      */
-    public function getStreamRevision(): Revision
+    public function getStreamRevision(): CommitStreamRevision
     {
         return $this->streamRevision;
     }
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getAggregateRevision(): Revision
+    public function getAggregateRevision(): AggregateRevision
     {
         return $this->eventLog->getHeadRevision();
     }
@@ -113,14 +113,14 @@ class Commit implements CommitInterface
     }
 
     /**
-     * @param StreamId $streamId
-     * @param Revision $streamRevision
+     * @param CommitStreamId $streamId
+     * @param CommitStreamRevision $streamRevision
      * @param DomainEventList $eventLog
      * @param Metadata $metadata
      */
     private function __construct(
-        StreamId $streamId,
-        Revision $streamRevision,
+        CommitStreamId $streamId,
+        CommitStreamRevision $streamRevision,
         DomainEventList $eventLog,
         Metadata $metadata
     ) {

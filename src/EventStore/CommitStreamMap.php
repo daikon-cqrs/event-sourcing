@@ -4,7 +4,7 @@ namespace Accordia\Cqrs\EventStore;
 
 use Accordia\DataStructures\TypedMapTrait;
 
-class CommitStreamMap implements \IteratorAggregate, \Countable
+final class CommitStreamMap implements \IteratorAggregate, \Countable
 {
     use TypedMapTrait;
 

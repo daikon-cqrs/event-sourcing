@@ -5,38 +5,38 @@ namespace Accordia\Cqrs\EventStore;
 use Accordia\MessageBus\MessageInterface;
 use Accordia\MessageBus\Metadata\Metadata;
 use Accordia\Cqrs\Aggregate\DomainEventList;
-use Accordia\Cqrs\Aggregate\Revision;
+use Accordia\Cqrs\Aggregate\AggregateRevision;
 
 interface CommitInterface extends MessageInterface
 {
     /**
-     * @param StreamId $streamId
-     * @param Revision $streamRevision
+     * @param CommitStreamId $streamId
+     * @param CommitStreamRevision $streamRevision
      * @param DomainEventList $eventLog
      * @param Metadata $metadata
      * @return CommitInterface
      */
     public static function make(
-        StreamId $streamId,
-        Revision $streamRevision,
+        CommitStreamId $streamId,
+        CommitStreamRevision $streamRevision,
         DomainEventList $eventLog,
         Metadata $metadata
     ): CommitInterface;
 
     /**
-     * @return \Accordia\Cqrs\EventStore\StreamId
+     * @return \Accordia\Cqrs\EventStore\CommitStreamId
      */
-    public function getStreamId(): StreamId;
+    public function getStreamId(): CommitStreamId;
 
     /**
-     * @return Revision
+     * @return CommitStreamRevision
      */
-    public function getStreamRevision(): Revision;
+    public function getStreamRevision(): CommitStreamRevision;
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getAggregateRevision(): Revision;
+    public function getAggregateRevision(): AggregateRevision;
 
     /**
      * @return DomainEventList

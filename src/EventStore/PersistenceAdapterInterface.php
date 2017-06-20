@@ -2,21 +2,19 @@
 
 namespace Accordia\Cqrs\EventStore;
 
-use Accordia\Cqrs\Aggregate\Revision;
-
 interface PersistenceAdapterInterface
 {
     /**
-     * @param StreamId $streamId
-     * @param Revision|null $revision
+     * @param CommitStreamId $streamId
+     * @param CommitStreamRevision|null $revision
      * @return CommitStreamInterface
      */
-    public function loadStream(StreamId $streamId, Revision $revision = null): CommitStreamInterface;
+    public function loadStream(CommitStreamId $streamId, CommitStreamRevision $revision = null): CommitStreamInterface;
 
     /**
      * @param CommitStreamInterface $stream
-     * @param Revision $storeHead
+     * @param CommitStreamRevision $storeHead
      * @return bool
      */
-    public function storeStream(CommitStreamInterface $stream, Revision $storeHead): bool;
+    public function storeStream(CommitStreamInterface $stream, CommitStreamRevision $storeHead): bool;
 }

@@ -4,17 +4,17 @@ namespace Accordia\Cqrs\EventStore;
 
 use Accordia\MessageBus\Metadata\Metadata;
 use Accordia\Cqrs\Aggregate\DomainEventList;
-use Accordia\Cqrs\Aggregate\Revision;
+use Accordia\Cqrs\Aggregate\AggregateRevision;
 
-class CommitStream implements CommitStreamInterface
+final class CommitStream implements CommitStreamInterface
 {
     /**
-     * @var StreamId
+     * @var CommitStreamId
      */
     private $streamId;
 
     /**
-     * @var Revision
+     * @var CommitStreamRevision
      */
     private $streamRevision;
 
@@ -29,53 +29,53 @@ class CommitStream implements CommitStreamInterface
     private $commitImplementor;
 
     /**
-     * @param StreamId $streamId
+     * @param CommitStreamId $streamId
      * @param string $commitImplementor
      * @return CommitStreamInterface
      */
     public static function fromStreamId(
-        StreamId $streamId,
+        CommitStreamId $streamId,
         string $commitImplementor = Commit::class
     ): CommitStreamInterface {
         return new static($streamId);
     }
 
     /**
-     * @param StreamId $streamId
+     * @param CommitStreamId $streamId
      * @param CommitSequence|null $commitSequence
      * @param string $commitImplementor
      */
     public function __construct(
-        StreamId $streamId,
+        CommitStreamId $streamId,
         CommitSequence $commitSequence = null,
         string $commitImplementor = Commit::class
     ) {
         $this->streamId = $streamId;
         $this->commitSequence = $commitSequence ?? new CommitSequence;
         $this->commitImplementor = $commitImplementor;
-        $this->streamRevision = Revision::fromNative($this->commitSequence->count());
+        $this->streamRevision = CommitStreamRevision::fromNative($this->commitSequence->count());
     }
 
     /**
-     * @return StreamId
+     * @return CommitStreamId
      */
-    public function getStreamId(): StreamId
+    public function getStreamId(): CommitStreamId
     {
         return $this->streamId;
     }
 
     /**
-     * @return Revision
+     * @return CommitStreamRevision
      */
-    public function getStreamRevision(): Revision
+    public function getStreamRevision(): CommitStreamRevision
     {
         return $this->streamRevision;
     }
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getAggregateRevision(): Revision
+    public function getAggregateRevision(): AggregateRevision
     {
         return $this->commitSequence->getHead()->getAggregateRevision();
     }
@@ -127,11 +127,11 @@ class CommitStream implements CommitStreamInterface
     }
 
     /**
-     * @param Revision $fromRev
-     * @param Revision|null $toRev
+     * @param CommitStreamRevision $fromRev
+     * @param CommitStreamRevision|null $toRev
      * @return CommitSequence
      */
-    public function getCommitRange(Revision $fromRev, Revision $toRev = null): CommitSequence
+    public function getCommitRange(CommitStreamRevision $fromRev, CommitStreamRevision $toRev = null): CommitSequence
     {
         return $this->commitSequence->getSlice($fromRev, $toRev ?? $this->getStreamRevision());
     }

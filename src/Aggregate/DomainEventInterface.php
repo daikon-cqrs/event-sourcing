@@ -12,13 +12,13 @@ interface DomainEventInterface extends MessageInterface
     public function getAggregateId(): AggregateIdInterface;
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getAggregateRevision(): Revision;
+    public function getAggregateRevision(): AggregateRevision;
 
     /**
-     * @param Revision $aggregateRevision
+     * @param AggregateRevision $aggregateRevision
      * @return DomainEventInterface
      */
-    public function withAggregateRevision(Revision $aggregateRevision): DomainEventInterface;
+    public function withAggregateRevision(AggregateRevision $aggregateRevision): DomainEventInterface;
 }

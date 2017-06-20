@@ -18,12 +18,12 @@ use Accordia\Entity\Entity\TypedEntityInterface;
 use Accordia\Entity\ValueObject\Email;
 use Accordia\Entity\ValueObject\Text;
 
-class AccountEntityType extends EntityType
+final class AccountEntityType extends EntityType
 {
     public function __construct()
     {
         parent::__construct("AccountEntity", [
-            Attribute::define("id", AggregateId::class, $this),
+            Attribute::define("identity", AggregateId::class, $this),
             Attribute::define("username", Username::class, $this),
             Attribute::define("email", Email::class, $this),
             Attribute::define("role", AccessRole::class, $this),
@@ -41,14 +41,14 @@ class AccountEntityType extends EntityType
     }
 
     /**
-     * @param mixed[] $entityState
+     * @param mixed[] $accountState
      * @param TypedEntityInterface|null $parent
      * @return TypedEntityInterface
      */
-    public function makeEntity(array $entityState = [], TypedEntityInterface $parent = null): TypedEntityInterface
+    public function makeEntity(array $accountState = [], TypedEntityInterface $parent = null): TypedEntityInterface
     {
-        $entityState["@type"] = $this;
-        $entityState["@parent"] = $parent;
-        return AccountEntity::fromArray($entityState);
+        $accountState["@type"] = $this;
+        $accountState["@parent"] = $parent;
+        return AccountEntity::fromArray($accountState);
     }
 }

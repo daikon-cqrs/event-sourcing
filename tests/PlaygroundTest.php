@@ -2,6 +2,15 @@
 
 namespace Accordia\Tests\Cqrs;
 
+use AccordiaCqrsAggregateAggregateRevision;
+use Accordia\Cqrs\Aggregate\AggregateId;
+use Accordia\Cqrs\Aggregate\AggregateRootInterface;
+use Accordia\Cqrs\EventStore\Commit;
+use Accordia\Cqrs\EventStore\CommitStream;
+use Accordia\Cqrs\EventStore\PersistenceAdapterInterface;
+use Accordia\Cqrs\EventStore\CommitStreamRevision;
+use Accordia\Cqrs\EventStore\UnitOfWork;
+use Accordia\Cqrs\Projection\StandardProjector;
 use Accordia\MessageBus\Channel\Channel;
 use Accordia\MessageBus\Channel\ChannelMap;
 use Accordia\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerList;
@@ -11,14 +20,6 @@ use Accordia\MessageBus\Channel\Subscription\Transport\InProcessTransport;
 use Accordia\MessageBus\Envelope;
 use Accordia\MessageBus\MessageBus;
 use Accordia\MessageBus\MessageBusInterface;
-use Accordia\Cqrs\Aggregate\AggregateId;
-use Accordia\Cqrs\Aggregate\AggregateRootInterface;
-use Accordia\Cqrs\Aggregate\Revision;
-use Accordia\Cqrs\EventStore\Commit;
-use Accordia\Cqrs\EventStore\CommitStream;
-use Accordia\Cqrs\EventStore\PersistenceAdapterInterface;
-use Accordia\Cqrs\EventStore\UnitOfWork;
-use Accordia\Cqrs\Projection\StandardProjector;
 use Accordia\Tests\Cqrs\Fixture\AccountManagement\CommandHandler\RegisterAccountHandler;
 use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
@@ -71,7 +72,7 @@ final class PlaygroundTest extends TestCase
                 $this->assertEquals($commitStream->getStreamRevision()->toNative(), 1);
                 $this->assertEquals($commitStream->getAggregateRevision()->toNative(), 3);
                 return true;
-            }), Revision::makeEmpty())
+            }), CommitStreamRevision::makeEmpty())
             ->willReturn(true);
 
         $handler = new RegisterAccountHandler(

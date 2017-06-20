@@ -4,17 +4,17 @@ namespace Accordia\Cqrs\EventStore;
 
 use Accordia\MessageBus\Metadata\Metadata;
 use Accordia\Cqrs\Aggregate\DomainEventList;
-use Accordia\Cqrs\Aggregate\Revision;
+use Accordia\Cqrs\Aggregate\AggregateRevision;
 
 interface CommitStreamInterface extends \IteratorAggregate, \Countable
 {
     /**
-     * @param StreamId $streamId
+     * @param CommitStreamId $streamId
      * @param string $commitImplementor
      * @return CommitStreamInterface
      */
     public static function fromStreamId(
-        StreamId $streamId,
+        CommitStreamId $streamId,
         string $commitImplementor = Commit::class
     ): CommitStreamInterface;
 
@@ -32,26 +32,26 @@ interface CommitStreamInterface extends \IteratorAggregate, \Countable
     public function appendCommit(CommitInterface $commit): CommitStreamInterface;
 
     /**
-     * @param Revision $fromRev
-     * @param Revision|null $toRev
+     * @param CommitStreamRevision $fromRev
+     * @param CommitStreamRevision|null $toRev
      * @return CommitSequence
      */
-    public function getCommitRange(Revision $fromRev, Revision $toRev = null): CommitSequence;
+    public function getCommitRange(CommitStreamRevision $fromRev, CommitStreamRevision $toRev = null): CommitSequence;
 
     /**
-     * @return StreamId
+     * @return CommitStreamId
      */
-    public function getStreamId(): StreamId;
+    public function getStreamId(): CommitStreamId;
 
     /**
-     * @return Revision
+     * @return CommitStreamRevision
      */
-    public function getStreamRevision(): Revision;
+    public function getStreamRevision(): CommitStreamRevision;
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getAggregateRevision(): Revision;
+    public function getAggregateRevision(): AggregateRevision;
 
     /**
      * @return CommitInterface

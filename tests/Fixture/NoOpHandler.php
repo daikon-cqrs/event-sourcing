@@ -5,7 +5,7 @@ namespace Accordia\Tests\Cqrs\Fixture;
 use Accordia\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Accordia\MessageBus\EnvelopeInterface;
 
-class NoOpHandler implements MessageHandlerInterface
+final class NoOpHandler implements MessageHandlerInterface
 {
     /**
      * @param EnvelopeInterface $envelope

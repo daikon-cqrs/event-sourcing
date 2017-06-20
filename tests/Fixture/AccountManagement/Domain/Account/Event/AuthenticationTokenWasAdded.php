@@ -7,7 +7,7 @@ use Accordia\MessageBus\ToArrayTrait;
 use Accordia\Cqrs\Aggregate\AggregateId;
 use Accordia\Cqrs\Aggregate\CommandInterface;
 use Accordia\Cqrs\Aggregate\DomainEvent;
-use Accordia\Cqrs\Aggregate\Revision;
+use AccordiaCqrsAggregateAggregateRevision;
 use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
 use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
 use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;

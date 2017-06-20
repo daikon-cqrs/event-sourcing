@@ -7,7 +7,7 @@ use Accordia\Entity\Entity\NestedEntity;
 use Accordia\Entity\ValueObject\Uuid;
 use Accordia\Entity\ValueObject\ValueObjectInterface;
 
-class VerificationToken extends NestedEntity
+final class VerificationToken extends NestedEntity
 {
     /**
      * @return ValueObjectInterface

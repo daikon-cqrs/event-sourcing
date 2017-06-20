@@ -6,9 +6,8 @@ use Accordia\MessageBus\Metadata\Metadata;
 use Accordia\Cqrs\Aggregate\AggregateIdInterface;
 use Accordia\Cqrs\Aggregate\AggregateRootInterface;
 use Accordia\Cqrs\Aggregate\DomainEventList;
-use Accordia\Cqrs\Aggregate\Revision;
 
-class UnitOfWork implements UnitOfWorkInterface
+final class UnitOfWork implements UnitOfWorkInterface
 {
     /**
      * @var string
@@ -56,7 +55,7 @@ class UnitOfWork implements UnitOfWorkInterface
      */
     public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence
     {
-        $streamId = StreamId::fromNative($aggregateRoot->getIdentifier());
+        $streamId = CommitStreamId::fromNative($aggregateRoot->getIdentifier());
         $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
         if ($this->trackedCommitStreams->has((string)$streamId)) {
             $stream = $this->trackedCommitStreams->get((string)$streamId);
@@ -77,12 +76,12 @@ class UnitOfWork implements UnitOfWorkInterface
 
     /**
      * @param AggregateIdInterface $aggregateId
-     * @param Revision|null $revision
+     * @param CommitStreamRevision|null $revision
      * @return AggregateRootInterface
      */
-    public function checkout(AggregateIdInterface $aggregateId, Revision $revision = null): AggregateRootInterface
+    public function checkout(AggregateIdInterface $aggregateId, CommitStreamRevision $revision = null): AggregateRootInterface
     {
-        $streamId = StreamId::fromNative($aggregateId->toNative());
+        $streamId = CommitStreamId::fromNative($aggregateId->toNative());
         $stream = $this->persistenceAdapter->loadStream($streamId, $revision);
         $history = new DomainEventList;
         foreach ($stream as $commit) {

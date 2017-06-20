@@ -4,7 +4,7 @@ namespace Accordia\Cqrs\Aggregate;
 
 use Accordia\DataStructures\TypedListTrait;
 
-class DomainEventList implements \IteratorAggregate, \Countable
+final class DomainEventList implements \IteratorAggregate, \Countable
 {
     use TypedListTrait;
 
@@ -18,7 +18,14 @@ class DomainEventList implements \IteratorAggregate, \Countable
     }
 
     /**
-     * DomainEventList constructor.
+     * @return DomainEventList
+     */
+    public static function makeEmpty(): DomainEventList
+    {
+        return new self;
+    }
+
+    /**
      * @param array $events
      */
     public function __construct(array $events = [])
@@ -41,17 +48,17 @@ class DomainEventList implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getHeadRevision(): Revision
+    public function getHeadRevision(): AggregateRevision
     {
         return $this->compositeVector->last()->getAggregateRevision();
     }
 
     /**
-     * @return Revision
+     * @return AggregateRevision
      */
-    public function getTailRevision(): Revision
+    public function getTailRevision(): AggregateRevision
     {
         return $this->compositeVector->first()->getAggregateRevision();
     }
