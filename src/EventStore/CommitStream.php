@@ -96,7 +96,7 @@ final class CommitStream implements CommitStreamInterface
     {
         $previousCommits = $this->findCommitsSince($eventLog->getHeadRevision());
         if (!$previousCommits->isEmpty()) {
-            $conflictingEvents = $this->detectConflictingEvents($eventLog, $conflictingCommits);
+            $conflictingEvents = $this->detectConflictingEvents($eventLog, $previousCommits);
             // @todo pass $conflictingEvents to an exception and throw?
         }
         return $this->appendCommit(
