@@ -14,7 +14,10 @@ interface PersistenceAdapterInterface
     /**
      * @param CommitStreamInterface $stream
      * @param CommitStreamRevision $storeHead
-     * @return bool
+     * @return StoreResultInterface
      */
-    public function storeStream(CommitStreamInterface $stream, CommitStreamRevision $storeHead): bool;
+    public function storeStream(
+        CommitStreamInterface $stream,
+        CommitStreamRevision $storeHead
+    ): StoreResultInterface;
 }

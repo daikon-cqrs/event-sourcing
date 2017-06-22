@@ -5,10 +5,10 @@ namespace Accordia\Cqrs\Aggregate;
 interface AggregateRootInterface
 {
     /**
-     * @param DomainEventList $history
+     * @param DomainEventSequence $history
      * @return AggregateRootInterface
      */
-    public static function reconstituteFromHistory(DomainEventList $history): AggregateRootInterface;
+    public static function reconstituteFromHistory(DomainEventSequence $history): AggregateRootInterface;
 
     /**
      * @return AggregateIdInterface
@@ -21,9 +21,9 @@ interface AggregateRootInterface
     public function getRevision(): AggregateRevision;
 
     /**
-     * @return DomainEventList
+     * @return DomainEventSequence
      */
-    public function getTrackedEvents(): DomainEventList;
+    public function getTrackedEvents(): DomainEventSequence;
 
     /**
      * @return AggregateRootInterface

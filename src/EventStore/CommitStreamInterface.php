@@ -3,7 +3,7 @@
 namespace Accordia\Cqrs\EventStore;
 
 use Accordia\MessageBus\Metadata\Metadata;
-use Accordia\Cqrs\Aggregate\DomainEventList;
+use Accordia\Cqrs\Aggregate\DomainEventSequence;
 use Accordia\Cqrs\Aggregate\AggregateRevision;
 
 interface CommitStreamInterface extends \IteratorAggregate, \Countable
@@ -19,11 +19,11 @@ interface CommitStreamInterface extends \IteratorAggregate, \Countable
     ): CommitStreamInterface;
 
     /**
-     * @param DomainEventList $eventLog
+     * @param DomainEventSequence $eventLog
      * @param Metadata $metadata
      * @return CommitStreamInterface
      */
-    public function appendEvents(DomainEventList $eventLog, Metadata $metadata): CommitStreamInterface;
+    public function appendEvents(DomainEventSequence $eventLog, Metadata $metadata): CommitStreamInterface;
 
     /**
      * @param CommitInterface $commit
@@ -54,7 +54,7 @@ interface CommitStreamInterface extends \IteratorAggregate, \Countable
     public function getAggregateRevision(): AggregateRevision;
 
     /**
-     * @return CommitInterface
+     * @return CommitInterface|null
      */
-    public function getHead(): CommitInterface;
+    public function getHead(): ?CommitInterface;
 }

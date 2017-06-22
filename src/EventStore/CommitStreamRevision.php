@@ -7,8 +7,14 @@ use Accordia\Entity\ValueObject\ValueObjectInterface;
 
 final class CommitStreamRevision implements ValueObjectInterface
 {
+    /**
+     * @var int
+     */
     private const INITIAL = 1;
 
+    /**
+     * @var int
+     */
     private const NONE = 0;
 
     /**

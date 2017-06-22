@@ -5,7 +5,7 @@ namespace Accordia\Cqrs\EventStore;
 use Accordia\MessageBus\Metadata\Metadata;
 use Accordia\Cqrs\Aggregate\AggregateIdInterface;
 use Accordia\Cqrs\Aggregate\AggregateRootInterface;
-use Accordia\Cqrs\Aggregate\DomainEventList;
+use Accordia\Cqrs\Aggregate\DomainEventSequence;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {
@@ -20,6 +20,11 @@ final class UnitOfWork implements UnitOfWorkInterface
     private $persistenceAdapter;
 
     /**
+     * @var StreamProcessorInterface
+     */
+    private $streamProcessor;
+
+    /**
      * @var string
      */
     private $streamImplementor;
@@ -32,19 +37,20 @@ final class UnitOfWork implements UnitOfWorkInterface
     /**
      * @param string $aggregateRootType
      * @param PersistenceAdapterInterface $persistenceAdapter
+     * @param StreamProcessorInterface $streamProcessor
      * @param string $streamImplementor
-     * @param CommitStreamMap|null $trackedCommitStreams
      */
     public function __construct(
         string $aggregateRootType,
         PersistenceAdapterInterface $persistenceAdapter,
-        string $streamImplementor = CommitStream::class,
-        CommitStreamMap $trackedCommitStreams = null
+        StreamProcessorInterface $streamProcessor,
+        string $streamImplementor = CommitStream::class
     ) {
         $this->aggregateRootType = $aggregateRootType;
         $this->persistenceAdapter = $persistenceAdapter;
+        $this->streamProcessor = $streamProcessor;
         $this->streamImplementor = $streamImplementor;
-        $this->trackedCommitStreams = $trackedCommitStreams ?? new CommitStreamMap;
+        $this->trackedCommitStreams = CommitStreamMap::makeEmpty();
     }
 
     /**
@@ -59,14 +65,14 @@ final class UnitOfWork implements UnitOfWorkInterface
         $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
         if ($this->trackedCommitStreams->has((string)$streamId)) {
             $stream = $this->trackedCommitStreams->get((string)$streamId);
-            $this->trackedCommitStreams = $this->trackedCommitStreams->remove($stream);
+            $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($stream);
         } elseif ($tailRevision->isInitial()) {
             $stream = $this->streamImplementor::fromStreamId($streamId);
         } else {
             throw new \Exception("Existing aggregate-roots must be checked out before they may be comitted.");
         }
-        $knownHead = $stream->getStreamRevision();
         $stream = $stream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
+        $knownHead = $stream->getStreamRevision();
         if (!$this->persistenceAdapter->storeStream($stream, $knownHead)) {
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
             throw new \Exception("Failed to store commit-stream with stream-id: ".$stream->getStreamId());
@@ -79,16 +85,15 @@ final class UnitOfWork implements UnitOfWorkInterface
      * @param CommitStreamRevision|null $revision
      * @return AggregateRootInterface
      */
-    public function checkout(AggregateIdInterface $aggregateId, CommitStreamRevision $revision = null): AggregateRootInterface
-    {
+    public function checkout(
+        AggregateIdInterface $aggregateId,
+        CommitStreamRevision $revision = null
+    ): AggregateRootInterface {
         $streamId = CommitStreamId::fromNative($aggregateId->toNative());
         $stream = $this->persistenceAdapter->loadStream($streamId, $revision);
-        $history = new DomainEventList;
-        foreach ($stream as $commit) {
+        $history = DomainEventSequence::makeEmpty();
+        foreach ($this->streamProcessor->process($stream) as $commit) {
             $history = $history->append($commit->getEventLog());
-            if ($revision && $revision->equals($commit->getStreamRevision())) {
-                break;
-            }
         }
         $aggregateRoot = $this->aggregateRootType::reconstituteFromHistory($history);
         $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);

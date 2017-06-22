@@ -15,15 +15,15 @@ abstract class AggregateRoot implements AggregateRootInterface
     private $revision;
 
     /**
-     * @var DomainEventList
+     * @var DomainEventSequence
      */
     private $trackedEvents;
 
     /**
-     * @param DomainEventList $history
+     * @param DomainEventSequence $history
      * @return AggregateRootInterface
      */
-    public static function reconstituteFromHistory(DomainEventList $history): AggregateRootInterface
+    public static function reconstituteFromHistory(DomainEventSequence $history): AggregateRootInterface
     {
         $aggRoot = new static;
         foreach ($history as $eventOccured) {
@@ -49,9 +49,9 @@ abstract class AggregateRoot implements AggregateRootInterface
     }
 
     /**
-     * @return DomainEventList
+     * @return DomainEventSequence
      */
-    public function getTrackedEvents(): DomainEventList
+    public function getTrackedEvents(): DomainEventSequence
     {
         return $this->trackedEvents;
     }
@@ -62,7 +62,7 @@ abstract class AggregateRoot implements AggregateRootInterface
     public function markClean(): AggregateRootInterface
     {
         $aggRoot = clone $this;
-        $aggRoot->trackedEvents = DomainEventList::makeEmpty();
+        $aggRoot->trackedEvents = DomainEventSequence::makeEmpty();
         return $aggRoot;
     }
 
@@ -73,7 +73,7 @@ abstract class AggregateRoot implements AggregateRootInterface
     {
         $this->identifier = $aggregateId;
         $this->revision = AggregateRevision::makeEmpty();
-        $this->trackedEvents = DomainEventList::makeEmpty();
+        $this->trackedEvents = DomainEventSequence::makeEmpty();
     }
 
     /**

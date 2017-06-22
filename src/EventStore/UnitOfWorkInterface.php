@@ -20,5 +20,8 @@ interface UnitOfWorkInterface
      * @param CommitStreamRevision|null $revision
      * @return AggregateRootInterface
      */
-    public function checkout(AggregateIdInterface $aggregateId, CommitStreamRevision $revision = null): AggregateRootInterface;
+    public function checkout(
+        AggregateIdInterface $aggregateId,
+        CommitStreamRevision $revision = null
+    ): AggregateRootInterface;
 }

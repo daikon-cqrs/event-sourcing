@@ -7,8 +7,10 @@ use Accordia\Cqrs\Aggregate\AggregateId;
 use Accordia\Cqrs\Aggregate\AggregateRootInterface;
 use Accordia\Cqrs\EventStore\Commit;
 use Accordia\Cqrs\EventStore\CommitStream;
-use Accordia\Cqrs\EventStore\PersistenceAdapterInterface;
 use Accordia\Cqrs\EventStore\CommitStreamRevision;
+use Accordia\Cqrs\EventStore\NoopStreamProcessor;
+use Accordia\Cqrs\EventStore\PersistenceAdapterInterface;
+use Accordia\Cqrs\EventStore\StoreSuccess;
 use Accordia\Cqrs\EventStore\UnitOfWork;
 use Accordia\Cqrs\Projection\StandardProjector;
 use Accordia\MessageBus\Channel\Channel;
@@ -72,12 +74,12 @@ final class PlaygroundTest extends TestCase
                 $this->assertEquals($commitStream->getStreamRevision()->toNative(), 1);
                 $this->assertEquals($commitStream->getAggregateRevision()->toNative(), 3);
                 return true;
-            }), CommitStreamRevision::makeEmpty())
-            ->willReturn(true);
+            }), CommitStreamRevision::fromNative(1))
+            ->willReturn(new StoreSuccess);
 
         $handler = new RegisterAccountHandler(
             new AccountEntityType,
-            new UnitOfWork(Account::class, $persistenceMock),
+            new UnitOfWork(Account::class, $persistenceMock, new NoopStreamProcessor),
             $messageBusMock
         );
         $registerCommand = $this->createCommand();
@@ -111,11 +113,11 @@ final class PlaygroundTest extends TestCase
     {
         $messageBus = false;
         $persistenceMock = $this->createMock(PersistenceAdapterInterface::class);
-        $persistenceMock->method("storeStream")->willReturn(true);
+        $persistenceMock->method("storeStream")->willReturn(new StoreSuccess);
         $registerAccountFactory = function () use (&$messageBus, $persistenceMock) {
             return new RegisterAccountHandler(
                 new AccountEntityType,
-                new UnitOfWork(Account::class, $persistenceMock),
+                new UnitOfWork(Account::class, $persistenceMock, new NoopStreamProcessor),
                 $messageBus
             );
         };

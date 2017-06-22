@@ -6,9 +6,10 @@
     "homepage": "https://github.com/accordia/cqrs",
     "license": "MPL-2.0",
     "prefer-stable": true,
+    "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
-        "accordia/data-structures": "master@dev",
+        "php-ds/php-ds": "^v1.1",
         "accordia/entity": "master@dev",
         "accordia/message-bus": "master@dev"
     },

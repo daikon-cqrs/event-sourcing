@@ -2,9 +2,9 @@
 
 namespace Accordia\Cqrs\EventStore;
 
-use Accordia\MessageBus\Metadata\Metadata;
-use Accordia\Cqrs\Aggregate\DomainEventList;
 use Accordia\Cqrs\Aggregate\AggregateRevision;
+use Accordia\Cqrs\Aggregate\DomainEventSequence;
+use Accordia\MessageBus\Metadata\Metadata;
 
 final class CommitStream implements CommitStreamInterface
 {
@@ -12,11 +12,6 @@ final class CommitStream implements CommitStreamInterface
      * @var CommitStreamId
      */
     private $streamId;
-
-    /**
-     * @var CommitStreamRevision
-     */
-    private $streamRevision;
 
     /**
      * @var CommitSequence
@@ -41,6 +36,19 @@ final class CommitStream implements CommitStreamInterface
     }
 
     /**
+     * @param mixed[] $streamState
+     * @return CommitStream
+     */
+    public static function fromArray(array $streamState): CommitStream
+    {
+        return new static(
+            CommitStreamId::fromNative($streamState["commitStreamId"]),
+            CommitSequence::fromArray($streamState["commitStreamSequence"]),
+            $commitStreamState["commitImplementor"]
+        );
+    }
+
+    /**
      * @param CommitStreamId $streamId
      * @param CommitSequence|null $commitSequence
      * @param string $commitImplementor
@@ -53,7 +61,6 @@ final class CommitStream implements CommitStreamInterface
         $this->streamId = $streamId;
         $this->commitSequence = $commitSequence ?? new CommitSequence;
         $this->commitImplementor = $commitImplementor;
-        $this->streamRevision = CommitStreamRevision::fromNative($this->commitSequence->count());
     }
 
     /**
@@ -69,7 +76,7 @@ final class CommitStream implements CommitStreamInterface
      */
     public function getStreamRevision(): CommitStreamRevision
     {
-        return $this->streamRevision;
+        return CommitStreamRevision::fromNative($this->commitSequence->getLength());
     }
 
     /**
@@ -81,16 +88,21 @@ final class CommitStream implements CommitStreamInterface
     }
 
     /**
-     * @param DomainEventList $eventLog
+     * @param DomainEventSequence $eventLog
      * @param Metadata $metadata
      * @return CommitStreamInterface
      */
-    public function appendEvents(DomainEventList $eventLog, Metadata $metadata): CommitStreamInterface
+    public function appendEvents(DomainEventSequence $eventLog, Metadata $metadata): CommitStreamInterface
     {
+        $previousCommits = $this->findCommitsSince($eventLog->getHeadRevision());
+        if (!$previousCommits->isEmpty()) {
+            $conflictingEvents = $this->detectConflictingEvents($eventLog, $conflictingCommits);
+            // @todo pass $conflictingEvents to an exception and throw?
+        }
         return $this->appendCommit(
             $this->commitImplementor::make(
                 $this->streamId,
-                $this->streamRevision->increment(),
+                $this->getStreamRevision()->increment(),
                 $eventLog,
                 $metadata
             )
@@ -104,26 +116,17 @@ final class CommitStream implements CommitStreamInterface
      */
     public function appendCommit(CommitInterface $commit): CommitStreamInterface
     {
-        if (!$commit->getStreamRevision()->equals($this->streamRevision->increment())) {
-            throw new \Exception(sprintf(
-                "Trying to commit revision %s with current HEAD being %s. Expected revision %s",
-                $commit->getRevision(),
-                $this->streamRevision->getRevision(),
-                $this->streamRevision->getRevision()->increment()
-            ));
-        }
-        $copy = clone $this;
-        $copy->commitSequence = $this->commitSequence->push($commit);
-        $copy->streamRevision = $this->streamRevision->increment();
-        return $copy;
+        $stream = clone $this;
+        $stream->commitSequence = $this->commitSequence->push($commit);
+        return $stream;
     }
 
     /**
-     * @return CommitInterface
+     * @return CommitInterface|null
      */
-    public function getHead(): CommitInterface
+    public function getHead(): ?CommitInterface
     {
-        return $this->commitSequence->getHead();
+        return $this->commitSequence->isEmpty() ? null : $this->commitSequence->getHead();
     }
 
     /**
@@ -145,10 +148,59 @@ final class CommitStream implements CommitStreamInterface
     }
 
     /**
-     * @return \Iterator
+     * @return mixed[]
+     */
+    public function toNative(): array
+    {
+        return [
+            "commitSequence" => $this->commitSequence->toNative(),
+            "streamId" => $this->streamId->toNative(),
+            "commitImplementor" => $this->commitImplementor
+        ];
+    }
+
+    /**
+     * @return Iterator
      */
     public function getIterator(): \Iterator
     {
         return $this->commitSequence->getIterator();
+    }
+
+    /**
+     * @param AggregateRevision $incomingRevision
+     * @return CommitSequence
+     */
+    private function findCommitsSince(AggregateRevision $incomingRevision): CommitSequence
+    {
+        $previousCommits = [];
+        $prevCommit = $this->getHead();
+        while ($prevCommit && $incomingRevision->isLessThanOrEqual($prevCommit->getAggregateRevision())) {
+            $previousCommits[] = $prevCommit;
+            $prevCommit = $this->commitSequence->get($prevCommit->getStreamRevision()->decrement());
+        }
+        return new CommitSequence(array_reverse($previousCommits));
+    }
+
+    /**
+     * @param DomainEventSequence $newEvents
+     * @param CommitSequence $conflictingCommits
+     * @return DomainEventInterface[]
+     */
+    private function detectConflictingEvents(DomainEventSequence $newEvents, CommitSequence $previousCommits): array
+    {
+        $conflictingEvents = [];
+        foreach ($newEvents as $newEvent) {
+            foreach ($previousCommits as $previousCommit) {
+                foreach ($previousCommit->getEventLog() as $previousEvent) {
+                    /* @todo figure out how to do conflict resolution.
+                    if ($newEvent->conflictsWith($previousEvent)) {
+                        $conflictingEvents[] = [ $previousEvent, $newEvent ];
+                    }
+                    */
+                }
+            }
+        }
+        return $conflictingEvents;
     }
 }

@@ -4,7 +4,7 @@ namespace Accordia\Cqrs\EventStore;
 
 use Accordia\MessageBus\MessageInterface;
 use Accordia\MessageBus\Metadata\Metadata;
-use Accordia\Cqrs\Aggregate\DomainEventList;
+use Accordia\Cqrs\Aggregate\DomainEventSequence;
 use Accordia\Cqrs\Aggregate\AggregateRevision;
 
 final class Commit implements CommitInterface
@@ -20,7 +20,7 @@ final class Commit implements CommitInterface
     private $streamRevision;
 
     /**
-     * @var DomainEventList
+     * @var DomainEventSequence
      */
     private $eventLog;
 
@@ -32,14 +32,14 @@ final class Commit implements CommitInterface
     /**
      * @param CommitStreamId $streamId
      * @param CommitStreamRevision $streamRevision
-     * @param DomainEventList $eventLog
+     * @param DomainEventSequence $eventLog
      * @param Metadata $metadata
      * @return CommitInterface
      */
     public static function make(
         CommitStreamId $streamId,
         CommitStreamRevision $streamRevision,
-        DomainEventList $eventLog,
+        DomainEventSequence $eventLog,
         Metadata $metadata
     ): CommitInterface {
         return new static($streamId, $streamRevision, $eventLog, $metadata);
@@ -54,7 +54,7 @@ final class Commit implements CommitInterface
         return new static(
             CommitStreamId::fromNative($state["streamId"]),
             CommitStreamRevision::fromNative((int)$state["streamRevision"]),
-            DomainEventList::fromArray($state["eventLog"]),
+            DomainEventSequence::fromArray($state["eventLog"]),
             Metadata::fromArray($state["metadata"])
         );
     }
@@ -84,9 +84,9 @@ final class Commit implements CommitInterface
     }
 
     /**
-     * @return DomainEventList
+     * @return DomainEventSequence
      */
-    public function getEventLog(): DomainEventList
+    public function getEventLog(): DomainEventSequence
     {
         return $this->eventLog;
     }
@@ -115,13 +115,13 @@ final class Commit implements CommitInterface
     /**
      * @param CommitStreamId $streamId
      * @param CommitStreamRevision $streamRevision
-     * @param DomainEventList $eventLog
+     * @param DomainEventSequence $eventLog
      * @param Metadata $metadata
      */
     private function __construct(
         CommitStreamId $streamId,
         CommitStreamRevision $streamRevision,
-        DomainEventList $eventLog,
+        DomainEventSequence $eventLog,
         Metadata $metadata
     ) {
         $this->streamId = $streamId;
