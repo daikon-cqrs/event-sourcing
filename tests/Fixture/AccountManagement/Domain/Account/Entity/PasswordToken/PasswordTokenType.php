@@ -1,14 +1,14 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken;
 
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
-use Accordia\Entity\EntityType\Attribute;
-use Accordia\Entity\EntityType\AttributeInterface;
-use Accordia\Entity\EntityType\EntityType;
-use Accordia\Entity\Entity\TypedEntityInterface;
-use Accordia\Entity\ValueObject\Timestamp;
-use Accordia\Entity\ValueObject\Uuid;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Entity\EntityType\Attribute;
+use Daikon\Entity\EntityType\AttributeInterface;
+use Daikon\Entity\EntityType\EntityType;
+use Daikon\Entity\Entity\TypedEntityInterface;
+use Daikon\Entity\ValueObject\Timestamp;
+use Daikon\Entity\ValueObject\Uuid;
 
 final class PasswordTokenType extends EntityType
 {

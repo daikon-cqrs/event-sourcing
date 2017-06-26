@@ -1,12 +1,12 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken;
 
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
-use Accordia\Entity\Entity\NestedEntity;
-use Accordia\Entity\ValueObject\Timestamp;
-use Accordia\Entity\ValueObject\Uuid;
-use Accordia\Entity\ValueObject\ValueObjectInterface;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Entity\Entity\NestedEntity;
+use Daikon\Entity\ValueObject\Timestamp;
+use Daikon\Entity\ValueObject\Uuid;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class PasswordToken extends NestedEntity
 {

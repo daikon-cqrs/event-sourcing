@@ -1,14 +1,14 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command;
 
-use Accordia\MessageBus\FromArrayTrait;
-use Accordia\MessageBus\ToArrayTrait;
-use Accordia\Cqrs\Aggregate\AggregateId;
-use Accordia\Cqrs\Aggregate\Command;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
-use Accordia\Entity\ValueObject\Text;
-use Accordia\Entity\ValueObject\Timestamp;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\Command;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
+use Daikon\Entity\ValueObject\Text;
+use Daikon\Entity\ValueObject\Timestamp;
 
 final class RegisterOauthAccount extends Command
 {
@@ -16,25 +16,25 @@ final class RegisterOauthAccount extends Command
     use FromArrayTrait;
 
     /**
-     * @var \Accordia\Entity\ValueObject\Timestamp
+     * @var \Daikon\Entity\ValueObject\Timestamp
      * @buzz::fromArray->createFromString
      */
     private $expiresAt;
 
     /**
-     * @var \Accordia\Entity\ValueObject\Text
+     * @var \Daikon\Entity\ValueObject\Text
      * @buzz::fromArray->fromNative
      */
     private $service;
 
     /**
-     * @var \Accordia\Entity\ValueObject\Text
+     * @var \Daikon\Entity\ValueObject\Text
      * @buzz::fromArray->fromNative
      */
     private $tokenId;
 
     /**
-     * @var \Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole
+     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole
      * @buzz::fromArray->fromNative
      */
     private $role;

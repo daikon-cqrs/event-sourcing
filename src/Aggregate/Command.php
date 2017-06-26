@@ -1,17 +1,17 @@
 <?php
 
-namespace Accordia\Cqrs\Aggregate;
+namespace Daikon\Cqrs\Aggregate;
 
 abstract class Command implements CommandInterface
 {
     /**
-     * @var \Accordia\Cqrs\Aggregate\AggregateId
+     * @var \Daikon\Cqrs\Aggregate\AggregateId
      * @buzz::fromArray->fromNative
      */
     private $aggregateId;
 
     /**
-     * @var \Accordia\Cqrs\Aggregate\AggregateRevision
+     * @var \Daikon\Cqrs\Aggregate\AggregateRevision
      * @buzz::fromArray->fromNative
      */
     private $knownAggregateRevision;

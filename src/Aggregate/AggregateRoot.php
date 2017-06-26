@@ -1,6 +1,6 @@
 <?php
 
-namespace Accordia\Cqrs\Aggregate;
+namespace Daikon\Cqrs\Aggregate;
 
 abstract class AggregateRoot implements AggregateRootInterface
 {

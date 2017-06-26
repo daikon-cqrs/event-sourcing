@@ -1,11 +1,11 @@
 <?php
 
-namespace Accordia\Cqrs\EventStore;
+namespace Daikon\Cqrs\EventStore;
 
-use Accordia\MessageBus\MessageInterface;
-use Accordia\MessageBus\Metadata\Metadata;
-use Accordia\Cqrs\Aggregate\DomainEventSequence;
-use Accordia\Cqrs\Aggregate\AggregateRevision;
+use Daikon\MessageBus\MessageInterface;
+use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Cqrs\Aggregate\DomainEventSequence;
+use Daikon\Cqrs\Aggregate\AggregateRevision;
 
 final class Commit implements CommitInterface
 {

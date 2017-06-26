@@ -1,22 +1,22 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity;
 
-use Accordia\Cqrs\Aggregate\AggregateId;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AuthToken\AuthenticationTokenType;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\OauthToken\OauthTokenType;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken\PasswordTokenType;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\VerifyToken\VerificationTokenType;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\HashedPassword;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username;
-use Accordia\Entity\EntityType\Attribute;
-use Accordia\Entity\EntityType\EntityType;
-use Accordia\Entity\EntityType\NestedEntityListAttribute;
-use Accordia\Entity\Entity\TypedEntityInterface;
-use Accordia\Entity\ValueObject\Email;
-use Accordia\Entity\ValueObject\Text;
+use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AuthToken\AuthenticationTokenType;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\OauthToken\OauthTokenType;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken\PasswordTokenType;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\VerifyToken\VerificationTokenType;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\HashedPassword;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username;
+use Daikon\Entity\EntityType\Attribute;
+use Daikon\Entity\EntityType\EntityType;
+use Daikon\Entity\EntityType\NestedEntityListAttribute;
+use Daikon\Entity\Entity\TypedEntityInterface;
+use Daikon\Entity\ValueObject\Email;
+use Daikon\Entity\ValueObject\Text;
 
 final class AccountEntityType extends EntityType
 {

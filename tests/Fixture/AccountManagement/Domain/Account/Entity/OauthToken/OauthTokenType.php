@@ -1,16 +1,16 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\OauthToken;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\OauthToken;
 
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
-use Accordia\Entity\EntityType\Attribute;
-use Accordia\Entity\EntityType\AttributeInterface;
-use Accordia\Entity\EntityType\EntityType;
-use Accordia\Entity\Entity\TypedEntityInterface;
-use Accordia\Entity\ValueObject\Text;
-use Accordia\Entity\ValueObject\Timestamp;
-use Accordia\Entity\ValueObject\Uuid;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Entity\EntityType\Attribute;
+use Daikon\Entity\EntityType\AttributeInterface;
+use Daikon\Entity\EntityType\EntityType;
+use Daikon\Entity\Entity\TypedEntityInterface;
+use Daikon\Entity\ValueObject\Text;
+use Daikon\Entity\ValueObject\Timestamp;
+use Daikon\Entity\ValueObject\Uuid;
 
 final class OauthTokenType extends EntityType
 {

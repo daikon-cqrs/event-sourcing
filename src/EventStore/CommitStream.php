@@ -1,10 +1,10 @@
 <?php
 
-namespace Accordia\Cqrs\EventStore;
+namespace Daikon\Cqrs\EventStore;
 
-use Accordia\Cqrs\Aggregate\AggregateRevision;
-use Accordia\Cqrs\Aggregate\DomainEventSequence;
-use Accordia\MessageBus\Metadata\Metadata;
+use Daikon\Cqrs\Aggregate\AggregateRevision;
+use Daikon\Cqrs\Aggregate\DomainEventSequence;
+use Daikon\MessageBus\Metadata\Metadata;
 
 final class CommitStream implements CommitStreamInterface
 {

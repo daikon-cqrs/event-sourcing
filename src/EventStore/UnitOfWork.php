@@ -1,11 +1,11 @@
 <?php
 
-namespace Accordia\Cqrs\EventStore;
+namespace Daikon\Cqrs\EventStore;
 
-use Accordia\MessageBus\Metadata\Metadata;
-use Accordia\Cqrs\Aggregate\AggregateIdInterface;
-use Accordia\Cqrs\Aggregate\AggregateRootInterface;
-use Accordia\Cqrs\Aggregate\DomainEventSequence;
+use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Cqrs\Aggregate\AggregateIdInterface;
+use Daikon\Cqrs\Aggregate\AggregateRootInterface;
+use Daikon\Cqrs\Aggregate\DomainEventSequence;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject;
 
 use Assert\Assertion;
-use Accordia\Entity\ValueObject\ValueObjectInterface;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class AccessRole implements ValueObjectInterface
 {

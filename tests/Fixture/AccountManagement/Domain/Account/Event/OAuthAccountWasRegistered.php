@@ -1,14 +1,14 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use Accordia\MessageBus\FromArrayTrait;
-use Accordia\MessageBus\ToArrayTrait;
-use Accordia\Cqrs\Aggregate\AggregateId;
-use Accordia\Cqrs\Aggregate\DomainEvent;
-use AccordiaCqrsAggregateAggregateRevision;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\DomainEvent;
+use DaikonCqrsAggregateAggregateRevision;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
 
 final class OauthAccountWasRegistered extends DomainEvent
 {
@@ -16,7 +16,7 @@ final class OauthAccountWasRegistered extends DomainEvent
     use FromArrayTrait;
 
     /**
-     * @var \Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole
+     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole
      * @buzz::fromArray->fromNative
      */
     private $role;

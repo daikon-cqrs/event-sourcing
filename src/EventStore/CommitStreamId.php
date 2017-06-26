@@ -1,8 +1,8 @@
 <?php
 
-namespace Accordia\Cqrs\EventStore;
+namespace Daikon\Cqrs\EventStore;
 
-use Accordia\Entity\ValueObject\ValueObjectInterface;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class CommitStreamId implements ValueObjectInterface
 {

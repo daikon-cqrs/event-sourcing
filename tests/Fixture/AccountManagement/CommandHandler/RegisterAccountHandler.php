@@ -1,14 +1,14 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\CommandHandler;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\CommandHandler;
 
-use Accordia\MessageBus\MessageBusInterface;
-use Accordia\MessageBus\Metadata\Metadata;
-use Accordia\Cqrs\Aggregate\CommandHandler;
-use Accordia\Cqrs\EventStore\UnitOfWorkInterface;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEntityType;
+use Daikon\MessageBus\MessageBusInterface;
+use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Cqrs\Aggregate\CommandHandler;
+use Daikon\Cqrs\EventStore\UnitOfWorkInterface;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEntityType;
 
 final class RegisterAccountHandler extends CommandHandler
 {

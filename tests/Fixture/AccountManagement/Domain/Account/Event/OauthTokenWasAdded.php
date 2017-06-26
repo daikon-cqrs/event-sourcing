@@ -1,18 +1,18 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use Accordia\MessageBus\FromArrayTrait;
-use Accordia\MessageBus\ToArrayTrait;
-use Accordia\Cqrs\Aggregate\AggregateId;
-use Accordia\Cqrs\Aggregate\DomainEvent;
-use AccordiaCqrsAggregateAggregateRevision;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
-use Accordia\Entity\ValueObject\Text;
-use Accordia\Entity\ValueObject\Timestamp;
-use Accordia\Entity\ValueObject\Uuid;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\DomainEvent;
+use DaikonCqrsAggregateAggregateRevision;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Entity\ValueObject\Text;
+use Daikon\Entity\ValueObject\Timestamp;
+use Daikon\Entity\ValueObject\Uuid;
 
 final class OauthTokenWasAdded extends DomainEvent
 {
@@ -20,31 +20,31 @@ final class OauthTokenWasAdded extends DomainEvent
     use FromArrayTrait;
 
     /**
-     * @var \Accordia\Entity\ValueObject\Uuid
+     * @var \Daikon\Entity\ValueObject\Uuid
      * @buzz::fromArray->fromNative
      */
     private $id;
 
     /**
-     * @var \Accordia\Entity\ValueObject\Text
+     * @var \Daikon\Entity\ValueObject\Text
      * @buzz::fromArray->fromNative
      */
     private $tokenId;
 
     /**
-     * @var \Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken
+     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken
      * @buzz::fromArray->fromNative
      */
     private $token;
 
     /**
-     * @var \Accordia\Entity\ValueObject\Timestamp
+     * @var \Daikon\Entity\ValueObject\Timestamp
      * @buzz::fromArray->createFromString
      */
     private $expiresAt;
 
     /**
-     * @var \Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName
+     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName
      * @buzz::fromArray->fromNative
      */
     private $service;

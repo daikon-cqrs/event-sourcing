@@ -1,8 +1,8 @@
 <?php
 
-namespace Accordia\Cqrs\Aggregate;
+namespace Daikon\Cqrs\Aggregate;
 
-use Accordia\Entity\ValueObject\ValueObjectInterface;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 interface AggregateIdInterface extends ValueObjectInterface
 {

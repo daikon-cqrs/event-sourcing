@@ -1,8 +1,8 @@
 <?php
 
-namespace Accordia\Cqrs\Projection;
+namespace Daikon\Cqrs\Projection;
 
-use Accordia\Cqrs\Aggregate\DomainEventInterface;
+use Daikon\Cqrs\Aggregate\DomainEventInterface;
 
 trait ProjectionTrait
 {

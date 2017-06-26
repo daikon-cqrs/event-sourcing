@@ -1,11 +1,11 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\VerifyToken;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\VerifyToken;
 
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
-use Accordia\Entity\Entity\NestedEntity;
-use Accordia\Entity\ValueObject\Uuid;
-use Accordia\Entity\ValueObject\ValueObjectInterface;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Entity\Entity\NestedEntity;
+use Daikon\Entity\ValueObject\Uuid;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class VerificationToken extends NestedEntity
 {

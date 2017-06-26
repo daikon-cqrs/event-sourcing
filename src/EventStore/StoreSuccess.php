@@ -1,6 +1,6 @@
 <?php
 
-namespace Accordia\Cqrs\EventStore;
+namespace Daikon\Cqrs\EventStore;
 
 final class StoreSuccess implements StoreResultInterface
 {

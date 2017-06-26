@@ -1,17 +1,17 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity;
 
-use Accordia\Cqrs\Aggregate\AggregateId;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\HashedPassword;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username;
-use Accordia\Entity\Entity\Entity;
-use Accordia\Entity\Entity\NestedEntityList;
-use Accordia\Entity\ValueObject\Email;
-use Accordia\Entity\ValueObject\Text;
-use Accordia\Entity\ValueObject\ValueObjectInterface;
+use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\HashedPassword;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username;
+use Daikon\Entity\Entity\Entity;
+use Daikon\Entity\Entity\NestedEntityList;
+use Daikon\Entity\ValueObject\Email;
+use Daikon\Entity\ValueObject\Text;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class AccountEntity extends Entity
 {
@@ -202,10 +202,10 @@ final class AccountEntity extends Entity
      */
     private function addToken(array $tokenPayload, string $type): self
     {
-        /* @var \Accordia\Entity\EntityType\NestedEntityListAttribute $tokenList */
+        /* @var \Daikon\Entity\EntityType\NestedEntityListAttribute $tokenList */
         $tokensAttribute = $this->getEntityType()->getAttribute("tokens");
         $tokenType = $tokensAttribute->getValueType()->get($type);
-        /* @var \Accordia\Entity\Entity\NestedEntity $token */
+        /* @var \Daikon\Entity\Entity\NestedEntity $token */
         $token = $tokenType->makeEntity($tokenPayload, $this);
         /* @var AccountEntity $accountState */
         $accountState = $this->withValue("tokens", $this->getTokens()->push($token));

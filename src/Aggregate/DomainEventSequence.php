@@ -1,6 +1,6 @@
 <?php
 
-namespace Accordia\Cqrs\Aggregate;
+namespace Daikon\Cqrs\Aggregate;
 
 use Countable;
 use Ds\Vector;

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ef8c5961122fe269b227c662a77e2616",
+    "hash": "7b1161741b8bac5729aa126f9e67a942",
     "content-hash": "413ac2b64a054fb31fed62e56dd9ba65",
     "packages": [
         {
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/accordia/data-structures.git",
-                "reference": "7a605e981c376db96549c4b59852f686fa5e2724"
+                "reference": "e2fcac5a900293d3df3a4a9bddea0f8c4b7a8a02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/accordia/data-structures/zipball/7a605e981c376db96549c4b59852f686fa5e2724",
-                "reference": "7a605e981c376db96549c4b59852f686fa5e2724",
+                "url": "https://api.github.com/repos/accordia/data-structures/zipball/e2fcac5a900293d3df3a4a9bddea0f8c4b7a8a02",
+                "reference": "e2fcac5a900293d3df3a4a9bddea0f8c4b7a8a02",
                 "shasum": ""
             },
             "require": {
@@ -33,7 +33,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Accordia\\DataStructures\\": "src"
+                    "Daikon\\DataStructures\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -47,7 +47,7 @@
                 "list",
                 "map"
             ],
-            "time": "2017-06-16 20:48:53"
+            "time": "2017-06-26 23:06:03"
         },
         {
             "name": "accordia/entity",
@@ -55,12 +55,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/accordia/entity.git",
-                "reference": "7bfc0b6f7f73967173499316abb0c73b21875fc4"
+                "reference": "cd979c294d82999d6e0692c82484c2ba1241e178"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/accordia/entity/zipball/7bfc0b6f7f73967173499316abb0c73b21875fc4",
-                "reference": "7bfc0b6f7f73967173499316abb0c73b21875fc4",
+                "url": "https://api.github.com/repos/accordia/entity/zipball/cd979c294d82999d6e0692c82484c2ba1241e178",
+                "reference": "cd979c294d82999d6e0692c82484c2ba1241e178",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +78,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Accordia\\Entity\\": "src"
+                    "Daikon\\Entity\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -92,7 +92,7 @@
                 "generic",
                 "value-object"
             ],
-            "time": "2017-06-16 21:15:33"
+            "time": "2017-06-26 23:15:56"
         },
         {
             "name": "accordia/message-bus",
@@ -100,12 +100,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/accordia/message-bus.git",
-                "reference": "7f3828509a69ea6f95dc9ae1dc98c4b8313eb7d7"
+                "reference": "ed98ff8d7bd3d2c135e3b02b6df369a7acfbcbba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/accordia/message-bus/zipball/7f3828509a69ea6f95dc9ae1dc98c4b8313eb7d7",
-                "reference": "7f3828509a69ea6f95dc9ae1dc98c4b8313eb7d7",
+                "url": "https://api.github.com/repos/accordia/message-bus/zipball/ed98ff8d7bd3d2c135e3b02b6df369a7acfbcbba",
+                "reference": "ed98ff8d7bd3d2c135e3b02b6df369a7acfbcbba",
                 "shasum": ""
             },
             "require": {
@@ -121,7 +121,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Accordia\\MessageBus\\": "src"
+                    "Daikon\\MessageBus\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -134,7 +134,7 @@
                 "message-bus",
                 "messaging"
             ],
-            "time": "2017-06-16 20:55:34"
+            "time": "2017-06-26 23:12:25"
         },
         {
             "name": "beberlei/assert",

@@ -1,10 +1,10 @@
 <?php
 
-namespace Accordia\Cqrs\Projection;
+namespace Daikon\Cqrs\Projection;
 
-use Accordia\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
-use Accordia\MessageBus\EnvelopeInterface;
-use Accordia\Entity\EntityType\EntityTypeInterface;
+use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
+use Daikon\MessageBus\EnvelopeInterface;
+use Daikon\Entity\EntityType\EntityTypeInterface;
 
 class StandardProjector implements MessageHandlerInterface
 {

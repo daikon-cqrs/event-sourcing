@@ -1,15 +1,15 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use Accordia\MessageBus\FromArrayTrait;
-use Accordia\MessageBus\ToArrayTrait;
-use Accordia\Cqrs\Aggregate\AggregateId;
-use Accordia\Cqrs\Aggregate\DomainEvent;
-use AccordiaCqrsAggregateAggregateRevision;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
-use Accordia\Entity\ValueObject\Uuid;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\DomainEvent;
+use DaikonCqrsAggregateAggregateRevision;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Entity\ValueObject\Uuid;
 
 final class VerificationTokenWasAdded extends DomainEvent
 {
@@ -17,13 +17,13 @@ final class VerificationTokenWasAdded extends DomainEvent
     use FromArrayTrait;
 
     /**
-     * @var \Accordia\Entity\ValueObject\Uuid
+     * @var \Daikon\Entity\ValueObject\Uuid
      * @buzz::fromArray->fromNative
      */
     private $id;
 
     /**
-     * @var \Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken
+     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken
      * @buzz::fromArray->fromNative
      */
     private $token;

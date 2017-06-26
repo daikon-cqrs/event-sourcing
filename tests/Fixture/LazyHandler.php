@@ -1,9 +1,9 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture;
+namespace Daikon\Tests\Cqrs\Fixture;
 
-use Accordia\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
-use Accordia\MessageBus\EnvelopeInterface;
+use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
+use Daikon\MessageBus\EnvelopeInterface;
 
 final class LazyHandler implements MessageHandlerInterface
 {

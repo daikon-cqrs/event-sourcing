@@ -1,17 +1,17 @@
 <?php
 
-namespace Accordia\Tests\Cqrs\Fixture\AccountManagement\Projection;
+namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Projection;
 
-use Accordia\Cqrs\Projection\ProjectionInterface;
-use Accordia\Cqrs\Projection\ProjectionTrait;
-use Accordia\Entity\Entity\Entity;
-use Accordia\Entity\ValueObject\ValueObjectInterface;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AccountWasRegistered;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AuthenticationTokenWasAdded;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\OauthAccountWasRegistered;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\OauthTokenWasAdded;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\PasswordTokenWasAdded;
-use Accordia\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\VerificationTokenWasAdded;
+use Daikon\Cqrs\Projection\ProjectionInterface;
+use Daikon\Cqrs\Projection\ProjectionTrait;
+use Daikon\Entity\Entity\Entity;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AccountWasRegistered;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AuthenticationTokenWasAdded;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\OauthAccountWasRegistered;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\OauthTokenWasAdded;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\PasswordTokenWasAdded;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\VerificationTokenWasAdded;
 
 final class AccountProjection extends Entity implements ProjectionInterface
 {
@@ -105,10 +105,10 @@ final class AccountProjection extends Entity implements ProjectionInterface
      */
     private function addToken(array $tokenPayload, string $type): self
     {
-        /* @var \Accordia\Entity\EntityType\NestedEntityListAttribute $tokenList */
+        /* @var \Daikon\Entity\EntityType\NestedEntityListAttribute $tokenList */
         $tokensAttribute = $this->getEntityType()->getAttribute("tokens");
         $tokenType = $tokensAttribute->getValueType()->get($type);
-        /* @var \Accordia\Entity\Entity\NestedEntity $token */
+        /* @var \Daikon\Entity\Entity\NestedEntity $token */
         $token = $tokenType->makeEntity($tokenPayload, $this);
         /* @var AccountEntity $accountState */
         $accountState = $this->withValue("tokens", $this->get("tokens")->push($token));

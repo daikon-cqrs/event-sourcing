@@ -1,13 +1,13 @@
 <?php
 
-namespace Accordia\Cqrs\Aggregate;
+namespace Daikon\Cqrs\Aggregate;
 
-use Accordia\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
-use Accordia\MessageBus\EnvelopeInterface;
-use Accordia\MessageBus\MessageBusInterface;
-use Accordia\MessageBus\Metadata\Metadata;
-use Accordia\Cqrs\EventStore\CommitInterface;
-use Accordia\Cqrs\EventStore\UnitOfWorkInterface;
+use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
+use Daikon\MessageBus\EnvelopeInterface;
+use Daikon\MessageBus\MessageBusInterface;
+use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Cqrs\EventStore\CommitInterface;
+use Daikon\Cqrs\EventStore\UnitOfWorkInterface;
 
 abstract class CommandHandler implements MessageHandlerInterface
 {

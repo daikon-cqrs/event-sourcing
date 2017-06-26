@@ -1,9 +1,9 @@
 <?php
 
-namespace Accordia\Cqrs\Projection;
+namespace Daikon\Cqrs\Projection;
 
-use Accordia\Cqrs\Aggregate\DomainEventInterface;
-use Accordia\Entity\Entity\EntityInterface;
+use Daikon\Cqrs\Aggregate\DomainEventInterface;
+use Daikon\Entity\Entity\EntityInterface;
 
 interface ProjectionInterface extends EntityInterface
 {

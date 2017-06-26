@@ -1,8 +1,8 @@
 <?php
 
-namespace Accordia\Cqrs\Aggregate;
+namespace Daikon\Cqrs\Aggregate;
 
-use Accordia\MessageBus\MessageInterface;
+use Daikon\MessageBus\MessageInterface;
 
 interface DomainEventInterface extends MessageInterface
 {

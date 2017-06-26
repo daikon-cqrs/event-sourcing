@@ -1,9 +1,9 @@
 <?php
 
-namespace Accordia\Cqrs\Aggregate;
+namespace Daikon\Cqrs\Aggregate;
 
 use Assert\Assertion;
-use Accordia\Entity\ValueObject\ValueObjectInterface;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class AggregateRevision implements ValueObjectInterface
 {
