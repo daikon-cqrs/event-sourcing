@@ -4,138 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7b1161741b8bac5729aa126f9e67a942",
-    "content-hash": "413ac2b64a054fb31fed62e56dd9ba65",
+    "hash": "936dffe0899935e18bbd2b40b3db0753",
+    "content-hash": "6579225babf6992d48d59671a95d724a",
     "packages": [
-        {
-            "name": "accordia/data-structures",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/accordia/data-structures.git",
-                "reference": "e2fcac5a900293d3df3a4a9bddea0f8c4b7a8a02"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/accordia/data-structures/zipball/e2fcac5a900293d3df3a4a9bddea0f8c4b7a8a02",
-                "reference": "e2fcac5a900293d3df3a4a9bddea0f8c4b7a8a02",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1",
-                "php-ds/php-ds": "^1.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.2",
-                "satooshi/php-coveralls": "master@dev",
-                "squizlabs/php_codesniffer": "^3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Daikon\\DataStructures\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MPL-2.0"
-            ],
-            "description": "Generic data-structure traits based on php/ds.",
-            "homepage": "https://github.com/accordia/data-structures",
-            "keywords": [
-                "data-structures",
-                "list",
-                "map"
-            ],
-            "time": "2017-06-26 23:06:03"
-        },
-        {
-            "name": "accordia/entity",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/accordia/entity.git",
-                "reference": "cd979c294d82999d6e0692c82484c2ba1241e178"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/accordia/entity/zipball/cd979c294d82999d6e0692c82484c2ba1241e178",
-                "reference": "cd979c294d82999d6e0692c82484c2ba1241e178",
-                "shasum": ""
-            },
-            "require": {
-                "accordia/data-structures": "master@dev",
-                "beberlei/assert": "~2.7",
-                "jms/parser-lib": "~1.0",
-                "php": ">=7.1",
-                "ramsey/uuid": "~3.6"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.2",
-                "satooshi/php-coveralls": "master@dev",
-                "squizlabs/php_codesniffer": "^3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Daikon\\Entity\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MPL-2.0"
-            ],
-            "description": "Generic boilerplate for implementing structured entities in php.",
-            "homepage": "https://github.com/accordia/entity",
-            "keywords": [
-                "entity",
-                "generic",
-                "value-object"
-            ],
-            "time": "2017-06-26 23:15:56"
-        },
-        {
-            "name": "accordia/message-bus",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/accordia/message-bus.git",
-                "reference": "ed98ff8d7bd3d2c135e3b02b6df369a7acfbcbba"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/accordia/message-bus/zipball/ed98ff8d7bd3d2c135e3b02b6df369a7acfbcbba",
-                "reference": "ed98ff8d7bd3d2c135e3b02b6df369a7acfbcbba",
-                "shasum": ""
-            },
-            "require": {
-                "accordia/data-structures": "master@dev",
-                "php": ">=7.1",
-                "ramsey/uuid": "3.6.*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.2",
-                "satooshi/php-coveralls": "master@dev",
-                "squizlabs/php_codesniffer": "^3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Daikon\\MessageBus\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MPL-2.0"
-            ],
-            "description": "Lightweight message bus for php.",
-            "homepage": "https://github.com/accordia/message-bus",
-            "keywords": [
-                "message-bus",
-                "messaging"
-            ],
-            "time": "2017-06-26 23:12:25"
-        },
         {
             "name": "beberlei/assert",
             "version": "v2.7.6",
@@ -190,6 +61,135 @@
                 "validation"
             ],
             "time": "2017-05-04 02:00:24"
+        },
+        {
+            "name": "daikon/data-structures",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/daikon-cqrs/data-structures.git",
+                "reference": "9a3167f37f614ffa2912283efd30e1aa9e3f4af8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/daikon-cqrs/data-structures/zipball/9a3167f37f614ffa2912283efd30e1aa9e3f4af8",
+                "reference": "9a3167f37f614ffa2912283efd30e1aa9e3f4af8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1",
+                "php-ds/php-ds": "^1.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.2",
+                "satooshi/php-coveralls": "master@dev",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Daikon\\DataStructures\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MPL-2.0"
+            ],
+            "description": "Generic data-structure traits based on php/ds.",
+            "homepage": "https://github.com/daikon-cqrs/data-structures",
+            "keywords": [
+                "data-structures",
+                "list",
+                "map"
+            ],
+            "time": "2017-06-27 16:36:02"
+        },
+        {
+            "name": "daikon/entity",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/daikon-cqrs/entity.git",
+                "reference": "e6520eca52a00182fc6e78cd8fb0012e5b0f7457"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/daikon-cqrs/entity/zipball/e6520eca52a00182fc6e78cd8fb0012e5b0f7457",
+                "reference": "e6520eca52a00182fc6e78cd8fb0012e5b0f7457",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "~2.7",
+                "daikon/data-structures": "master@dev",
+                "jms/parser-lib": "~1.0",
+                "php": ">=7.1",
+                "ramsey/uuid": "~3.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.2",
+                "satooshi/php-coveralls": "master@dev",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Daikon\\Entity\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MPL-2.0"
+            ],
+            "description": "Generic boilerplate for implementing structured entities in php.",
+            "homepage": "https://github.com/daikon-cqrs/entity",
+            "keywords": [
+                "entity",
+                "generic",
+                "value-object"
+            ],
+            "time": "2017-06-27 16:42:14"
+        },
+        {
+            "name": "daikon/message-bus",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/daikon-cqrs/message-bus.git",
+                "reference": "1b00efd87488e770cf4e4cf99b17e7c4c05d756d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/1b00efd87488e770cf4e4cf99b17e7c4c05d756d",
+                "reference": "1b00efd87488e770cf4e4cf99b17e7c4c05d756d",
+                "shasum": ""
+            },
+            "require": {
+                "daikon/data-structures": "master@dev",
+                "php": ">=7.1",
+                "ramsey/uuid": "3.6.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.2",
+                "satooshi/php-coveralls": "master@dev",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Daikon\\MessageBus\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MPL-2.0"
+            ],
+            "description": "Lightweight message bus for php.",
+            "homepage": "https://github.com/daikon-cqrs/message-bus",
+            "keywords": [
+                "message-bus",
+                "messaging"
+            ],
+            "time": "2017-06-27 16:44:07"
         },
         {
             "name": "jms/parser-lib",
@@ -2697,8 +2697,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "accordia/entity": 20,
-        "accordia/message-bus": 20,
+        "daikon/entity": 20,
+        "daikon/message-bus": 20,
         "satooshi/php-coveralls": 20
     },
     "prefer-stable": true,

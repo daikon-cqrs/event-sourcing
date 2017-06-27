@@ -1,17 +1,17 @@
 {
-    "name": "accordia/cqrs",
+    "name": "daikon/cqrs",
     "type": "library",
     "description": "CQRS and event-sourcing library for php.",
     "keywords": [ "cqrs", "event-sourcing" ],
-    "homepage": "https://github.com/accordia/cqrs",
+    "homepage": "https://github.com/daikon-cqrs/cqrs",
     "license": "MPL-2.0",
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
         "php-ds/php-ds": "^v1.1",
-        "accordia/entity": "master@dev",
-        "accordia/message-bus": "master@dev"
+        "daikon/entity": "master@dev",
+        "daikon/message-bus": "master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
