@@ -2,14 +2,15 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command;
 
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\Command;
+use Daikon\Entity\ValueObject\Timestamp;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username;
-use Daikon\Entity\ValueObject\Timestamp;
 
 final class RegisterAccount extends Command
 {
@@ -39,6 +40,11 @@ final class RegisterAccount extends Command
      * @buzz::fromArray->fromNative
      */
     private $username;
+
+    public static function getAggregateRootClass(): string
+    {
+        return Account::class;
+    }
 
     /**
      * @return Timestamp

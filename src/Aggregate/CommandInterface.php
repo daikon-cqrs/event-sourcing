@@ -6,6 +6,8 @@ use Daikon\MessageBus\MessageInterface;
 
 interface CommandInterface extends MessageInterface
 {
+    public static function getAggregateRootClass(): string;
+
     /**
      * @return AggregateIdInterface
      */

@@ -39,6 +39,11 @@ final class RegisterOauthAccount extends Command
      */
     private $role;
 
+    public static function getAggregateRootClass(): string
+    {
+        return Account::class;
+    }
+
     /**
      * @return Text
      */
