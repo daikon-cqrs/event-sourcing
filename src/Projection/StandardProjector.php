@@ -8,23 +8,13 @@ use Daikon\Entity\EntityType\EntityTypeInterface;
 
 class StandardProjector implements MessageHandlerInterface
 {
-    /**
-     * @var EntityTypeInterface
-     */
     private $projectionType;
 
-    /**
-     * @param EntityTypeInterface $projectionType
-     */
     public function __construct(EntityTypeInterface $projectionType)
     {
         $this->projectionType = $projectionType;
     }
 
-    /**
-     * @param EnvelopeInterface $envelope
-     * @return bool
-     */
     public function handle(EnvelopeInterface $envelope): bool
     {
         $commit = $envelope->getMessage();

@@ -9,7 +9,7 @@ use Daikon\Cqrs\EventStore\Commit;
 use Daikon\Cqrs\EventStore\CommitStream;
 use Daikon\Cqrs\EventStore\CommitStreamRevision;
 use Daikon\Cqrs\EventStore\NoopStreamProcessor;
-use Daikon\Cqrs\EventStore\PersistenceAdapterInterface;
+use Daikon\Cqrs\EventStore\StreamStoreInterface;
 use Daikon\Cqrs\EventStore\StoreSuccess;
 use Daikon\Cqrs\EventStore\UnitOfWork;
 use Daikon\Cqrs\Projection\StandardProjector;
@@ -65,11 +65,11 @@ final class PlaygroundTest extends TestCase
             ->withConsecutive(...$expectedMessages)
             ->willReturn(true);
 
-        $persistenceMock = $this->getMockBuilder(PersistenceAdapterInterface::class)
-            ->setMethods([ "storeStream", "loadStream" ])
+        $streamStoreMock = $this->getMockBuilder(StreamStoreInterface::class)
+            ->setMethods([ "commit", "checkout" ])
             ->getMock();
-        $persistenceMock->expects($this->once())
-            ->method("storeStream")
+        $streamStoreMock->expects($this->once())
+            ->method("commit")
             ->with($this->callback(function (CommitStream $commitStream) {
                 $this->assertEquals($commitStream->getStreamRevision()->toNative(), 1);
                 $this->assertEquals($commitStream->getAggregateRevision()->toNative(), 3);
@@ -79,7 +79,7 @@ final class PlaygroundTest extends TestCase
 
         $handler = new RegisterAccountHandler(
             new AccountEntityType,
-            new UnitOfWork(Account::class, $persistenceMock, new NoopStreamProcessor),
+            new UnitOfWork(Account::class, $streamStoreMock, new NoopStreamProcessor),
             $messageBusMock
         );
         $registerCommand = $this->createCommand();
@@ -112,12 +112,12 @@ final class PlaygroundTest extends TestCase
     private function setupMessageBus()
     {
         $messageBus = false;
-        $persistenceMock = $this->createMock(PersistenceAdapterInterface::class);
-        $persistenceMock->method("storeStream")->willReturn(new StoreSuccess);
-        $registerAccountFactory = function () use (&$messageBus, $persistenceMock) {
+        $streamStoreMock = $this->createMock(StreamStoreInterface::class);
+        $streamStoreMock->method("commit")->willReturn(new StoreSuccess);
+        $registerAccountFactory = function () use (&$messageBus, $streamStoreMock) {
             return new RegisterAccountHandler(
                 new AccountEntityType,
-                new UnitOfWork(Account::class, $persistenceMock, new NoopStreamProcessor),
+                new UnitOfWork(Account::class, $streamStoreMock, new NoopStreamProcessor),
                 $messageBus
             );
         };

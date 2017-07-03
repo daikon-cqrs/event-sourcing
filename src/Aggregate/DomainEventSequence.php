@@ -9,15 +9,8 @@ use IteratorAggregate;
 
 final class DomainEventSequence implements IteratorAggregate, Countable
 {
-    /**
-     * @var Vector
-     */
     private $compositeVector;
 
-    /**
-     * @param array $eventsArray
-     * @return DomainEventSequence
-     */
     public static function fromArray(array $eventsArray): DomainEventSequence
     {
         return new static(array_map(function (array $eventState) {
@@ -26,17 +19,11 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         }, $eventsArray));
     }
 
-    /**
-     * @return DomainEventSequence
-     */
     public static function makeEmpty(): DomainEventSequence
     {
         return new self;
     }
 
-    /**
-     * @param DomainEventInterface[] $events
-     */
     public function __construct(array ...$events)
     {
         (function (DomainEventInterface ...$events) {
@@ -44,10 +31,6 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         })(...$events);
     }
 
-    /**
-     * @param  DomainEventInterface $event
-     * @return DomainEventSequence
-     */
     public function push(DomainEventInterface $event): self
     {
         if (!$this->isEmpty() && !$this->getHeadRevision()->increment()->equals($event->getAggregateRevision())) {
@@ -61,9 +44,6 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         return $eventSequence;
     }
 
-    /**
-     * @return mixed[]
-     */
     public function toNative(): array
     {
         $nativeList = [];
@@ -75,84 +55,51 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         return $nativeList;
     }
 
-    /**
-     * @return AggregateRevision
-     */
     public function getHeadRevision(): AggregateRevision
     {
         return $this->isEmpty() ? AggregateRevision::makeEmpty() : $this->getHead()->getAggregateRevision();
     }
 
-    /**
-     * @return AggregateRevision
-     */
     public function getTailRevision(): AggregateRevision
     {
         return $this->isEmpty() ? AggregateRevision::makeEmpty() :$this->getTail()->getAggregateRevision();
     }
 
-    /**
-     * @return DomainEventInterface|null
-     */
     public function getTail(): ?DomainEventInterface
     {
         return $this->compositeVector->first();
     }
 
-    /**
-     * @return DomainEventInterface|null
-     */
     public function getHead(): ?DomainEventInterface
     {
         return $this->compositeVector->last();
     }
 
-    /**
-     * @return int
-     */
     public function getLength(): int
     {
         return $this->count();
     }
 
-    /**
-     * @return boolean
-     */
     public function isEmpty(): bool
     {
         return $this->compositeVector->isEmpty();
     }
 
-    /**
-     * @param DomainEventInterface $event
-     * @return int
-     */
     public function indexOf(DomainEventInterface $event): int
     {
         return $this->compositeVector->find($event);
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return $this->compositeVector->count();
     }
 
-    /**
-     * @return Iterator
-     */
     public function getIterator(): Iterator
     {
         return $this->compositeVector->getIterator();
     }
 
-    /**
-     * @param array $eventState
-     * @return string
-     * @throws \Exception
-     */
     private static function resolveEventFqcn(array $eventState): DomainEventInterface
     {
         if (!isset($eventState["@type"])) {

@@ -9,56 +9,29 @@ use Daikon\Cqrs\Aggregate\DomainEventSequence;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {
-    /**
-     * @var string
-     */
     private $aggregateRootType;
 
-    /**
-     * @var PersistenceAdapterInterface
-     */
-    private $persistenceAdapter;
+    private $streamStore;
 
-    /**
-     * @var StreamProcessorInterface
-     */
     private $streamProcessor;
 
-    /**
-     * @var string
-     */
     private $streamImplementor;
 
-    /**
-     * @var CommitStreamMap|null
-     */
     private $trackedCommitStreams;
 
-    /**
-     * @param string $aggregateRootType
-     * @param PersistenceAdapterInterface $persistenceAdapter
-     * @param StreamProcessorInterface $streamProcessor
-     * @param string $streamImplementor
-     */
     public function __construct(
         string $aggregateRootType,
-        PersistenceAdapterInterface $persistenceAdapter,
+        StreamStoreInterface $streamStore,
         StreamProcessorInterface $streamProcessor,
         string $streamImplementor = CommitStream::class
     ) {
         $this->aggregateRootType = $aggregateRootType;
-        $this->persistenceAdapter = $persistenceAdapter;
+        $this->streamStore = $streamStore;
         $this->streamProcessor = $streamProcessor;
         $this->streamImplementor = $streamImplementor;
         $this->trackedCommitStreams = CommitStreamMap::makeEmpty();
     }
 
-    /**
-     * @param AggregateRootInterface $aggregateRoot
-     * @param Metadata $metadata
-     * @return CommitSequence
-     * @throws \Exception
-     */
     public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence
     {
         $streamId = CommitStreamId::fromNative($aggregateRoot->getIdentifier());
@@ -73,24 +46,19 @@ final class UnitOfWork implements UnitOfWorkInterface
         }
         $stream = $stream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
         $knownHead = $stream->getStreamRevision();
-        if (!$this->persistenceAdapter->storeStream($stream, $knownHead)) {
+        if (!$this->streamStore->commit($stream, $knownHead)) {
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
             throw new \Exception("Failed to store commit-stream with stream-id: ".$stream->getStreamId());
         }
         return $stream->getCommitRange($knownHead, $stream->getStreamRevision());
     }
 
-    /**
-     * @param AggregateIdInterface $aggregateId
-     * @param CommitStreamRevision|null $revision
-     * @return AggregateRootInterface
-     */
     public function checkout(
         AggregateIdInterface $aggregateId,
         CommitStreamRevision $revision = null
     ): AggregateRootInterface {
         $streamId = CommitStreamId::fromNative($aggregateId->toNative());
-        $stream = $this->persistenceAdapter->loadStream($streamId, $revision);
+        $stream = $this->streamStore->checkout($streamId, $revision);
         $history = DomainEventSequence::makeEmpty();
         foreach ($this->streamProcessor->process($stream) as $commit) {
             $history = $history->append($commit->getEventLog());

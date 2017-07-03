@@ -11,31 +11,16 @@ use Daikon\Cqrs\EventStore\UnitOfWorkInterface;
 
 abstract class CommandHandler implements MessageHandlerInterface
 {
-    /**
-     * @var MessageBusInterface
-     */
     private $messageBus;
 
-    /**
-     * @var UnitOfWorkInterface
-     */
     private $unitOfWork;
 
-    /**
-     * @param UnitOfWorkInterface $unitOfWork
-     * @param MessageBusInterface $messageBus
-     */
     public function __construct(UnitOfWorkInterface $unitOfWork, MessageBusInterface $messageBus)
     {
         $this->messageBus = $messageBus;
         $this->unitOfWork = $unitOfWork;
     }
 
-    /**
-     * @param EnvelopeInterface $envelope
-     * @return bool
-     * @throws \Exception
-     */
     public function handle(EnvelopeInterface $envelope): bool
     {
         $commandMessage = $envelope->getMessage();
@@ -48,11 +33,6 @@ abstract class CommandHandler implements MessageHandlerInterface
         return call_user_func($handler, $commandMessage, $envelope->getMetadata());
     }
 
-    /**
-     * @param AggregateRootInterface $aggregateRoot
-     * @param Metadata $metadata
-     * @return bool
-     */
     protected function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): bool
     {
         $committed = false;
@@ -64,10 +44,6 @@ abstract class CommandHandler implements MessageHandlerInterface
         return $committed;
     }
 
-    /**
-     * @param CommitInterface $commit
-     * @return bool
-     */
     private function dispatch(CommitInterface $commit): bool
     {
         $commitPublished = $this->messageBus->publish($commit, "commits");

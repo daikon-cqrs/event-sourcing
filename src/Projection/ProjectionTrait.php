@@ -6,20 +6,11 @@ use Daikon\Cqrs\Aggregate\DomainEventInterface;
 
 trait ProjectionTrait
 {
-    /**
-     * @param DomainEventInterface $domainEvent
-     * @return ProjectionInterface
-     */
     public function project(DomainEventInterface $domainEvent): ProjectionInterface
     {
         return $this->invokeEventHandler($domainEvent);
     }
 
-    /**
-     * @param DomainEventInterface $event
-     * @return ProjectionInterface
-     * @throws \Exception
-     */
     private function invokeEventHandler(DomainEventInterface $event): ProjectionInterface
     {
         $handlerName = preg_replace("/Event$/", "", (new \ReflectionClass($event))->getShortName());

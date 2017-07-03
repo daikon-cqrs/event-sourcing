@@ -8,26 +8,12 @@ use Daikon\MessageBus\Metadata\Metadata;
 
 final class CommitStream implements CommitStreamInterface
 {
-    /**
-     * @var CommitStreamId
-     */
     private $streamId;
 
-    /**
-     * @var CommitSequence
-     */
     private $commitSequence;
 
-    /**
-     * @var string
-     */
     private $commitImplementor;
 
-    /**
-     * @param CommitStreamId $streamId
-     * @param string $commitImplementor
-     * @return CommitStreamInterface
-     */
     public static function fromStreamId(
         CommitStreamId $streamId,
         string $commitImplementor = Commit::class
@@ -35,10 +21,6 @@ final class CommitStream implements CommitStreamInterface
         return new static($streamId);
     }
 
-    /**
-     * @param mixed[] $streamState
-     * @return CommitStream
-     */
     public static function fromArray(array $streamState): CommitStream
     {
         return new static(
@@ -48,11 +30,6 @@ final class CommitStream implements CommitStreamInterface
         );
     }
 
-    /**
-     * @param CommitStreamId $streamId
-     * @param CommitSequence|null $commitSequence
-     * @param string $commitImplementor
-     */
     public function __construct(
         CommitStreamId $streamId,
         CommitSequence $commitSequence = null,
@@ -63,35 +40,21 @@ final class CommitStream implements CommitStreamInterface
         $this->commitImplementor = $commitImplementor;
     }
 
-    /**
-     * @return CommitStreamId
-     */
     public function getStreamId(): CommitStreamId
     {
         return $this->streamId;
     }
 
-    /**
-     * @return CommitStreamRevision
-     */
     public function getStreamRevision(): CommitStreamRevision
     {
         return CommitStreamRevision::fromNative($this->commitSequence->getLength());
     }
 
-    /**
-     * @return AggregateRevision
-     */
     public function getAggregateRevision(): AggregateRevision
     {
         return $this->commitSequence->getHead()->getAggregateRevision();
     }
 
-    /**
-     * @param DomainEventSequence $eventLog
-     * @param Metadata $metadata
-     * @return CommitStreamInterface
-     */
     public function appendEvents(DomainEventSequence $eventLog, Metadata $metadata): CommitStreamInterface
     {
         $previousCommits = $this->findCommitsSince($eventLog->getHeadRevision());
@@ -109,11 +72,6 @@ final class CommitStream implements CommitStreamInterface
         );
     }
 
-    /**
-     * @param CommitInterface $commit
-     * @return CommitStreamInterface
-     * @throws \Exception
-     */
     public function appendCommit(CommitInterface $commit): CommitStreamInterface
     {
         $stream = clone $this;
@@ -121,35 +79,21 @@ final class CommitStream implements CommitStreamInterface
         return $stream;
     }
 
-    /**
-     * @return CommitInterface|null
-     */
     public function getHead(): ?CommitInterface
     {
         return $this->commitSequence->isEmpty() ? null : $this->commitSequence->getHead();
     }
 
-    /**
-     * @param CommitStreamRevision $fromRev
-     * @param CommitStreamRevision|null $toRev
-     * @return CommitSequence
-     */
     public function getCommitRange(CommitStreamRevision $fromRev, CommitStreamRevision $toRev = null): CommitSequence
     {
         return $this->commitSequence->getSlice($fromRev, $toRev ?? $this->getStreamRevision());
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return $this->commitSequence->count();
     }
 
-    /**
-     * @return mixed[]
-     */
     public function toNative(): array
     {
         return [
@@ -159,18 +103,11 @@ final class CommitStream implements CommitStreamInterface
         ];
     }
 
-    /**
-     * @return Iterator
-     */
     public function getIterator(): \Iterator
     {
         return $this->commitSequence->getIterator();
     }
 
-    /**
-     * @param AggregateRevision $incomingRevision
-     * @return CommitSequence
-     */
     private function findCommitsSince(AggregateRevision $incomingRevision): CommitSequence
     {
         $previousCommits = [];
@@ -182,11 +119,6 @@ final class CommitStream implements CommitStreamInterface
         return new CommitSequence(array_reverse($previousCommits));
     }
 
-    /**
-     * @param DomainEventSequence $newEvents
-     * @param CommitSequence $conflictingCommits
-     * @return DomainEventInterface[]
-     */
     private function detectConflictingEvents(DomainEventSequence $newEvents, CommitSequence $previousCommits): array
     {
         $conflictingEvents = [];
