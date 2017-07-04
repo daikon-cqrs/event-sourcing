@@ -16,26 +16,22 @@ final class RegisterOauthAccount extends Command
     use FromArrayTrait;
 
     /**
-     * @var \Daikon\Entity\ValueObject\Timestamp
-     * @buzz::fromArray->createFromString
+     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Timestamp::createFromString)
      */
     private $expiresAt;
 
     /**
-     * @var \Daikon\Entity\ValueObject\Text
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName::fromNative)
      */
     private $service;
 
     /**
-     * @var \Daikon\Entity\ValueObject\Text
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Text::fromNative)
      */
     private $tokenId;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole::fromNative)
      */
     private $role;
 

@@ -155,12 +155,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/message-bus.git",
-                "reference": "edcaf1540cd1986271316c28616220f688ccf476"
+                "reference": "2c90a511cfba03e14d33dabaa8ef753a0c0a5f2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/edcaf1540cd1986271316c28616220f688ccf476",
-                "reference": "edcaf1540cd1986271316c28616220f688ccf476",
+                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/2c90a511cfba03e14d33dabaa8ef753a0c0a5f2a",
+                "reference": "2c90a511cfba03e14d33dabaa8ef753a0c0a5f2a",
                 "shasum": ""
             },
             "require": {
@@ -189,7 +189,7 @@
                 "message-bus",
                 "messaging"
             ],
-            "time": "2017-07-02 17:54:27"
+            "time": "2017-07-04 00:40:13"
         },
         {
             "name": "jms/parser-lib",
@@ -1295,16 +1295,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.2.2",
+            "version": "6.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "f2786490399836d2a544a34785c4a8d3ab32cf0e"
+                "reference": "fa5711d0559fc4b64deba0702be52d41434cbcb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f2786490399836d2a544a34785c4a8d3ab32cf0e",
-                "reference": "f2786490399836d2a544a34785c4a8d3ab32cf0e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fa5711d0559fc4b64deba0702be52d41434cbcb7",
+                "reference": "fa5711d0559fc4b64deba0702be52d41434cbcb7",
                 "shasum": ""
             },
             "require": {
@@ -1375,7 +1375,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-06-13 14:07:07"
+            "time": "2017-07-03 15:54:24"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

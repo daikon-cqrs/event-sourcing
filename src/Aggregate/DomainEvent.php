@@ -1,18 +1,30 @@
 <?php
+/**
+ * This file is part of the daikon-cqrs/cqrs project.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace Daikon\Cqrs\Aggregate;
 
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+
 abstract class DomainEvent implements DomainEventInterface
 {
+    use FromArrayTrait;
+    use ToArrayTrait;
+
     /**
-     * @var \Daikon\Cqrs\Aggregate\AggregateId
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Cqrs\Aggregate\AggregateId::fromNative)
      */
     private $aggregateId;
 
     /**
-     * @var \Daikon\Cqrs\Aggregate\AggregateRevision
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Cqrs\Aggregate\AggregateRevision::fromNative)
      */
     private $aggregateRevision;
 

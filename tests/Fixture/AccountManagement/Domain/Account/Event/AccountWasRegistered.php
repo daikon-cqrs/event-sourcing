@@ -18,20 +18,17 @@ final class AccountWasRegistered extends DomainEvent
     use FromArrayTrait;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username::fromNative)
      */
     private $username;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole::fromNative)
      */
     private $role;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale::fromNative)
      */
     private $locale;
 

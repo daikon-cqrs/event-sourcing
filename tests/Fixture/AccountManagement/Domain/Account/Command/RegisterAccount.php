@@ -18,26 +18,22 @@ final class RegisterAccount extends Command
     use FromArrayTrait;
 
     /**
-     * @var \Daikon\Entity\ValueObject\Timestamp
-     * @buzz::fromArray->createFromString
+     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Timestamp::createFromString)
      */
     private $expiresAt;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole::fromNative)
      */
     private $role;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale::fromNative)
      */
     private $locale;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username::fromNative)
      */
     private $username;
 

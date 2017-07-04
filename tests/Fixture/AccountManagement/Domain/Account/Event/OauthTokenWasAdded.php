@@ -20,32 +20,27 @@ final class OauthTokenWasAdded extends DomainEvent
     use FromArrayTrait;
 
     /**
-     * @var \Daikon\Entity\ValueObject\Uuid
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Uuid::fromNative)
      */
     private $id;
 
     /**
-     * @var \Daikon\Entity\ValueObject\Text
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Text::fromNative)
      */
     private $tokenId;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken::fromNative)
      */
     private $token;
 
     /**
-     * @var \Daikon\Entity\ValueObject\Timestamp
-     * @buzz::fromArray->createFromString
+     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Timestamp::createFromString)
      */
     private $expiresAt;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName::fromNative)
      */
     private $service;
 

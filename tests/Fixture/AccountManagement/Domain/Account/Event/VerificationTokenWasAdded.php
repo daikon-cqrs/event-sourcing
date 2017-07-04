@@ -17,14 +17,12 @@ final class VerificationTokenWasAdded extends DomainEvent
     use FromArrayTrait;
 
     /**
-     * @var \Daikon\Entity\ValueObject\Uuid
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Uuid::fromNative)
      */
     private $id;
 
     /**
-     * @var \Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken
-     * @buzz::fromArray->fromNative
+     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken::fromNative)
      */
     private $token;
 
