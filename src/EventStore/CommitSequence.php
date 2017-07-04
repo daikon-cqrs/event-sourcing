@@ -57,7 +57,7 @@ final class CommitSequence implements IteratorAggregate, Countable
             $nativeRep = $commit->toArray();
             $nativeRep["@type"] = get_class($commit);
             return $nativeRep;
-        });
+        }, $this->compositeVector->toArray());
     }
 
     public function getTail(): ?CommitInterface
