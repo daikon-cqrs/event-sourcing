@@ -40,11 +40,14 @@ final class CommitSequence implements IteratorAggregate, Countable
 
     public function push(CommitInterface $commit): self
     {
-        if (!$this->isEmpty() && !$this->getHeadRevision()->increment()->equals($commit->getAggregateRevision())) {
-            throw new \Exception(sprintf(
-                "Trying to add unexpected revision %s to event-sequence. Expected revision is $nextRevision",
-                $commit->getAggregateRevision()
-            ));
+        if (!$this->isEmpty()) {
+            $nextRevision = $this->getHead()->getAggregateRevision()->increment();
+            if (!$nextRevision->equals($commit->getAggregateRevision())) {
+                throw new \Exception(sprintf(
+                    "Trying to add unexpected revision %s to event-sequence. Expected revision is $nextRevision",
+                    $commit->getAggregateRevision()
+                ));
+            }
         }
         $commitSequence = clone $this;
         $commitSequence->compositeVector->push($commit);
@@ -70,9 +73,12 @@ final class CommitSequence implements IteratorAggregate, Countable
         return $this->isEmpty() ? null : $this->compositeVector->last();
     }
 
-    public function get(CommitStreamRevision $streamRevision): CommitInterface
+    public function get(CommitStreamRevision $streamRevision): ?CommitInterface
     {
-        return $this->compositeVector->get($streamRevision->toNative());
+        if ($this->compositeVector->offsetExists($streamRevision->toNative() - 1)) {
+            $this->compositeVector->get($streamRevision->toNative() - 1);
+        }
+        return null;
     }
 
     public function getSlice(CommitStreamRevision $start, CommitStreamRevision $end): self
