@@ -69,9 +69,19 @@ final class AggregateRevision implements ValueObjectInterface
         return $this->revision >= $revision->toNative();
     }
 
+    public function isGreaterThan(AggregateRevision $revision)
+    {
+        return $this->revision > $revision->toNative();
+    }
+
     public function isLessThanOrEqual(AggregateRevision $revision)
     {
         return $this->revision <= $revision->toNative();
+    }
+
+    public function isLessThan(AggregateRevision $revision)
+    {
+        return $this->revision < $revision->toNative();
     }
 
     public function __toString(): string
