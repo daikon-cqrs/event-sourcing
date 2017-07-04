@@ -31,12 +31,12 @@ final class Commit implements CommitInterface
         DomainEventSequence $eventLog,
         Metadata $metadata
     ): CommitInterface {
-        return new static($streamId, $streamRevision, $eventLog, $metadata);
+        return new self($streamId, $streamRevision, $eventLog, $metadata);
     }
 
     public static function fromArray(array $state): MessageInterface
     {
-        return new static(
+        return new self(
             CommitStreamId::fromNative($state["streamId"]),
             CommitStreamRevision::fromNative((int)$state["streamRevision"]),
             DomainEventSequence::fromArray($state["eventLog"]),

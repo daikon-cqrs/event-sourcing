@@ -15,6 +15,7 @@ use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\Cqrs\EventStore\CommitInterface;
+use Daikon\Cqrs\EventStore\CommitStreamRevision;
 use Daikon\Cqrs\EventStore\UnitOfWorkInterface;
 
 abstract class CommandHandler implements MessageHandlerInterface
@@ -50,6 +51,13 @@ abstract class CommandHandler implements MessageHandlerInterface
             }
         }
         return $committed;
+    }
+
+    protected function checkout(
+        AggregateIdInterface $aggregateId,
+        CommitStreamRevision $revision = null
+    ): AggregateRootInterface {
+        return $this->unitOfWork->checkout($aggregateId, $revision);
     }
 
     private function dispatch(CommitInterface $commit): bool

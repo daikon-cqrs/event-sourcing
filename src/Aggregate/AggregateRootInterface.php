@@ -12,7 +12,10 @@ namespace Daikon\Cqrs\Aggregate;
 
 interface AggregateRootInterface
 {
-    public static function reconstituteFromHistory(DomainEventSequence $history): AggregateRootInterface;
+    public static function reconstituteFromHistory(
+        AggregateIdInterface $aggregateId,
+        DomainEventSequence $history
+    ): AggregateRootInterface;
 
     public function getIdentifier(): AggregateIdInterface;
 

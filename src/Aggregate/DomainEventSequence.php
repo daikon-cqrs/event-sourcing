@@ -32,7 +32,7 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         return new self;
     }
 
-    public function __construct(array ...$events)
+    public function __construct(array $events = [])
     {
         (function (DomainEventInterface ...$events) {
             $this->compositeVector = new Vector($events);

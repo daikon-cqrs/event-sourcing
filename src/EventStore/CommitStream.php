@@ -34,7 +34,7 @@ final class CommitStream implements CommitStreamInterface
         return new static(
             CommitStreamId::fromNative($streamState["commitStreamId"]),
             CommitSequence::fromArray($streamState["commitStreamSequence"]),
-            $commitStreamState["commitImplementor"]
+            $streamState["commitImplementor"]
         );
     }
 

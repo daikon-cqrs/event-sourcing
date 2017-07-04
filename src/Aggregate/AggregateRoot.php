@@ -18,9 +18,11 @@ abstract class AggregateRoot implements AggregateRootInterface
 
     private $trackedEvents;
 
-    public static function reconstituteFromHistory(DomainEventSequence $history): AggregateRootInterface
-    {
-        $aggRoot = new static;
+    public static function reconstituteFromHistory(
+        AggregateIdInterface $aggregateId,
+        DomainEventSequence $history
+    ): AggregateRootInterface {
+        $aggRoot = new static($aggregateId);
         foreach ($history as $eventOccured) {
             $aggRoot = $aggRoot->reflectThat($eventOccured, false);
         }

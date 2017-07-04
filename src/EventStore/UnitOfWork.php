@@ -69,9 +69,11 @@ final class UnitOfWork implements UnitOfWorkInterface
         $stream = $this->streamStore->checkout($streamId, $revision);
         $history = DomainEventSequence::makeEmpty();
         foreach ($this->streamProcessor->process($stream) as $commit) {
-            $history = $history->append($commit->getEventLog());
+            foreach ($commit->getEventLog() as $event) {
+                $history = $history->push($event);
+            }
         }
-        $aggregateRoot = $this->aggregateRootType::reconstituteFromHistory($history);
+        $aggregateRoot = $this->aggregateRootType::reconstituteFromHistory($aggregateId, $history);
         $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         return $aggregateRoot;
     }
