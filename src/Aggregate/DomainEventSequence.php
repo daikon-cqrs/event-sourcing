@@ -22,7 +22,7 @@ final class DomainEventSequence implements IteratorAggregate, Countable
     public static function fromArray(array $eventsArray): DomainEventSequence
     {
         return new static(array_map(function (array $eventState) {
-            $eventFqcn = $this->resolveEventFqcn($eventState);
+            $eventFqcn = self::resolveEventFqcn($eventState);
             return $eventFqcn::fromArray($eventState);
         }, $eventsArray));
     }
@@ -108,7 +108,7 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         return $this->compositeVector->getIterator();
     }
 
-    private static function resolveEventFqcn(array $eventState): DomainEventInterface
+    private static function resolveEventFqcn(array $eventState): string
     {
         if (!isset($eventState["@type"])) {
             throw new \Exception("Missing expected typeinfo for event at key '@type' within given state-array.");
