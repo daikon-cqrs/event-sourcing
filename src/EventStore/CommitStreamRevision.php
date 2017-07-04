@@ -43,6 +43,13 @@ final class CommitStreamRevision implements ValueObjectInterface
         return $copy;
     }
 
+    public function decrement(): CommitStreamRevision
+    {
+        $copy = clone $this;
+        $copy->revision--;
+        return $copy;
+    }
+
     public function equals(ValueObjectInterface $otherValue): bool
     {
         Assertion::isInstanceOf($otherValue, static::class);
