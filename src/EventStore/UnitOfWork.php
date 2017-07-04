@@ -42,7 +42,7 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence
     {
-        $streamId = CommitStreamId::fromNative($aggregateRoot->getIdentifier());
+        $streamId = CommitStreamId::fromNative((string)$aggregateRoot->getIdentifier());
         $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
         if ($this->trackedCommitStreams->has((string)$streamId)) {
             $stream = $this->trackedCommitStreams->get((string)$streamId);
