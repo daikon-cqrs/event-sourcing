@@ -120,7 +120,7 @@ final class CommitStream implements CommitStreamInterface
     {
         $previousCommits = [];
         $prevCommit = $this->getHead();
-        while ($prevCommit && $incomingRevision->isLessThanOrEqual($prevCommit->getAggregateRevision())) {
+        while ($prevCommit && $incomingRevision->isLessThan($prevCommit->getAggregateRevision())) {
             $previousCommits[] = $prevCommit;
             $prevCommit = $this->commitSequence->get($prevCommit->getStreamRevision()->decrement());
         }
