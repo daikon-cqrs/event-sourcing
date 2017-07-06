@@ -2,87 +2,75 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command;
 
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\Command;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
 use Daikon\Entity\ValueObject\Text;
 use Daikon\Entity\ValueObject\Timestamp;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
 
 final class RegisterOauthAccount extends Command
 {
-    use ToArrayTrait;
-    use FromArrayTrait;
-
-    /**
-     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Timestamp::createFromString)
-     */
     private $expiresAt;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName::fromNative)
-     */
     private $service;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Text::fromNative)
-     */
     private $tokenId;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole::fromNative)
-     */
     private $role;
+
+    public static function fromArray(array $nativeArray): MessageInterface
+    {
+        return new self(
+            AggregateId::fromNative($nativeArray["aggregateId"]),
+            Text::fromNative($nativeArray["tokenId"]),
+            OauthServiceName::fromNative($nativeArray["service"]),
+            AccessRole::fromNative($nativeArray["role"]),
+            Timestamp::createFromString($nativeArray["expiresAt"])
+        );
+    }
 
     public static function getAggregateRootClass(): string
     {
         return Account::class;
     }
 
-    /**
-     * @return Text
-     */
     public function getTokenId(): Text
     {
         return $this->tokenId;
     }
 
-    /**
-     * @return Text
-     */
     public function getService(): Text
     {
         return $this->service;
     }
 
-    /**
-     * @return Timestamp
-     */
     public function getExpiresAt(): Timestamp
     {
         return $this->expiresAt;
     }
 
-    /**
-     * @return AccessRole
-     */
     public function getRole(): AccessRole
     {
         return $this->role;
     }
 
-    /**
-     * @param AggregateId $aggregateId
-     * @param Text $tokenId
-     * @param Text $service
-     * @param AccessRole $role
-     * @param Timestamp $expiresAt
-     */
+    public function toArray(): array
+    {
+        return array_merge([
+            "expiresAt" => $this->expiresAt->toNative(),
+            "role" => $this->role->toNative(),
+            "service" => $this->service->toNative(),
+            "tokenId" => $this->tokenId->toNative(),
+        ], parent::toArray());
+    }
+
     protected function __construct(
         AggregateId $aggregateId,
         Text $tokenId,
-        Text $service,
+        OauthServiceName $service,
         AccessRole $role,
         Timestamp $expiresAt
     ) {

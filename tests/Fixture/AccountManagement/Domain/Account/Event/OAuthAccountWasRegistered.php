@@ -2,32 +2,28 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\DomainEvent;
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use Daikon\MessageBus\MessageInterface;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
 
 final class OauthAccountWasRegistered extends DomainEvent
 {
-    use ToArrayTrait;
-    use FromArrayTrait;
-
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole::fromNative)
-     */
     private $role;
 
-    /**
-     * @param RegisterOauthAccount $registration
-     * @return OauthAccountWasRegistered
-     */
     public static function viaCommand(RegisterOauthAccount $registration): self
     {
         return new static($registration->getAggregateId(), $registration->getRole());
+    }
+
+    public static function fromArray(array $nativeArray): MessageInterface
+    {
+        return new self(
+            AggregateId::fromNative($nativeArray["aggregateId"]),
+            AccessRole::fromNative($nativeArray["role"])
+        );
     }
 
     public static function getAggregateRootClass(): string
@@ -35,19 +31,18 @@ final class OauthAccountWasRegistered extends DomainEvent
         return Account::class;
     }
 
-    /**
-     * @return AccessRole
-     */
     public function getRole(): AccessRole
     {
         return $this->role;
     }
 
-    /**
-     * @param AggregateId $aggregateId
-     * @param AccessRole $role
-     * @param Revision|null $aggregateRevision
-     */
+    public function toArray(): array
+    {
+        return array_merge([
+            "role" => $this->role->toNative(),
+        ], parent::toArray());
+    }
+
     protected function __construct(AggregateId $aggregateId, AccessRole $role, Revision $aggregateRevision = null)
     {
         parent::__construct($aggregateId, $aggregateRevision);

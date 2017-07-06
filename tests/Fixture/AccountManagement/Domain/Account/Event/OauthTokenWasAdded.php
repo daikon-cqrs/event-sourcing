@@ -2,14 +2,12 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\DomainEvent;
 use Daikon\Entity\ValueObject\Text;
 use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\Entity\ValueObject\Uuid;
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use Daikon\MessageBus\MessageInterface;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
@@ -17,38 +15,16 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Rando
 
 final class OauthTokenWasAdded extends DomainEvent
 {
-    use ToArrayTrait;
-    use FromArrayTrait;
-
-    /**
-     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Uuid::fromNative)
-     */
     private $id;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Text::fromNative)
-     */
     private $tokenId;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken::fromNative)
-     */
     private $token;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Timestamp::createFromString)
-     */
     private $expiresAt;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName::fromNative)
-     */
     private $service;
 
-    /**
-     * @param RegisterOauthAccount $registration
-     * @return OauthTokenWasAdded
-     */
     public static function viaCommand(RegisterOauthAccount $registration): self
     {
         return new static(
@@ -61,52 +37,54 @@ final class OauthTokenWasAdded extends DomainEvent
         );
     }
 
+    public static function fromArray(array $nativeArray): MessageInterface
+    {
+        return new self(
+            Uuid::fromNative($nativeArray["id"]),
+            Text::fromNative($nativeArray["tokenId"]),
+            AggregateId::fromNative($nativeArray["aggregateId"]),
+            RandomToken::fromNative($nativeArray["token"]),
+            Timestamp::createFromString($nativeArray["expiresAt"]),
+            OauthServiceName::fromNative($nativeArray["service"])
+        );
+    }
+
     public static function getAggregateRootClass(): string
     {
         return Account::class;
     }
 
-    /**
-     * @return Text
-     */
     public function getTokenId(): Text
     {
         return $this->tokenId;
     }
 
-    /**
-     * @return RandomToken
-     */
     public function getToken(): RandomToken
     {
         return $this->token;
     }
 
-    /**
-     * @return Timestamp
-     */
     public function getExpiresAt(): Timestamp
     {
         return $this->expiresAt;
     }
 
-    /**
-     * @return OauthServiceName
-     */
     public function getService(): OauthServiceName
     {
         return $this->service;
     }
 
-    /**
-     * @param Uuid $id
-     * @param Text $tokenId
-     * @param AggregateId $aggregateId
-     * @param RandomToken $token
-     * @param Timestamp $expiresAt
-     * @param OauthServiceName $service
-     * @param Revision|null $aggregateRevision
-     */
+    public function toArray(): array
+    {
+        return array_merge([
+            "expiresAt" => $this->expiresAt->toNative(),
+            "tokenId" => $this->tokenId->toNative(),
+            "id" => $this->id->toNative(),
+            "service" => $this->service->toNative(),
+            "token" => $this->token->toNative(),
+        ], parent::toArray());
+    }
+
     protected function __construct(
         Uuid $id,
         Text $tokenId,

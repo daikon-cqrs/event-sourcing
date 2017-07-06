@@ -10,22 +10,10 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\Aggregate;
 
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
-
 abstract class DomainEvent implements DomainEventInterface
 {
-    use FromArrayTrait;
-    use ToArrayTrait;
-
-    /**
-     * @MessageBus::deserialize(\Daikon\Cqrs\Aggregate\AggregateId::fromNative)
-     */
     private $aggregateId;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Cqrs\Aggregate\AggregateRevision::fromNative)
-     */
     private $aggregateRevision;
 
     public function getAggregateId(): AggregateIdInterface
@@ -43,6 +31,14 @@ abstract class DomainEvent implements DomainEventInterface
         $copy = clone $this;
         $copy->aggregateRevision = $aggregateRevision;
         return $copy;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'aggregateId' => $this->aggregateId->toNative(),
+            'aggregateRevision' => $this->aggregateRevision->toNative()
+        ];
     }
 
     protected function __construct(AggregateIdInterface $aggregateId, AggregateRevision $aggregateRevision = null)

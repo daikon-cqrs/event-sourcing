@@ -2,11 +2,9 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\DomainEvent;
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use Daikon\MessageBus\MessageInterface;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
@@ -15,28 +13,12 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Usern
 
 final class AccountWasRegistered extends DomainEvent
 {
-    use ToArrayTrait;
-    use FromArrayTrait;
-
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username::fromNative)
-     */
     private $username;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole::fromNative)
-     */
     private $role;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale::fromNative)
-     */
     private $locale;
 
-    /**
-     * @param  RegisterAccount $registerAccount
-     * @return AccountWasRegistered
-     */
     public static function viaCommand(RegisterAccount $registerAccount): self
     {
         return new static(
@@ -47,42 +29,46 @@ final class AccountWasRegistered extends DomainEvent
         );
     }
 
+    public static function fromArray(array $nativeArray): MessageInterface
+    {
+        return new self(
+            AggregateId::fromNative($nativeArray["aggregateId"]),
+            AccessRole::fromNative($nativeArray["role"]),
+            Username::fromNative($nativeArray["username"]),
+            Locale::fromNative($nativeArray["locale"])
+        );
+    }
+
     public static function getAggregateRootClass(): string
     {
         return Account::class;
     }
 
-    /**
-     * @return AccessRole
-     */
     public function getRole(): AccessRole
     {
         return $this->role;
     }
 
-    /**
-     * @return Locale
-     */
     public function getLocale(): Locale
     {
         return $this->locale;
     }
 
-    /**
-     * @return Username
-     */
     public function getUsername(): Username
     {
         return $this->username;
     }
 
-    /**
-     * @param AggregateId $aggregateId
-     * @param AccessRole $role
-     * @param Username $username
-     * @param Locale $locale
-     * @param Revision|null $aggregateRevision
-     */
+    public function toArray(): array
+    {
+        return array_merge([
+            "expiresAt" => $this->expiresAt->toNative(),
+            "role" => $this->role->toNative(),
+            "locale" => $this->locale->toNative(),
+            "username" => $this->username->toNative(),
+        ], parent::toArray());
+    }
+
     protected function __construct(
         AggregateId $aggregateId,
         AccessRole $role,

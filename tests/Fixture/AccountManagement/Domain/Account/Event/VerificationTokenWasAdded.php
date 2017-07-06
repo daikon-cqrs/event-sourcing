@@ -2,35 +2,20 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\DomainEvent;
 use Daikon\Entity\ValueObject\Uuid;
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use Daikon\MessageBus\MessageInterface;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
 
 final class VerificationTokenWasAdded extends DomainEvent
 {
-    use ToArrayTrait;
-    use FromArrayTrait;
-
-    /**
-     * @MessageBus::deserialize(\Daikon\Entity\ValueObject\Uuid::fromNative)
-     */
     private $id;
 
-    /**
-     * @MessageBus::deserialize(\Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken::fromNative)
-     */
     private $token;
 
-    /**
-     * @param RegisterAccount $registerAccount
-     * @return VerificationTokenWasAdded
-     */
     public static function viaCommand(RegisterAccount $registerAccount): self
     {
         return new static(
@@ -40,33 +25,38 @@ final class VerificationTokenWasAdded extends DomainEvent
         );
     }
 
+    public static function fromArray(array $nativeArray): MessageInterface
+    {
+        return new self(
+            Uuid::fromNative($nativeArray["id"]),
+            AggregateId::fromNative($nativeArray["aggregateId"]),
+            RandomToken::fromNative($nativeArray["token"])
+        );
+    }
+
     public static function getAggregateRootClass(): string
     {
         return Account::class;
     }
 
-    /**
-     * @return Uuid
-     */
     public function getId(): Uuid
     {
         return $this->id;
     }
 
-    /**
-     * @return RandomToken
-     */
     public function getToken(): RandomToken
     {
         return $this->token;
     }
 
-    /**
-     * @param Uuid $id
-     * @param AggregateId $aggregateId
-     * @param RandomToken $token
-     * @param Revision|null $aggregateRevision
-     */
+    public function toArray(): array
+    {
+        return array_merge([
+            "id" => $this->id->toNative(),
+            "token" => $this->token->toNative(),
+        ], parent::toArray());
+    }
+
     protected function __construct(
         Uuid $id,
         AggregateId $aggregateId,
