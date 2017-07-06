@@ -4,4 +4,4 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/daikon-cqrs/cqrs/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/cqrs/?branch=master)
 [![Code Quality](https://scrutinizer-ci.com/g/daikon-cqrs/cqrs/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/cqrs/?branch=master)
 
-Cqrs and event-sourcing library for php.
+Modular immutable CQRS & ES library for PHP7.

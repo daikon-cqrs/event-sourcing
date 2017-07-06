@@ -67,12 +67,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/data-structures.git",
-                "reference": "00e74b52aa9d77569689a02123565ded0d234b5e"
+                "reference": "6b349183c842787ff64d610cc069e973cfa75da3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/data-structures/zipball/00e74b52aa9d77569689a02123565ded0d234b5e",
-                "reference": "00e74b52aa9d77569689a02123565ded0d234b5e",
+                "url": "https://api.github.com/repos/daikon-cqrs/data-structures/zipball/6b349183c842787ff64d610cc069e973cfa75da3",
+                "reference": "6b349183c842787ff64d610cc069e973cfa75da3",
                 "shasum": ""
             },
             "require": {
@@ -94,14 +94,14 @@
             "license": [
                 "MPL-2.0"
             ],
-            "description": "Generic data-structure traits based on php/ds.",
+            "description": "Data-structure traits based on php/ds.",
             "homepage": "https://github.com/daikon-cqrs/data-structures",
             "keywords": [
                 "data-structures",
                 "list",
                 "map"
             ],
-            "time": "2017-07-04 17:07:18"
+            "time": "2017-07-06 16:20:15"
         },
         {
             "name": "daikon/entity",
@@ -109,12 +109,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/entity.git",
-                "reference": "fc875da0b29e3d2685d87ce392909666ccce29ee"
+                "reference": "cd8ea38057e86afa1363e57783bb343f112a69ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/entity/zipball/fc875da0b29e3d2685d87ce392909666ccce29ee",
-                "reference": "fc875da0b29e3d2685d87ce392909666ccce29ee",
+                "url": "https://api.github.com/repos/daikon-cqrs/entity/zipball/cd8ea38057e86afa1363e57783bb343f112a69ad",
+                "reference": "cd8ea38057e86afa1363e57783bb343f112a69ad",
                 "shasum": ""
             },
             "require": {
@@ -139,14 +139,14 @@
             "license": [
                 "MPL-2.0"
             ],
-            "description": "Generic boilerplate for implementing structured entities in php.",
+            "description": "Boilerplate for implementing well structured entities in PHP7.",
             "homepage": "https://github.com/daikon-cqrs/entity",
             "keywords": [
                 "entity",
                 "generic",
                 "value-object"
             ],
-            "time": "2017-06-30 16:16:34"
+            "time": "2017-07-06 16:21:35"
         },
         {
             "name": "daikon/message-bus",
