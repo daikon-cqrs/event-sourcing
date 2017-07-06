@@ -9,14 +9,14 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
-        "php-ds/php-ds": "^v1.1",
         "daikon/entity": "master@dev",
-        "daikon/message-bus": "master@dev"
+        "daikon/message-bus": "master@dev",
+        "php-ds/php-ds": "^v1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
-        "squizlabs/php_codesniffer": "^3.0",
-        "satooshi/php-coveralls": "master@dev"
+        "satooshi/php-coveralls": "master@dev",
+        "squizlabs/php_codesniffer": "^3.0"
     },
     "autoload": {
         "psr-4": { "Daikon\\Cqrs\\" : "src" }
