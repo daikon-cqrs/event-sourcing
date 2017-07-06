@@ -15,65 +15,39 @@ final class OauthServiceName implements ValueObjectInterface
 
     public const ALLOWED_SERVICE_NAMES = [ self::FACEBOOK, self::TWITTER, self::GITHUB ];
 
-    /**
-     * @var string
-     */
     private $serviceName;
 
-    /**
-     * @param string $serviceName
-     * @return OauthServiceName
-     */
     public static function fromNative($serviceName): ValueObjectInterface
     {
         return new static($serviceName);
     }
 
-    /**
-     * @return OauthServiceName
-     */
     public static function makeEmpty(): ValueObjectInterface
     {
         return new static("");
     }
 
-    /**
-     * @return string
-     */
     public function toNative()
     {
         return $this->serviceName;
     }
 
-    /**
-     * @param ValueObjectInterface $accessRole
-     * @return bool
-     */
     public function equals(ValueObjectInterface $accessRole): bool
     {
         Assertion::isInstanceOf($accessRole, static::class);
         return $this->serviceName === $accessRole->toNative();
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return empty($this->serviceName);
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->serviceName;
     }
 
-    /**
-     * @param string $serviceName
-     */
     private function __construct(string $serviceName)
     {
         if (!empty($serviceName)) {

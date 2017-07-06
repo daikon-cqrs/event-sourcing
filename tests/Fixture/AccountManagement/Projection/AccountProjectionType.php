@@ -40,11 +40,6 @@ final class AccountProjectionType extends EntityType
         ]);
     }
 
-    /**
-     * @param array $entityState
-     * @param TypedEntityInterface|null $parent
-     * @return TypedEntityInterface
-     */
     public function makeEntity(array $entityState = [], TypedEntityInterface $parent = null): TypedEntityInterface
     {
         $entityState["@type"] = $this;

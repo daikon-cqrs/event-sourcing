@@ -9,25 +9,16 @@ use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class VerificationToken extends NestedEntity
 {
-    /**
-     * @return ValueObjectInterface
-     */
     public function getIdentity(): ValueObjectInterface
     {
         return $this->getId();
     }
 
-    /**
-     * @return Uuid
-     */
     public function getId(): Uuid
     {
         return $this->get("id");
     }
 
-    /**
-     * @return RandomToken
-     */
     public function getToken(): RandomToken
     {
         return $this->get("token");

@@ -11,33 +11,21 @@ use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class AuthenticationToken extends NestedEntity
 {
-    /**
-     * @return ValueObjectInterface
-     */
     public function getIdentity(): ValueObjectInterface
     {
         return $this->getId();
     }
 
-    /**
-     * @return Uuid
-     */
     public function getId(): Uuid
     {
         return $this->get("id");
     }
 
-    /**
-     * @return RandomToken
-     */
     public function getToken(): RandomToken
     {
         return $this->get("token");
     }
 
-    /**
-     * @return Timestamp
-     */
     public function getExpiresAt(): Timestamp
     {
         return $this->get("timestamp");

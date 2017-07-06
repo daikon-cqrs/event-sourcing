@@ -22,10 +22,6 @@ final class AccountProjection extends Entity implements ProjectionInterface
         return $this->get("identity");
     }
 
-    /**
-     * @param AccountWasRegistered $accountWasRegistered
-     * @return AccountProjection
-     */
     protected function whenAccountWasRegistered(AccountWasRegistered $accountWasRegistered): self
     {
         return $this
@@ -34,10 +30,6 @@ final class AccountProjection extends Entity implements ProjectionInterface
             ->withValue("role", $accountWasRegistered->getRole());
     }
 
-    /**
-     * @param OauthAccountWasRegistered $oauthAccountWasRegistered
-     * @return AccountProjection
-     */
     protected function whenOauthAccountWasRegistered(OauthAccountWasRegistered $oauthAccountWasRegistered): self
     {
         return $this
@@ -45,10 +37,6 @@ final class AccountProjection extends Entity implements ProjectionInterface
             ->withValue("role", $oauthAccountWasRegistered->getRole());
     }
 
-    /**
-     * @param AuthenticationTokenWasAdded $tokenWasAdded
-     * @return AccountProjection
-     */
     protected function whenAuthenticationTokenWasAdded(AuthenticationTokenWasAdded $tokenWasAdded): self
     {
         return $this->addToken([
@@ -58,10 +46,6 @@ final class AccountProjection extends Entity implements ProjectionInterface
         ], "authentication_token");
     }
 
-    /**
-     * @param VerificationTokenWasAdded $tokenWasAdded
-     * @return AccountProjection
-     */
     protected function whenVerificationTokenWasAdded(VerificationTokenWasAdded $tokenWasAdded): self
     {
         return $this->addToken([
@@ -70,10 +54,6 @@ final class AccountProjection extends Entity implements ProjectionInterface
         ], "verification_token");
     }
 
-    /**
-     * @param OauthTokenWasAdded $tokenWasAdded
-     * @return AccountProjection
-     */
     protected function whenOauthTokenWasAdded(OauthTokenWasAdded $tokenWasAdded): self
     {
         return $this->addToken([
@@ -85,10 +65,6 @@ final class AccountProjection extends Entity implements ProjectionInterface
         ], "oauth_token");
     }
 
-    /**
-     * @param PasswordTokenWasAdded $tokenWasAdded
-     * @return AccountProjection
-     */
     protected function whenPasswordTokenWasAdded(PasswordTokenWasAdded $tokenWasAdded): self
     {
         return $this->addToken([
@@ -98,11 +74,6 @@ final class AccountProjection extends Entity implements ProjectionInterface
         ], "password_token");
     }
 
-    /**
-     * @param array $tokenPayload
-     * @param string $type
-     * @return AccountEntity
-     */
     private function addToken(array $tokenPayload, string $type): self
     {
         /* @var \Daikon\Entity\EntityType\NestedEntityListAttribute $tokenList */

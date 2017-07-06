@@ -16,16 +16,8 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\Verificatio
 
 final class Account extends AggregateRoot
 {
-    /**
-     * @var AccountEntity
-     */
     private $accountState;
 
-    /**
-     * @param RegisterAccount $registerAccount
-     * @param AccountEntityType $accountStateType
-     * @return Account
-     */
     public static function register(RegisterAccount $registerAccount, AccountEntityType $accountStateType): self
     {
         return (new Account($registerAccount->getAggregateId(), $accountStateType))
@@ -34,11 +26,6 @@ final class Account extends AggregateRoot
             ->reflectThat(VerificationTokenWasAdded::viaCommand($registerAccount));
     }
 
-    /**
-     * @param RegisterOauthAccount $registerOauthAccount
-     * @param AccountEntityType $accountStateType
-     * @return Account
-     */
     public static function registerOauth(
         RegisterOauthAccount $registerOauthAccount,
         AccountEntityType $accountStateType
@@ -49,10 +36,6 @@ final class Account extends AggregateRoot
             ->reflectThat(OauthTokenWasAdded::viaCommand($registerOauthAccount));
     }
 
-    /**
-     * @param AccountWasRegistered $accountWasRegistered
-     * @return void
-     */
     protected function whenAccountWasRegistered(AccountWasRegistered $accountWasRegistered)
     {
         $this->accountState = $this->accountState
@@ -61,10 +44,6 @@ final class Account extends AggregateRoot
             ->withRole($accountWasRegistered->getRole());
     }
 
-    /**
-     * @param OauthAccountWasRegistered $oauthAccountWasRegistered
-     * @return void
-     */
     protected function whenOauthAccountWasRegistered(OauthAccountWasRegistered $oauthAccountWasRegistered)
     {
         $this->accountState = $this->accountState
@@ -72,10 +51,6 @@ final class Account extends AggregateRoot
             ->withRole($accountWasRegistered->getRole());
     }
 
-    /**
-     * @param AuthenticationTokenWasAdded $tokenWasAdded
-     * @return void
-     */
     protected function whenAuthenticationTokenWasAdded(AuthenticationTokenWasAdded $tokenWasAdded)
     {
         $this->accountState = $this->accountState->addAuthenticationToken([
@@ -85,10 +60,6 @@ final class Account extends AggregateRoot
         ]);
     }
 
-    /**
-     * @param VerificationTokenWasAdded $tokenWasAdded
-     * @return void
-     */
     protected function whenVerificationTokenWasAdded(VerificationTokenWasAdded $tokenWasAdded)
     {
         $this->accountState = $this->accountState->addVerificationToken([
@@ -97,10 +68,6 @@ final class Account extends AggregateRoot
         ]);
     }
 
-    /**
-     * @param OauthTokenWasAdded $tokenWasAdded
-     * @return void
-     */
     protected function whenOauthTokenWasAdded(OauthTokenWasAdded $tokenWasAdded)
     {
         $this->accountState = $this->accountState->addOauthToken([
@@ -112,19 +79,11 @@ final class Account extends AggregateRoot
         ]);
     }
 
-    /**
-     * @param PasswordTokenWasAdded $tokenWasAdded
-     * @return void
-     */
     protected function whenPasswordTokenWasAdded(PasswordTokenWasAdded $tokenWasAdded)
     {
         // @todd implement
     }
 
-    /**
-     * @param AggregateIdInterface $aggregateId
-     * @param AccountEntityType $accountStateType
-     */
     protected function __construct(AggregateIdInterface $aggregateId, AccountEntityType $accountStateType)
     {
         parent::__construct($aggregateId);

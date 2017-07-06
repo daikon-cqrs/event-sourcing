@@ -40,11 +40,6 @@ final class AccountEntityType extends EntityType
         ]);
     }
 
-    /**
-     * @param mixed[] $accountState
-     * @param TypedEntityInterface|null $parent
-     * @return TypedEntityInterface
-     */
     public function makeEntity(array $accountState = [], TypedEntityInterface $parent = null): TypedEntityInterface
     {
         $accountState["@type"] = $this;

@@ -11,9 +11,6 @@ use Daikon\Entity\ValueObject\Uuid;
 
 final class VerificationTokenType extends EntityType
 {
-    /**
-     * @param AttributeInterface $parentAttribute
-     */
     public function __construct(AttributeInterface $parentAttribute)
     {
         parent::__construct("VerificationToken", [
@@ -22,11 +19,6 @@ final class VerificationTokenType extends EntityType
         ], $parentAttribute);
     }
 
-    /**
-     * @param array $tokenState
-     * @param TypedEntityInterface|null $parent
-     * @return TypedEntityInterface
-     */
     public function makeEntity(array $tokenState = [], TypedEntityInterface $parent = null): TypedEntityInterface
     {
         $tokenState["@type"] = $this;

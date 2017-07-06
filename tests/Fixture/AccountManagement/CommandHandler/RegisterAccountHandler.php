@@ -12,16 +12,8 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEnt
 
 final class RegisterAccountHandler extends CommandHandler
 {
-    /**
-     * @var AccountEntityType
-     */
     private $accountStateType;
 
-    /**
-     * @param AccountEntityType $accountStateType
-     * @param UnitOfWorkInterface $unitOfWork
-     * @param MessageBusInterface $messageBus
-     */
     public function __construct(
         AccountEntityType $accountStateType,
         UnitOfWorkInterface $unitOfWork,
@@ -31,11 +23,6 @@ final class RegisterAccountHandler extends CommandHandler
         $this->accountStateType = $accountStateType;
     }
 
-    /**
-     * @param RegisterAccount $registerAccount
-     * @param Metadata $metadata
-     * @return bool
-     */
     protected function handleRegisterAccount(RegisterAccount $registerAccount, Metadata $metadata): bool
     {
         return $this->commit(
