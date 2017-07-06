@@ -70,7 +70,7 @@ final class DomainEventSequence implements IteratorAggregate, Countable
 
     public function getTailRevision(): AggregateRevision
     {
-        return $this->isEmpty() ? AggregateRevision::makeEmpty() :$this->getTail()->getAggregateRevision();
+        return $this->isEmpty() ? AggregateRevision::makeEmpty() : $this->getTail()->getAggregateRevision();
     }
 
     public function getTail(): ?DomainEventInterface
