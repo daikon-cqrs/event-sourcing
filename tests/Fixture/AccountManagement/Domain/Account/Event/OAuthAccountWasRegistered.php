@@ -2,11 +2,12 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\DomainEvent;
-use DaikonCqrsAggregateAggregateRevision;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
 
@@ -27,6 +28,11 @@ final class OauthAccountWasRegistered extends DomainEvent
     public static function viaCommand(RegisterOauthAccount $registration): self
     {
         return new static($registration->getAggregateId(), $registration->getRole());
+    }
+
+    public static function getAggregateRootClass(): string
+    {
+        return Account::class;
     }
 
     /**

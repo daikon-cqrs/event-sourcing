@@ -2,14 +2,15 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\DomainEvent;
-use DaikonCqrsAggregateAggregateRevision;
+use Daikon\Entity\ValueObject\Uuid;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
-use Daikon\Entity\ValueObject\Uuid;
 
 final class VerificationTokenWasAdded extends DomainEvent
 {
@@ -37,6 +38,11 @@ final class VerificationTokenWasAdded extends DomainEvent
             $registerAccount->getAggregateId(),
             RandomToken::generate()
         );
+    }
+
+    public static function getAggregateRootClass(): string
+    {
+        return Account::class;
     }
 
     /**

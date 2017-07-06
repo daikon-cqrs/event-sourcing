@@ -14,6 +14,8 @@ use Daikon\MessageBus\MessageInterface;
 
 interface DomainEventInterface extends MessageInterface
 {
+    public static function getAggregateRootClass(): string;
+
     public function getAggregateId(): AggregateIdInterface;
 
     public function getAggregateRevision(): AggregateRevision;

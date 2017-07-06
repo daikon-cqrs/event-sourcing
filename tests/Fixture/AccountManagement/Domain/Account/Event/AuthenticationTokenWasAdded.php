@@ -2,17 +2,18 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\CommandInterface;
 use Daikon\Cqrs\Aggregate\DomainEvent;
-use DaikonCqrsAggregateAggregateRevision;
+use Daikon\Entity\ValueObject\Timestamp;
+use Daikon\Entity\ValueObject\Uuid;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
-use Daikon\Entity\ValueObject\Timestamp;
-use Daikon\Entity\ValueObject\Uuid;
 
 final class AuthenticationTokenWasAdded extends DomainEvent
 {
@@ -48,6 +49,11 @@ final class AuthenticationTokenWasAdded extends DomainEvent
             RandomToken::generate(),
             $registration->getExpiresAt()
         );
+    }
+
+    public static function getAggregateRootClass(): string
+    {
+        return Account::class;
     }
 
     /**

@@ -2,11 +2,12 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\DomainEvent;
-use DaikonCqrsAggregateAggregateRevision;
+use Daikon\MessageBus\FromArrayTrait;
+use Daikon\MessageBus\ToArrayTrait;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale;
@@ -44,6 +45,11 @@ final class AccountWasRegistered extends DomainEvent
             $registerAccount->getUsername(),
             $registerAccount->getLocale()
         );
+    }
+
+    public static function getAggregateRootClass(): string
+    {
+        return Account::class;
     }
 
     /**
