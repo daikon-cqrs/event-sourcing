@@ -3,6 +3,8 @@
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
 use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\AggregateIdInterface;
+use Daikon\Cqrs\Aggregate\AggregateRevision;
 use Daikon\Cqrs\Aggregate\DomainEvent;
 use Daikon\Entity\ValueObject\Uuid;
 use Daikon\MessageBus\MessageInterface;
@@ -12,8 +14,10 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Rando
 
 final class VerificationTokenWasAdded extends DomainEvent
 {
+    /** @var Uuid */
     private $id;
 
+    /** @var RandomToken */
     private $token;
 
     public static function viaCommand(RegisterAccount $registerAccount): self
@@ -59,9 +63,9 @@ final class VerificationTokenWasAdded extends DomainEvent
 
     protected function __construct(
         Uuid $id,
-        AggregateId $aggregateId,
+        AggregateIdInterface $aggregateId,
         RandomToken $token,
-        Revision $aggregateRevision = null
+        AggregateRevision $aggregateRevision = null
     ) {
         parent::__construct($aggregateId, $aggregateRevision);
         $this->id = $id;

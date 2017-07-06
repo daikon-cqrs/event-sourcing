@@ -3,6 +3,7 @@
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command;
 
 use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\AggregateIdInterface;
 use Daikon\Cqrs\Aggregate\Command;
 use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\MessageBus\MessageInterface;
@@ -68,7 +69,7 @@ final class RegisterAccount extends Command
     }
 
     protected function __construct(
-        AggregateId $aggregateId,
+        AggregateIdInterface $aggregateId,
         AccessRole $role,
         Username $username,
         Locale $locale,

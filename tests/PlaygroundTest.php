@@ -2,17 +2,15 @@
 
 namespace Daikon\Tests\Cqrs;
 
-use DaikonCqrsAggregateAggregateRevision;
 use Daikon\Cqrs\Aggregate\AggregateId;
 use Daikon\Cqrs\Aggregate\AggregateRootInterface;
 use Daikon\Cqrs\EventStore\Commit;
 use Daikon\Cqrs\EventStore\CommitStream;
 use Daikon\Cqrs\EventStore\CommitStreamRevision;
 use Daikon\Cqrs\EventStore\NoopStreamProcessor;
-use Daikon\Cqrs\EventStore\StreamStoreInterface;
 use Daikon\Cqrs\EventStore\StoreSuccess;
+use Daikon\Cqrs\EventStore\StreamStoreInterface;
 use Daikon\Cqrs\EventStore\UnitOfWork;
-use Daikon\Cqrs\Projection\StandardProjector;
 use Daikon\MessageBus\Channel\Channel;
 use Daikon\MessageBus\Channel\ChannelMap;
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerList;
@@ -29,7 +27,6 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEnt
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AccountWasRegistered;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AuthenticationTokenWasAdded;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\VerificationTokenWasAdded;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Projection\AccountProjectionType;
 use Daikon\Tests\Cqrs\Fixture\LazyHandler;
 use Daikon\Tests\Cqrs\Fixture\NoOpHandler;
 use PHPUnit\Framework\TestCase;

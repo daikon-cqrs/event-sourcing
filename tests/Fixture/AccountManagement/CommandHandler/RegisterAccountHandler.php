@@ -2,10 +2,10 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\CommandHandler;
 
-use Daikon\MessageBus\MessageBusInterface;
-use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\Cqrs\Aggregate\CommandHandler;
 use Daikon\Cqrs\EventStore\UnitOfWorkInterface;
+use Daikon\MessageBus\MessageBusInterface;
+use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEntityType;

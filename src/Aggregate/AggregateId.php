@@ -10,11 +10,12 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\Aggregate;
 
-use Daikon\Entity\ValueObject\ValueObjectInterface;
 use Assert\Assertion;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
-class AggregateId implements AggregateIdInterface
+final class AggregateId implements AggregateIdInterface
 {
+    /** @var string */
     private $id;
 
     public static function fromNative($id): ValueObjectInterface
@@ -32,10 +33,10 @@ class AggregateId implements AggregateIdInterface
         return $this->id;
     }
 
-    public function equals(ValueObjectInterface $aggregateId): bool
+    public function equals(ValueObjectInterface $streamId): bool
     {
-        Assertion::isInstanceOf($aggregateId, static::class);
-        return $this->id === $aggregateId->toNative();
+        Assertion::isInstanceOf($streamId, static::class);
+        return $this->id === $streamId->toNative();
     }
 
     public function isEmpty(): bool

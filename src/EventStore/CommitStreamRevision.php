@@ -19,6 +19,7 @@ final class CommitStreamRevision implements ValueObjectInterface
 
     private const NONE = 0;
 
+    /** @var int */
     private $revision;
 
     public static function fromNative($revision): ValueObjectInterface

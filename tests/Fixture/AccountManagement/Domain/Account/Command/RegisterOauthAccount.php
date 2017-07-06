@@ -3,22 +3,26 @@
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command;
 
 use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\AggregateIdInterface;
 use Daikon\Cqrs\Aggregate\Command;
 use Daikon\Entity\ValueObject\Text;
 use Daikon\Entity\ValueObject\Timestamp;
-use Daikon\MessageBus\FromArrayTrait;
-use Daikon\MessageBus\ToArrayTrait;
+use Daikon\MessageBus\MessageInterface;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
 
 final class RegisterOauthAccount extends Command
 {
+    /** @var Timestamp */
     private $expiresAt;
 
+    /** @var OauthServiceName */
     private $service;
 
+    /** @var Text */
     private $tokenId;
 
+    /** @var AccessRole */
     private $role;
 
     public static function fromArray(array $nativeArray): MessageInterface
@@ -42,7 +46,7 @@ final class RegisterOauthAccount extends Command
         return $this->tokenId;
     }
 
-    public function getService(): Text
+    public function getService(): OauthServiceName
     {
         return $this->service;
     }
@@ -68,7 +72,7 @@ final class RegisterOauthAccount extends Command
     }
 
     protected function __construct(
-        AggregateId $aggregateId,
+        AggregateIdInterface $aggregateId,
         Text $tokenId,
         OauthServiceName $service,
         AccessRole $role,

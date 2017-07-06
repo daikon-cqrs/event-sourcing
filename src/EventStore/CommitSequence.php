@@ -17,6 +17,7 @@ use IteratorAggregate;
 
 final class CommitSequence implements IteratorAggregate, Countable
 {
+    /** @var Vector */
     private $compositeVector;
 
     public static function fromArray(array $commitsArray): CommitSequence
@@ -102,7 +103,7 @@ final class CommitSequence implements IteratorAggregate, Countable
 
     public function revisionOf(CommitInterface $commit): CommitStreamRevision
     {
-        return StreamRevision::fromNative($this->compositeVector->find($commit));
+        return CommitStreamRevision::fromNative($this->compositeVector->find($commit));
     }
 
     public function getLength(): int

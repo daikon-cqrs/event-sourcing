@@ -10,11 +10,12 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\Aggregate;
 
-use Daikon\Entity\ValueObject\ValueObjectInterface;
 use Assert\Assertion;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
 
-class AggregatePrefix implements AggregateIdInterface
+final class AggregatePrefix implements AggregateIdInterface
 {
+    /** @var string */
     private $prefix;
 
     public static function fromNative($prefix): ValueObjectInterface
@@ -47,10 +48,10 @@ class AggregatePrefix implements AggregateIdInterface
         return $this->prefix;
     }
 
-    public function equals(ValueObjectInterface $aggregatePrefix): bool
+    public function equals(ValueObjectInterface $streamPrefix): bool
     {
-        Assertion::isInstanceOf($aggregatePrefix, static::class);
-        return $this->prefix === $aggregatePrefix->toNative();
+        Assertion::isInstanceOf($streamPrefix, static::class);
+        return $this->prefix === $streamPrefix->toNative();
     }
 
     public function isEmpty(): bool
@@ -63,9 +64,11 @@ class AggregatePrefix implements AggregateIdInterface
         return $this->prefix;
     }
 
-    protected static function asSnakeCase(string $value): string
+    private static function asSnakeCase(string $value): string
     {
-        return ctype_lower($value) ? $value : mb_strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $value));
+        return ctype_lower($value)
+            ? $value
+            : mb_strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $value));
     }
 
     private function __construct(string $prefix)

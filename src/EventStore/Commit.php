@@ -10,19 +10,23 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\EventStore;
 
+use Daikon\Cqrs\Aggregate\AggregateRevision;
+use Daikon\Cqrs\Aggregate\DomainEventSequence;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
-use Daikon\Cqrs\Aggregate\DomainEventSequence;
-use Daikon\Cqrs\Aggregate\AggregateRevision;
 
 final class Commit implements CommitInterface
 {
+    /** @var CommitStreamId */
     private $streamId;
 
+    /** @var CommitStreamRevision */
     private $streamRevision;
 
+    /** @var DomainEventSequence */
     private $eventLog;
 
+    /** @var Metadata */
     private $metadata;
 
     public static function make(

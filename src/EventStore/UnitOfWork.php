@@ -10,21 +10,26 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\EventStore;
 
-use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\Cqrs\Aggregate\AggregateIdInterface;
 use Daikon\Cqrs\Aggregate\AggregateRootInterface;
 use Daikon\Cqrs\Aggregate\DomainEventSequence;
+use Daikon\MessageBus\Metadata\Metadata;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {
+    /** @var string */
     private $aggregateRootType;
 
+    /** @var StreamStoreInterface */
     private $streamStore;
 
+    /** @var StreamProcessorInterface */
     private $streamProcessor;
 
+    /** @var string */
     private $streamImplementor;
 
+    /** @var CommitStreamMap */
     private $trackedCommitStreams;
 
     public function __construct(

@@ -12,8 +12,10 @@ namespace Daikon\Cqrs\Aggregate;
 
 abstract class DomainEvent implements DomainEventInterface
 {
+    /** @var AggregateIdInterface */
     private $aggregateId;
 
+    /** @var AggregateRevision */
     private $aggregateRevision;
 
     public function getAggregateId(): AggregateIdInterface

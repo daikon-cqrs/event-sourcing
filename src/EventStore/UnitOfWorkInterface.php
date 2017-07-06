@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\EventStore;
 
-use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\Cqrs\Aggregate\AggregateIdInterface;
 use Daikon\Cqrs\Aggregate\AggregateRootInterface;
+use Daikon\MessageBus\Metadata\Metadata;
 
 interface UnitOfWorkInterface
 {

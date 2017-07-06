@@ -17,6 +17,7 @@ use IteratorAggregate;
 
 final class DomainEventSequence implements IteratorAggregate, Countable
 {
+    /** @var Vector */
     private $compositeVector;
 
     public static function fromArray(array $eventsArray): DomainEventSequence

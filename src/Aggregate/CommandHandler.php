@@ -10,18 +10,20 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\Aggregate;
 
+use Daikon\Cqrs\EventStore\CommitInterface;
+use Daikon\Cqrs\EventStore\CommitStreamRevision;
+use Daikon\Cqrs\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
 use Daikon\MessageBus\Metadata\Metadata;
-use Daikon\Cqrs\EventStore\CommitInterface;
-use Daikon\Cqrs\EventStore\CommitStreamRevision;
-use Daikon\Cqrs\EventStore\UnitOfWorkInterface;
 
 abstract class CommandHandler implements MessageHandlerInterface
 {
+    /** @var MessageBusInterface */
     private $messageBus;
 
+    /** @var UnitOfWorkInterface */
     private $unitOfWork;
 
     public function __construct(UnitOfWorkInterface $unitOfWork, MessageBusInterface $messageBus)

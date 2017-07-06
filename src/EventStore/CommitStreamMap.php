@@ -17,6 +17,7 @@ use IteratorAggregate;
 
 final class CommitStreamMap implements IteratorAggregate, Countable
 {
+    /** @var Map */
     private $compositeMap;
 
     public static function makeEmpty(): self

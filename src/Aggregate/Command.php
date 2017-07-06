@@ -12,8 +12,10 @@ namespace Daikon\Cqrs\Aggregate;
 
 abstract class Command implements CommandInterface
 {
+    /** @var AggregateIdInterface */
     private $aggregateId;
 
+    /** @var AggregateRevision */
     private $knownAggregateRevision;
 
     public function getAggregateId(): AggregateIdInterface

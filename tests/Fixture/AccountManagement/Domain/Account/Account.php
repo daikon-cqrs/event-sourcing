@@ -6,6 +6,7 @@ use Daikon\Cqrs\Aggregate\AggregateIdInterface;
 use Daikon\Cqrs\Aggregate\AggregateRoot;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterOauthAccount;
+use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEntity;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEntityType;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AccountWasRegistered;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AuthenticationTokenWasAdded;
@@ -16,6 +17,7 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\Verificatio
 
 final class Account extends AggregateRoot
 {
+    /** @var AccountEntity */
     private $accountState;
 
     public static function register(RegisterAccount $registerAccount, AccountEntityType $accountStateType): self
@@ -48,7 +50,7 @@ final class Account extends AggregateRoot
     {
         $this->accountState = $this->accountState
             ->withIdentity($oauthAccountWasRegistered->getAggregateId())
-            ->withRole($accountWasRegistered->getRole());
+            ->withRole($oauthAccountWasRegistered->getRole());
     }
 
     protected function whenAuthenticationTokenWasAdded(AuthenticationTokenWasAdded $tokenWasAdded)

@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\EventStore;
 
+use Daikon\Cqrs\Aggregate\AggregateRevision;
+use Daikon\Cqrs\Aggregate\DomainEventSequence;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
-use Daikon\Cqrs\Aggregate\DomainEventSequence;
-use Daikon\Cqrs\Aggregate\AggregateRevision;
 
 interface CommitInterface extends MessageInterface
 {

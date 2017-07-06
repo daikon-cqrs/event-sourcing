@@ -16,10 +16,13 @@ use Daikon\MessageBus\Metadata\Metadata;
 
 final class CommitStream implements CommitStreamInterface
 {
+    /** @var CommitStreamId */
     private $streamId;
 
+    /** @var CommitSequence */
     private $commitSequence;
 
+    /** @var string */
     private $commitImplementor;
 
     public static function fromStreamId(

@@ -3,6 +3,8 @@
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
 use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\AggregateIdInterface;
+use Daikon\Cqrs\Aggregate\AggregateRevision;
 use Daikon\Cqrs\Aggregate\DomainEvent;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
@@ -11,6 +13,7 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Acces
 
 final class OauthAccountWasRegistered extends DomainEvent
 {
+    /** @var AccessRole */
     private $role;
 
     public static function viaCommand(RegisterOauthAccount $registration): self
@@ -43,8 +46,11 @@ final class OauthAccountWasRegistered extends DomainEvent
         ], parent::toArray());
     }
 
-    protected function __construct(AggregateId $aggregateId, AccessRole $role, Revision $aggregateRevision = null)
-    {
+    protected function __construct(
+        AggregateIdInterface $aggregateId,
+        AccessRole $role,
+        AggregateRevision $aggregateRevision = null
+    ) {
         parent::__construct($aggregateId, $aggregateRevision);
         $this->role = $role;
     }

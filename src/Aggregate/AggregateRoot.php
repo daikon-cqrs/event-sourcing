@@ -12,10 +12,13 @@ namespace Daikon\Cqrs\Aggregate;
 
 abstract class AggregateRoot implements AggregateRootInterface
 {
+    /** @var AggregateIdInterface */
     private $identifier;
 
+    /** @var AggregateRevision */
     private $revision;
 
+    /** @var DomainEventSequence */
     private $trackedEvents;
 
     public static function reconstituteFromHistory(

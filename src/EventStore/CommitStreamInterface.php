@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\EventStore;
 
-use Daikon\MessageBus\Metadata\Metadata;
-use Daikon\Cqrs\Aggregate\DomainEventSequence;
 use Daikon\Cqrs\Aggregate\AggregateRevision;
+use Daikon\Cqrs\Aggregate\DomainEventSequence;
+use Daikon\MessageBus\Metadata\Metadata;
 
 interface CommitStreamInterface extends \IteratorAggregate, \Countable
 {

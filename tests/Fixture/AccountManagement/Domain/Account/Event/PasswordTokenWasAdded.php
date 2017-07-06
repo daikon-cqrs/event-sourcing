@@ -3,6 +3,8 @@
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
 use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\AggregateIdInterface;
+use Daikon\Cqrs\Aggregate\AggregateRevision;
 use Daikon\Cqrs\Aggregate\DomainEvent;
 use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\Entity\ValueObject\Uuid;
@@ -13,10 +15,13 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Rando
 
 final class PasswordTokenWasAdded extends DomainEvent
 {
+    /** @var Uuid */
     private $id;
 
+    /** @var RandomToken */
     private $token;
 
+    /** @var Timestamp */
     private $expiresAt;
 
     public static function viaCommand(RegisterAccount $registerAccount): self
@@ -32,7 +37,7 @@ final class PasswordTokenWasAdded extends DomainEvent
     public static function fromArray(array $nativeArray): MessageInterface
     {
         return new self(
-            Uuid::fromNative($nativeArray["id"])
+            Uuid::fromNative($nativeArray["id"]),
             AggregateId::fromNative($nativeArray["aggregateId"]),
             RandomToken::fromNative($nativeArray["token"]),
             Timestamp::createFromString($nativeArray["expiresAt"])
@@ -70,10 +75,10 @@ final class PasswordTokenWasAdded extends DomainEvent
 
     protected function __construct(
         Uuid $id,
-        AggregateId $aggregateId,
+        AggregateIdInterface $aggregateId,
         RandomToken $token,
         Timestamp $expiresAt,
-        Revision $aggregateRevision = null
+        AggregateRevision $aggregateRevision = null
     ) {
         parent::__construct($aggregateId, $aggregateRevision);
         $this->id = $id;

@@ -3,6 +3,8 @@
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
 
 use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\AggregateIdInterface;
+use Daikon\Cqrs\Aggregate\AggregateRevision;
 use Daikon\Cqrs\Aggregate\DomainEvent;
 use Daikon\Entity\ValueObject\Text;
 use Daikon\Entity\ValueObject\Timestamp;
@@ -15,14 +17,19 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Rando
 
 final class OauthTokenWasAdded extends DomainEvent
 {
+    /** @var Uuid */
     private $id;
 
+    /** @var Text */
     private $tokenId;
 
+    /** @var RandomToken */
     private $token;
 
+    /** @var Timestamp */
     private $expiresAt;
 
+    /** @var OauthServiceName */
     private $service;
 
     public static function viaCommand(RegisterOauthAccount $registration): self
@@ -88,11 +95,11 @@ final class OauthTokenWasAdded extends DomainEvent
     protected function __construct(
         Uuid $id,
         Text $tokenId,
-        AggregateId $aggregateId,
+        AggregateIdInterface $aggregateId,
         RandomToken $token,
         Timestamp $expiresAt,
         OauthServiceName $service,
-        Revision $aggregateRevision = null
+        AggregateRevision $aggregateRevision = null
     ) {
         parent::__construct($aggregateId, $aggregateRevision);
         $this->id = $id;

@@ -10,44 +10,48 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\EventStore;
 
+use Assert\Assertion;
 use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class CommitStreamId implements ValueObjectInterface
 {
-    private $identifier;
+    /** @var string */
+    private $id;
 
-    public static function fromNative($identifier): ValueObjectInterface
+    public static function fromNative($id): ValueObjectInterface
     {
-        return new self($identifier);
+        return new self(trim($id));
     }
 
     public static function makeEmpty(): ValueObjectInterface
     {
-        return new static(null);
+        throw new \Exception("Creating empty stream-ids is not supported.");
     }
 
     public function toNative()
     {
-        return $this->identifier;
+        return $this->id;
     }
 
     public function equals(ValueObjectInterface $streamId): bool
     {
-        return $this->identifier === $streamId->toNative();
+        Assertion::isInstanceOf($streamId, static::class);
+        return $this->id === $streamId->toNative();
     }
 
     public function isEmpty(): bool
     {
-        return empty($this->identifier);
+        return false;
     }
 
     public function __toString(): string
     {
-        return $this->identifier ?? '';
+        return $this->id;
     }
 
-    private function __construct(string $identifier)
+    private function __construct(string $id)
     {
-        $this->identifier = $identifier;
+        Assertion::notEmpty($id);
+        $this->id = $id;
     }
 }
