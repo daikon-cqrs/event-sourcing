@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\EventStore;
 
-use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\AggregatePrefix;
 use Daikon\DataStructures\TypedMapTrait;
 
 final class UnitOfWorkMap implements \IteratorAggregate, \Countable
@@ -22,9 +22,9 @@ final class UnitOfWorkMap implements \IteratorAggregate, \Countable
         $this->init($unitsOfWork, UnitOfWorkInterface::class);
     }
 
-    public function getByAggregateId(AggregateId $aggregateId)
+    public function getByAggregatePrefix(AggregatePrefix $aggregatePrefix)
     {
-        $key = explode('-', $aggregateId->toNative(), 2)[0];
+        $key = explode('-', $aggregatePrefix->toNative(), 2)[0];
         return $this->get($key);
     }
 }
