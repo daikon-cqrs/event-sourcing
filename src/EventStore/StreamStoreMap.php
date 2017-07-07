@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\Cqrs\EventStore;
 
-use Daikon\DataStructures\TypedMapTrait;
+use Daikon\DataStructure\TypedMapTrait;
 
 final class StreamStoreMap implements \IteratorAggregate, \Countable
 {

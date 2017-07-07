@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "90edb33a84f15fe44f58037a7ea079d2",
+    "hash": "98cf4c1616fd3c0444cd074f595f00a8",
+    "content-hash": "7d4eef2acda903cb328ebb1d3f317f6b",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -59,20 +60,20 @@
                 "assertion",
                 "validation"
             ],
-            "time": "2017-05-04T02:00:24+00:00"
+            "time": "2017-05-04 02:00:24"
         },
         {
-            "name": "daikon/data-structures",
+            "name": "daikon/data-structure",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/daikon-cqrs/data-structures.git",
-                "reference": "6b349183c842787ff64d610cc069e973cfa75da3"
+                "url": "https://github.com/daikon-cqrs/data-structure.git",
+                "reference": "72588799a236a99a94a8a1170db0a97d4b093c20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/data-structures/zipball/6b349183c842787ff64d610cc069e973cfa75da3",
-                "reference": "6b349183c842787ff64d610cc069e973cfa75da3",
+                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/72588799a236a99a94a8a1170db0a97d4b093c20",
+                "reference": "72588799a236a99a94a8a1170db0a97d4b093c20",
                 "shasum": ""
             },
             "require": {
@@ -87,21 +88,22 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Daikon\\DataStructures\\": "src"
+                    "Daikon\\DataStructure\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MPL-2.0"
             ],
-            "description": "Data-structure traits based on php/ds.",
+            "description": "Immutable data-structure traits based on php/ds.",
             "homepage": "https://github.com/daikon-cqrs/data-structures",
             "keywords": [
                 "data-structures",
+                "immutable",
                 "list",
                 "map"
             ],
-            "time": "2017-07-06 16:20:15"
+            "time": "2017-07-07 14:08:42"
         },
         {
             "name": "daikon/entity",
@@ -109,17 +111,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/entity.git",
-                "reference": "cd8ea38057e86afa1363e57783bb343f112a69ad"
+                "reference": "0f759867b2729bea34b5f71c913fd625b62da1d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/entity/zipball/cd8ea38057e86afa1363e57783bb343f112a69ad",
-                "reference": "cd8ea38057e86afa1363e57783bb343f112a69ad",
+                "url": "https://api.github.com/repos/daikon-cqrs/entity/zipball/0f759867b2729bea34b5f71c913fd625b62da1d9",
+                "reference": "0f759867b2729bea34b5f71c913fd625b62da1d9",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "~2.7",
-                "daikon/data-structures": "master@dev",
+                "daikon/data-structure": "master@dev",
                 "jms/parser-lib": "~1.0",
                 "php": ">=7.1",
                 "ramsey/uuid": "~3.6"
@@ -146,7 +148,7 @@
                 "generic",
                 "value-object"
             ],
-            "time": "2017-07-06 16:21:35"
+            "time": "2017-07-07 14:23:31"
         },
         {
             "name": "daikon/message-bus",
@@ -154,16 +156,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/message-bus.git",
-                "reference": "bd5d774db37eafa94ce2b4fbdcd4eb5aa25ca9fb"
+                "reference": "fdacd7c5ac7ca6ac8f5f3de853a344fd60dab05a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/bd5d774db37eafa94ce2b4fbdcd4eb5aa25ca9fb",
-                "reference": "bd5d774db37eafa94ce2b4fbdcd4eb5aa25ca9fb",
+                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/fdacd7c5ac7ca6ac8f5f3de853a344fd60dab05a",
+                "reference": "fdacd7c5ac7ca6ac8f5f3de853a344fd60dab05a",
                 "shasum": ""
             },
             "require": {
-                "daikon/data-structures": "master@dev",
+                "daikon/data-structure": "master@dev",
                 "php": ">=7.1",
                 "ramsey/uuid": "3.6.*"
             },
@@ -188,7 +190,7 @@
                 "message-bus",
                 "messaging"
             ],
-            "time": "2017-07-04 01:26:00"
+            "time": "2017-07-07 14:21:47"
         },
         {
             "name": "jms/parser-lib",
@@ -223,7 +225,7 @@
                 "Apache2"
             ],
             "description": "A library for easily creating recursive-descent parsers.",
-            "time": "2012-11-18T18:08:43+00:00"
+            "time": "2012-11-18 18:08:43"
         },
         {
             "name": "paragonie/random_compat",
@@ -271,7 +273,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-13T16:27:32+00:00"
+            "time": "2017-03-13 16:27:32"
         },
         {
             "name": "php-ds/php-ds",
@@ -318,7 +320,7 @@
                 "php",
                 "polyfill"
             ],
-            "time": "2016-08-08T13:04:16+00:00"
+            "time": "2016-08-08 13:04:16"
         },
         {
             "name": "phpoption/phpoption",
@@ -368,7 +370,7 @@
                 "php",
                 "type"
             ],
-            "time": "2015-07-25T16:39:46+00:00"
+            "time": "2015-07-25 16:39:46"
         },
         {
             "name": "ramsey/uuid",
@@ -450,7 +452,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2017-03-26T20:37:53+00:00"
+            "time": "2017-03-26 20:37:53"
         }
     ],
     "packages-dev": [
@@ -506,7 +508,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14T21:17:01+00:00"
+            "time": "2015-06-14 21:17:01"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -571,7 +573,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2017-06-22T18:50:49+00:00"
+            "time": "2017-06-22 18:50:49"
         },
         {
             "name": "guzzlehttp/promises",
@@ -622,7 +624,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2016-12-20T10:07:11+00:00"
+            "time": "2016-12-20 10:07:11"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -687,7 +689,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-03-20T17:10:46+00:00"
+            "time": "2017-03-20 17:10:46"
         },
         {
             "name": "myclabs/deep-copy",
@@ -729,7 +731,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2017-04-12T18:52:22+00:00"
+            "time": "2017-04-12 18:52:22"
         },
         {
             "name": "phar-io/manifest",
@@ -784,7 +786,7 @@
                 }
             ],
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
-            "time": "2017-03-05T18:14:27+00:00"
+            "time": "2017-03-05 18:14:27"
         },
         {
             "name": "phar-io/version",
@@ -831,7 +833,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-            "time": "2017-03-05T17:38:23+00:00"
+            "time": "2017-03-05 17:38:23"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -885,7 +887,7 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2015-12-27T11:43:31+00:00"
+            "time": "2015-12-27 11:43:31"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -930,7 +932,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-09-30T07:12:33+00:00"
+            "time": "2016-09-30 07:12:33"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -977,7 +979,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2016-11-25T06:54:22+00:00"
+            "time": "2016-11-25 06:54:22"
         },
         {
             "name": "phpspec/prophecy",
@@ -1040,7 +1042,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2017-03-02T20:05:34+00:00"
+            "time": "2017-03-02 20:05:34"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1104,7 +1106,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-04-21T08:03:57+00:00"
+            "time": "2017-04-21 08:03:57"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1151,7 +1153,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2016-10-03T07:40:28+00:00"
+            "time": "2016-10-03 07:40:28"
         },
         {
             "name": "phpunit/php-text-template",
@@ -1192,7 +1194,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21T13:50:34+00:00"
+            "time": "2015-06-21 13:50:34"
         },
         {
             "name": "phpunit/php-timer",
@@ -1241,7 +1243,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2017-02-26T11:10:40+00:00"
+            "time": "2017-02-26 11:10:40"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -1290,7 +1292,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-02-27T10:12:30+00:00"
+            "time": "2017-02-27 10:12:30"
         },
         {
             "name": "phpunit/phpunit",
@@ -1374,7 +1376,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-07-03T15:54:24+00:00"
+            "time": "2017-07-03 15:54:24"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1433,7 +1435,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2017-06-30T08:15:21+00:00"
+            "time": "2017-06-30 08:15:21"
         },
         {
             "name": "psr/http-message",
@@ -1483,7 +1485,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06T14:39:51+00:00"
+            "time": "2016-08-06 14:39:51"
         },
         {
             "name": "psr/log",
@@ -1530,7 +1532,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10T12:19:37+00:00"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "satooshi/php-coveralls",
@@ -1638,7 +1640,7 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "time": "2017-03-04T06:30:41+00:00"
+            "time": "2017-03-04 06:30:41"
         },
         {
             "name": "sebastian/comparator",
@@ -1702,7 +1704,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2017-03-03T06:26:08+00:00"
+            "time": "2017-03-03 06:26:08"
         },
         {
             "name": "sebastian/diff",
@@ -1754,7 +1756,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2017-05-22T07:24:03+00:00"
+            "time": "2017-05-22 07:24:03"
         },
         {
             "name": "sebastian/environment",
@@ -1804,7 +1806,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2017-07-01T08:51:00+00:00"
+            "time": "2017-07-01 08:51:00"
         },
         {
             "name": "sebastian/exporter",
@@ -1871,7 +1873,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2017-04-03T13:19:02+00:00"
+            "time": "2017-04-03 13:19:02"
         },
         {
             "name": "sebastian/global-state",
@@ -1922,7 +1924,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2017-04-27T15:39:26+00:00"
+            "time": "2017-04-27 15:39:26"
         },
         {
             "name": "sebastian/object-enumerator",
@@ -1969,7 +1971,7 @@
             ],
             "description": "Traverses array structures and object graphs to enumerate all referenced objects",
             "homepage": "https://github.com/sebastianbergmann/object-enumerator/",
-            "time": "2017-03-12T15:17:29+00:00"
+            "time": "2017-03-12 15:17:29"
         },
         {
             "name": "sebastian/object-reflector",
@@ -2014,7 +2016,7 @@
             ],
             "description": "Allows reflection of object attributes, including inherited and non-public ones",
             "homepage": "https://github.com/sebastianbergmann/object-reflector/",
-            "time": "2017-03-29T09:07:27+00:00"
+            "time": "2017-03-29 09:07:27"
         },
         {
             "name": "sebastian/recursion-context",
@@ -2067,7 +2069,7 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
-            "time": "2017-03-03T06:23:57+00:00"
+            "time": "2017-03-03 06:23:57"
         },
         {
             "name": "sebastian/resource-operations",
@@ -2109,7 +2111,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "time": "2015-07-28T20:34:47+00:00"
+            "time": "2015-07-28 20:34:47"
         },
         {
             "name": "sebastian/version",
@@ -2152,7 +2154,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2016-10-03T07:35:21+00:00"
+            "time": "2016-10-03 07:35:21"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -2203,7 +2205,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-06-14T01:23:49+00:00"
+            "time": "2017-06-14 01:23:49"
         },
         {
             "name": "symfony/config",
@@ -2265,7 +2267,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-16T12:40:34+00:00"
+            "time": "2017-06-16 12:40:34"
         },
         {
             "name": "symfony/console",
@@ -2334,7 +2336,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-03T13:19:36+00:00"
+            "time": "2017-07-03 13:19:36"
         },
         {
             "name": "symfony/debug",
@@ -2390,7 +2392,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-05T13:02:37+00:00"
+            "time": "2017-07-05 13:02:37"
         },
         {
             "name": "symfony/filesystem",
@@ -2439,7 +2441,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-24T09:29:48+00:00"
+            "time": "2017-06-24 09:29:48"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2498,7 +2500,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-09T14:24:12+00:00"
+            "time": "2017-06-09 14:24:12"
         },
         {
             "name": "symfony/stopwatch",
@@ -2547,7 +2549,7 @@
             ],
             "description": "Symfony Stopwatch Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12T14:14:56+00:00"
+            "time": "2017-04-12 14:14:56"
         },
         {
             "name": "symfony/yaml",
@@ -2602,7 +2604,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-15T12:58:50+00:00"
+            "time": "2017-06-15 12:58:50"
         },
         {
             "name": "theseer/tokenizer",
@@ -2642,7 +2644,7 @@
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
-            "time": "2017-04-07T12:08:54+00:00"
+            "time": "2017-04-07 12:08:54"
         },
         {
             "name": "webmozart/assert",
@@ -2692,7 +2694,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-11-23T20:04:58+00:00"
+            "time": "2016-11-23 20:04:58"
         }
     ],
     "aliases": [],
@@ -2700,6 +2702,7 @@
     "stability-flags": {
         "daikon/entity": 20,
         "daikon/message-bus": 20,
+        "daikon/data-structure": 20,
         "satooshi/php-coveralls": 20
     },
     "prefer-stable": true,

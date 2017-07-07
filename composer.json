@@ -11,7 +11,7 @@
         "php": ">=7.1",
         "daikon/entity": "master@dev",
         "daikon/message-bus": "master@dev",
-        "php-ds/php-ds": "^v1.1"
+        "daikon/data-structure": "master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",

@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\Cqrs\EventStore;
 
 use Daikon\Cqrs\Aggregate\AggregatePrefix;
-use Daikon\DataStructures\TypedMapTrait;
+use Daikon\DataStructure\TypedMapTrait;
 
 final class UnitOfWorkMap implements \IteratorAggregate, \Countable
 {
