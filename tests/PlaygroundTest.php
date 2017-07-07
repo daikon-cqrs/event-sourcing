@@ -67,10 +67,9 @@ final class PlaygroundTest extends TestCase
         $streamStoreMock->expects($this->once())
             ->method("commit")
             ->with($this->callback(function (Stream $commitStream) {
-                $this->assertEquals($commitStream->getStreamRevision()->toNative(), 1);
                 $this->assertEquals($commitStream->getAggregateRevision()->toNative(), 3);
                 return true;
-            }), StreamRevision::fromNative(1))
+            }), StreamRevision::makeEmpty())
             ->willReturn(new StoreSuccess);
 
         $handler = new RegisterAccountHandler(

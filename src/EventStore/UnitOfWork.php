@@ -18,6 +18,8 @@ use Daikon\MessageBus\Metadata\Metadata;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {
+    private const MAX_RESOLUTION_ATTEMPTS = 5;
+
     /** @var string */
     private $aggregateRootType;
 
@@ -48,14 +50,24 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence
     {
-        $stream = $this->getStream($aggregateRoot)->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-        $knownHead = $stream->getStreamRevision();
-        $result = $this->streamStore->commit($stream, $knownHead);
-        if ($result instanceof StoreError) {
-            $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
-            throw new \Exception("Failed to store commit-stream with stream-id: ".$stream->getStreamId());
+        $prevStream = $this->getTrackedStream($aggregateRoot);
+        $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
+        $result = $this->streamStore->commit($updatedStream, $prevStream->getStreamRevision());
+        $resolutionAttempts = 0;
+        while ($result instanceof PossibleConflict) {
+            $conflictingStream = $this->streamStore->checkout($updatedStream->getStreamId());
+            $conflictingEvents = $this->detectConflictingEvents($aggregateRoot, $conflictingStream);
+            if (!$conflictingEvents->isEmpty()) {
+                throw new UnresolvableConflict($conflictingStream->getStreamId(), $conflictingEvents);
+            }
+            $resolvedStream = $conflictingStream->appendEvents($aggregateRoot->getTrackedEvents());
+            $result = $this->streamStore->commit($resolvedStream, $conflictingStream->getStreamRevision());
+            if (++$resolutionAttempts >= self::MAX_RESOLUTION_ATTEMPTS) {
+                throw new ConcurrencyRaceLost($conflictingStream->getStreamId(), $aggregateRoot->getTrackedEvents());
+            }
         }
-        return $stream->getCommitRange($knownHead, $stream->getStreamRevision());
+        $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream);
+        return $updatedStream->getCommitRange($prevStream->getStreamRevision(), $updatedStream->getStreamRevision());
     }
 
     public function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface
@@ -71,15 +83,15 @@ final class UnitOfWork implements UnitOfWorkInterface
         return $aggregateRoot;
     }
 
-    private function getStream(AggregateRootInterface $aggregateRoot): StreamInterface
+    private function getTrackedStream(AggregateRootInterface $aggregateRoot): StreamInterface
     {
         $streamId = StreamId::fromNative((string)$aggregateRoot->getIdentifier());
         $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
         if ($this->trackedCommitStreams->has((string)$streamId)) {
             $stream = $this->trackedCommitStreams->get((string)$streamId);
-            $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($stream);
         } elseif ($tailRevision->isInitial()) {
             $stream = call_user_func([ $this->streamImplementor, 'fromStreamId' ], $streamId);
+            $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         } else {
             throw new \Exception("Existing aggregate-roots must be checked out before they may be comitted.");
         }
@@ -101,5 +113,20 @@ final class UnitOfWork implements UnitOfWorkInterface
             }
         }
         return $history;
+    }
+
+    private function detectConflictingEvents(AggregateRootInterface $aggregateRoot, StreamInterface $stream): array
+    {
+        $conflictingEvents = [];
+        foreach ($newEvents as $newEvent) {
+            foreach ($stream->findCommitsSince($aggregateRoot->getRevision()) as $previousCommit) {
+                foreach ($previousCommit->getEventLog() as $previousEvent) {
+                    if ($newEvent->conflictsWith($previousEvent)) {
+                        $conflictingEvents[] = [ $previousEvent, $newEvent ];
+                    }
+                }
+            }
+        }
+        return $conflictingEvents;
     }
 }

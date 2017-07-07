@@ -66,23 +66,6 @@ final class Stream implements StreamInterface
 
     public function appendEvents(DomainEventSequence $eventLog, Metadata $metadata): StreamInterface
     {
-        $previousCommits = $this->findCommitsSince($eventLog->getHeadRevision());
-        if (!$previousCommits->isEmpty()) {
-            $conflictingEvents = $this->detectConflictingEvents($eventLog, $previousCommits);
-            // @todo We need to indicate to the caller, that appending did not work and provide the conflicting events.
-            // Here are some possible solutions:
-            // 1. Throw an special exception, that contains the conflicting events
-            //    Con: This is not nice, because it would be misusing exceptions for control-flow
-            // 2. Add a two new methods isConflicted, getConflicting eventsto the StreamInterface.
-            //    Have this method return a new stream that is marked as conflicted and yields the conflicting events.
-            //    Con: Now you need check your stream for the conflicted state before further processing them.
-            // 3. Introduce a StreamResultInterface with two implementations for Success/Error.
-            //    Success would hold the new stream with appended events and Error would yield the conflict infos.
-            //    Con: More result interfaces/classes.
-            // 4. Same as 3. but use the Ok/Error monads from shrink0r/monatic.
-            //    These would then also replace the StoreResultInterface to preserve consistency.
-            //    Con: As this approach is more generic we lose explicity, no?
-        }
         return $this->appendCommit(
             call_user_func(
                 [ $this->commitImplementor, 'make' ],
@@ -130,7 +113,7 @@ final class Stream implements StreamInterface
         return $this->commitSequence->getIterator();
     }
 
-    private function findCommitsSince(AggregateRevision $incomingRevision): CommitSequence
+    public function findCommitsSince(AggregateRevision $incomingRevision): CommitSequence
     {
         $previousCommits = [];
         $prevCommit = $this->getHead();
@@ -139,20 +122,5 @@ final class Stream implements StreamInterface
             $prevCommit = $this->commitSequence->get($prevCommit->getStreamRevision()->decrement());
         }
         return new CommitSequence(array_reverse($previousCommits));
-    }
-
-    private function detectConflictingEvents(DomainEventSequence $newEvents, CommitSequence $previousCommits): array
-    {
-        $conflictingEvents = [];
-        foreach ($newEvents as $newEvent) {
-            foreach ($previousCommits as $previousCommit) {
-                foreach ($previousCommit->getEventLog() as $previousEvent) {
-                    if ($newEvent->conflictsWith($previousEvent)) {
-                        $conflictingEvents[] = [ $previousEvent, $newEvent ];
-                    }
-                }
-            }
-        }
-        return $conflictingEvents;
     }
 }
