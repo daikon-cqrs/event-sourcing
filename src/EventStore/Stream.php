@@ -75,6 +75,7 @@ final class Stream implements StreamInterface
             //    Con: This is not nice, because it would be misusing exceptions for control-flow
             // 2. Add a two new methods isConflicted, getConflicting eventsto the StreamInterface.
             //    Have this method return a new stream that is marked as conflicted and yields the conflicting events.
+            //    Con: Now you need check your stream for the conflicted state before further processing them.
             // 3. Introduce a StreamResultInterface with two implementations for Success/Error.
             //    Success would hold the new stream with appended events and Error would yield the conflict infos.
             //    Con: More result interfaces/classes.
