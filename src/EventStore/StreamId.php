@@ -13,7 +13,7 @@ namespace Daikon\EventSourcing\EventStore;
 use Assert\Assertion;
 use Daikon\Entity\ValueObject\ValueObjectInterface;
 
-final class CommitStreamId implements ValueObjectInterface
+final class StreamId implements ValueObjectInterface
 {
     /** @var string */
     private $id;

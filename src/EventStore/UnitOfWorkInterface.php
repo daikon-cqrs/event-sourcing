@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
@@ -18,8 +19,5 @@ interface UnitOfWorkInterface
 {
     public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence;
 
-    public function checkout(
-        AggregateIdInterface $aggregateId,
-        CommitStreamRevision $revision = null
-    ): AggregateRootInterface;
+    public function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface;
 }

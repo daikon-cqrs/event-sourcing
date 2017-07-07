@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Daikon\EventSourcing\EventStore\CommitInterface;
-use Daikon\EventSourcing\EventStore\CommitStreamRevision;
+use Daikon\EventSourcing\EventStore\StreamRevision;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;
@@ -57,7 +57,7 @@ abstract class CommandHandler implements MessageHandlerInterface
 
     protected function checkout(
         AggregateIdInterface $aggregateId,
-        CommitStreamRevision $revision = null
+        AggregateRevision $revision = null
     ): AggregateRootInterface {
         return $this->unitOfWork->checkout($aggregateId, $revision);
     }

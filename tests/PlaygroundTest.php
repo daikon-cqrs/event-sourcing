@@ -5,8 +5,8 @@ namespace Daikon\Tests\EventSourcing;
 use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\EventStore\Commit;
-use Daikon\EventSourcing\EventStore\CommitStream;
-use Daikon\EventSourcing\EventStore\CommitStreamRevision;
+use Daikon\EventSourcing\EventStore\Stream;
+use Daikon\EventSourcing\EventStore\StreamRevision;
 use Daikon\EventSourcing\EventStore\StoreSuccess;
 use Daikon\EventSourcing\EventStore\StreamStoreInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWork;
@@ -66,11 +66,11 @@ final class PlaygroundTest extends TestCase
             ->getMock();
         $streamStoreMock->expects($this->once())
             ->method("commit")
-            ->with($this->callback(function (CommitStream $commitStream) {
+            ->with($this->callback(function (Stream $commitStream) {
                 $this->assertEquals($commitStream->getStreamRevision()->toNative(), 1);
                 $this->assertEquals($commitStream->getAggregateRevision()->toNative(), 3);
                 return true;
-            }), CommitStreamRevision::fromNative(1))
+            }), StreamRevision::fromNative(1))
             ->willReturn(new StoreSuccess);
 
         $handler = new RegisterAccountHandler(

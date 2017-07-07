@@ -37,7 +37,7 @@ abstract class Command implements CommandInterface
     {
         return [
             'aggregateId' => $this->aggregateId->toNative(),
-            'knownAggregateRevision' => $this->knownAggregateRevision->toNative(),
+            'knownAggregateRevision' => $this->knownAggregateRevision->toNative()
         ];
     }
 

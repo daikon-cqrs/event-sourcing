@@ -14,9 +14,9 @@ use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\DomainEventSequence;
 use Daikon\MessageBus\Metadata\Metadata;
 
-final class CommitStream implements CommitStreamInterface
+final class Stream implements StreamInterface
 {
-    /** @var CommitStreamId */
+    /** @var StreamId */
     private $streamId;
 
     /** @var CommitSequence */
@@ -25,24 +25,22 @@ final class CommitStream implements CommitStreamInterface
     /** @var string */
     private $commitImplementor;
 
-    public static function fromStreamId(
-        CommitStreamId $streamId,
-        string $commitImplementor = Commit::class
-    ): CommitStreamInterface {
+    public static function fromStreamId(StreamId $streamId, string $commitImplementor = Commit::class): StreamInterface
+    {
         return new static($streamId);
     }
 
-    public static function fromArray(array $streamState): CommitStream
+    public static function fromArray(array $streamState): Stream
     {
         return new static(
-            CommitStreamId::fromNative($streamState["commitStreamId"]),
+            StreamId::fromNative($streamState["commitStreamId"]),
             CommitSequence::fromArray($streamState["commitStreamSequence"]),
             $streamState["commitImplementor"]
         );
     }
 
     public function __construct(
-        CommitStreamId $streamId,
+        StreamId $streamId,
         CommitSequence $commitSequence = null,
         string $commitImplementor = Commit::class
     ) {
@@ -51,14 +49,14 @@ final class CommitStream implements CommitStreamInterface
         $this->commitImplementor = $commitImplementor;
     }
 
-    public function getStreamId(): CommitStreamId
+    public function getStreamId(): StreamId
     {
         return $this->streamId;
     }
 
-    public function getStreamRevision(): CommitStreamRevision
+    public function getStreamRevision(): StreamRevision
     {
-        return CommitStreamRevision::fromNative($this->commitSequence->getLength());
+        return StreamRevision::fromNative($this->commitSequence->getLength());
     }
 
     public function getAggregateRevision(): AggregateRevision
@@ -66,15 +64,27 @@ final class CommitStream implements CommitStreamInterface
         return $this->commitSequence->getHead()->getAggregateRevision();
     }
 
-    public function appendEvents(DomainEventSequence $eventLog, Metadata $metadata): CommitStreamInterface
+    public function appendEvents(DomainEventSequence $eventLog, Metadata $metadata): StreamInterface
     {
         $previousCommits = $this->findCommitsSince($eventLog->getHeadRevision());
         if (!$previousCommits->isEmpty()) {
             $conflictingEvents = $this->detectConflictingEvents($eventLog, $previousCommits);
-            // @todo pass $conflictingEvents to an exception and throw?
+            // @todo We need to indicate to the caller, that appending did not work and provide the conflicting events.
+            // Here are some possible solutions:
+            // 1. Throw an special exception, that contains the conflicting events
+            //    Con: This is not nice, because it would be misusing exceptions for control-flow
+            // 2. Add a two new methods isConflicted, getConflicting eventsto the StreamInterface.
+            //    Have this method return a new stream that is marked as conflicted and yields the conflicting events.
+            // 3. Introduce a StreamResultInterface with two implementations for Success/Error.
+            //    Success would hold the new stream with appended events and Error would yield the conflict infos.
+            //    Con: More result interfaces/classes.
+            // 4. Same as 3. but use the Ok/Error monads from shrink0r/monatic.
+            //    These would then also replace the StoreResultInterface to preserve consistency.
+            //    Con: As this approach is more generic we lose explicity, no?
         }
         return $this->appendCommit(
-            $this->commitImplementor::make(
+            call_user_func(
+                [ $this->commitImplementor, 'make' ],
                 $this->streamId,
                 $this->getStreamRevision()->increment(),
                 $eventLog,
@@ -83,7 +93,7 @@ final class CommitStream implements CommitStreamInterface
         );
     }
 
-    public function appendCommit(CommitInterface $commit): CommitStreamInterface
+    public function appendCommit(CommitInterface $commit): StreamInterface
     {
         $stream = clone $this;
         $stream->commitSequence = $this->commitSequence->push($commit);
@@ -95,7 +105,7 @@ final class CommitStream implements CommitStreamInterface
         return $this->commitSequence->isEmpty() ? null : $this->commitSequence->getHead();
     }
 
-    public function getCommitRange(CommitStreamRevision $fromRev, CommitStreamRevision $toRev = null): CommitSequence
+    public function getCommitRange(StreamRevision $fromRev, StreamRevision $toRev = null): CommitSequence
     {
         return $this->commitSequence->getSlice($fromRev, $toRev ?? $this->getStreamRevision());
     }
@@ -136,11 +146,9 @@ final class CommitStream implements CommitStreamInterface
         foreach ($newEvents as $newEvent) {
             foreach ($previousCommits as $previousCommit) {
                 foreach ($previousCommit->getEventLog() as $previousEvent) {
-                    /* @todo figure out how to do conflict resolution.
                     if ($newEvent->conflictsWith($previousEvent)) {
                         $conflictingEvents[] = [ $previousEvent, $newEvent ];
                     }
-                    */
                 }
             }
         }

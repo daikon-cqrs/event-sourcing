@@ -15,7 +15,7 @@ use Ds\Map;
 use Iterator;
 use IteratorAggregate;
 
-final class CommitStreamMap implements IteratorAggregate, Countable
+final class StreamMap implements IteratorAggregate, Countable
 {
     /** @var Map */
     private $compositeMap;
@@ -25,19 +25,19 @@ final class CommitStreamMap implements IteratorAggregate, Countable
         return new self;
     }
 
-    public function __construct(CommitStream ...$commitStream)
+    public function __construct(Stream ...$commitStream)
     {
         $this->compositeMap = new Map($commitStream);
     }
 
-    public function register(CommitStreamInterface $commitStream): self
+    public function register(StreamInterface $commitStream): self
     {
         $copy = clone $this;
         $copy->compositeMap->put((string)$commitStream->getStreamId(), $commitStream);
         return $copy;
     }
 
-    public function unregister(CommitStreamInterface $commitStream): self
+    public function unregister(StreamInterface $commitStream): self
     {
         $copy = clone $this;
         $copy->compositeMap->remove((string)$commitStream->getStreamId());
@@ -49,7 +49,7 @@ final class CommitStreamMap implements IteratorAggregate, Countable
         return $this->compositeMap->hasKey($key);
     }
 
-    public function get(string $key): CommitStream
+    public function get(string $key): Stream
     {
         return $this->compositeMap->get($key);
     }
@@ -83,7 +83,7 @@ final class CommitStreamMap implements IteratorAggregate, Countable
         return $this->compositeMap->getIterator();
     }
 
-    public function __get(string $key): CommitStream
+    public function __get(string $key): Stream
     {
         return $this->get($key);
     }

@@ -74,7 +74,7 @@ final class CommitSequence implements IteratorAggregate, Countable
         return $this->isEmpty() ? null : $this->compositeVector->last();
     }
 
-    public function get(CommitStreamRevision $streamRevision): ?CommitInterface
+    public function get(StreamRevision $streamRevision): ?CommitInterface
     {
         if ($this->compositeVector->offsetExists($streamRevision->toNative() - 1)) {
             $this->compositeVector->get($streamRevision->toNative() - 1);
@@ -82,7 +82,7 @@ final class CommitSequence implements IteratorAggregate, Countable
         return null;
     }
 
-    public function getSlice(CommitStreamRevision $start, CommitStreamRevision $end): self
+    public function getSlice(StreamRevision $start, StreamRevision $end): self
     {
         return $this->compositeVector->reduce(
             function (CommitSequence $commits, CommitInterface $commit) use ($start, $end): CommitSequence {
@@ -101,9 +101,9 @@ final class CommitSequence implements IteratorAggregate, Countable
         return $this->compositeVector->isEmpty();
     }
 
-    public function revisionOf(CommitInterface $commit): CommitStreamRevision
+    public function revisionOf(CommitInterface $commit): StreamRevision
     {
-        return CommitStreamRevision::fromNative($this->compositeVector->find($commit));
+        return StreamRevision::fromNative($this->compositeVector->find($commit));
     }
 
     public function getLength(): int

@@ -13,7 +13,7 @@ namespace Daikon\EventSourcing\EventStore;
 use Assert\Assertion;
 use Daikon\Entity\ValueObject\ValueObjectInterface;
 
-final class CommitStreamRevision implements ValueObjectInterface
+final class StreamRevision implements ValueObjectInterface
 {
     private const INITIAL = 1;
 
@@ -37,14 +37,14 @@ final class CommitStreamRevision implements ValueObjectInterface
         return $this->revision;
     }
 
-    public function increment(): CommitStreamRevision
+    public function increment(): StreamRevision
     {
         $copy = clone $this;
         $copy->revision++;
         return $copy;
     }
 
-    public function decrement(): CommitStreamRevision
+    public function decrement(): StreamRevision
     {
         $copy = clone $this;
         $copy->revision--;
@@ -67,17 +67,17 @@ final class CommitStreamRevision implements ValueObjectInterface
         return $this->revision === self::INITIAL;
     }
 
-    public function isWithinRange(CommitStreamRevision $from, CommitStreamRevision $to)
+    public function isWithinRange(StreamRevision $from, StreamRevision $to)
     {
         return $this->isGreaterThanOrEqual($from) && $this->isLessThanOrEqual($to);
     }
 
-    public function isGreaterThanOrEqual(CommitStreamRevision $revision)
+    public function isGreaterThanOrEqual(StreamRevision $revision)
     {
         return $this->revision >= $revision->toNative();
     }
 
-    public function isLessThanOrEqual(CommitStreamRevision $revision)
+    public function isLessThanOrEqual(StreamRevision $revision)
     {
         return $this->revision <= $revision->toNative();
     }

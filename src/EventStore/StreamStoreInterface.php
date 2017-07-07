@@ -10,16 +10,15 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore;
 
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
+
 interface StreamStoreInterface
 {
     public function checkout(
-        CommitStreamId $streamId,
-        CommitStreamRevision $from = null,
-        CommitStreamRevision $to = null
-    ): CommitStreamInterface;
+        StreamId $streamId,
+        AggregateRevision $from = null,
+        AggregateRevision $to = null
+    ): StreamInterface;
 
-    public function commit(
-        CommitStreamInterface $stream,
-        CommitStreamRevision $storeHead
-    ): StoreResultInterface;
+    public function commit(StreamInterface $stream, StreamRevision $knownHead): StoreResultInterface;
 }

@@ -12,17 +12,17 @@ namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\DomainEventSequence;
-use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
-interface CommitInterface extends MessageInterface
+interface StreamInterface extends \IteratorAggregate, \Countable
 {
-    public static function make(
-        StreamId $streamId,
-        StreamRevision $streamRevision,
-        DomainEventSequence $eventLog,
-        Metadata $metadata
-    ): CommitInterface;
+    public static function fromStreamId(StreamId $streamId, string $commitImplementor = Commit::class): StreamInterface;
+
+    public function appendEvents(DomainEventSequence $eventLog, Metadata $metadata): StreamInterface;
+
+    public function appendCommit(CommitInterface $commit): StreamInterface;
+
+    public function getCommitRange(StreamRevision $fromRev, StreamRevision $toRev = null): CommitSequence;
 
     public function getStreamId(): StreamId;
 
@@ -30,7 +30,5 @@ interface CommitInterface extends MessageInterface
 
     public function getAggregateRevision(): AggregateRevision;
 
-    public function getEventLog(): DomainEventSequence;
-
-    public function getMetadata(): Metadata;
+    public function getHead(): ?CommitInterface;
 }

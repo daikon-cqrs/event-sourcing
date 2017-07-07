@@ -2,11 +2,12 @@
 
 namespace Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Event;
 
+use Daikon\Entity\ValueObject\Uuid;
 use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\DomainEvent;
-use Daikon\Entity\ValueObject\Uuid;
+use Daikon\EventSourcing\Aggregate\DomainEventInterface;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
@@ -41,6 +42,11 @@ final class VerificationTokenWasAdded extends DomainEvent
     public static function getAggregateRootClass(): string
     {
         return Account::class;
+    }
+
+    public function conflictsWith(DomainEventInterface $otherEvent): bool
+    {
+        return false;
     }
 
     public function getId(): Uuid

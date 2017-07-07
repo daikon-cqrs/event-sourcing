@@ -17,10 +17,10 @@ use Daikon\MessageBus\Metadata\Metadata;
 
 final class Commit implements CommitInterface
 {
-    /** @var CommitStreamId */
+    /** @var StreamId */
     private $streamId;
 
-    /** @var CommitStreamRevision */
+    /** @var StreamRevision */
     private $streamRevision;
 
     /** @var DomainEventSequence */
@@ -30,8 +30,8 @@ final class Commit implements CommitInterface
     private $metadata;
 
     public static function make(
-        CommitStreamId $streamId,
-        CommitStreamRevision $streamRevision,
+        StreamId $streamId,
+        StreamRevision $streamRevision,
         DomainEventSequence $eventLog,
         Metadata $metadata
     ): CommitInterface {
@@ -41,19 +41,19 @@ final class Commit implements CommitInterface
     public static function fromArray(array $state): MessageInterface
     {
         return new self(
-            CommitStreamId::fromNative($state["streamId"]),
-            CommitStreamRevision::fromNative((int)$state["streamRevision"]),
+            StreamId::fromNative($state["streamId"]),
+            StreamRevision::fromNative((int)$state["streamRevision"]),
             DomainEventSequence::fromArray($state["eventLog"]),
             Metadata::fromArray($state["metadata"])
         );
     }
 
-    public function getStreamId(): CommitStreamId
+    public function getStreamId(): StreamId
     {
         return $this->streamId;
     }
 
-    public function getStreamRevision(): CommitStreamRevision
+    public function getStreamRevision(): StreamRevision
     {
         return $this->streamRevision;
     }
@@ -84,8 +84,8 @@ final class Commit implements CommitInterface
     }
 
     private function __construct(
-        CommitStreamId $streamId,
-        CommitStreamRevision $streamRevision,
+        StreamId $streamId,
+        StreamRevision $streamRevision,
         DomainEventSequence $eventLog,
         Metadata $metadata
     ) {
