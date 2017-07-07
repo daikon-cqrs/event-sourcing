@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace Daikon\Cqrs\EventStore;
+namespace Daikon\EventSourcing\EventStore;
 
-use Daikon\Cqrs\Aggregate\AggregatePrefix;
+use Daikon\EventSourcing\Aggregate\AggregatePrefix;
 use Daikon\DataStructure\TypedMapTrait;
 
 final class UnitOfWorkMap implements \IteratorAggregate, \Countable

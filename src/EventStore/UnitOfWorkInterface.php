@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace Daikon\Cqrs\EventStore;
+namespace Daikon\EventSourcing\EventStore;
 
-use Daikon\Cqrs\Aggregate\AggregateIdInterface;
-use Daikon\Cqrs\Aggregate\AggregateRootInterface;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
 interface UnitOfWorkInterface

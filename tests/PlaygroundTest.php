@@ -1,15 +1,15 @@
 <?php
 
-namespace Daikon\Tests\Cqrs;
+namespace Daikon\Tests\EventSourcing;
 
-use Daikon\Cqrs\Aggregate\AggregateId;
-use Daikon\Cqrs\Aggregate\AggregateRootInterface;
-use Daikon\Cqrs\EventStore\Commit;
-use Daikon\Cqrs\EventStore\CommitStream;
-use Daikon\Cqrs\EventStore\CommitStreamRevision;
-use Daikon\Cqrs\EventStore\StoreSuccess;
-use Daikon\Cqrs\EventStore\StreamStoreInterface;
-use Daikon\Cqrs\EventStore\UnitOfWork;
+use Daikon\EventSourcing\Aggregate\AggregateId;
+use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
+use Daikon\EventSourcing\EventStore\Commit;
+use Daikon\EventSourcing\EventStore\CommitStream;
+use Daikon\EventSourcing\EventStore\CommitStreamRevision;
+use Daikon\EventSourcing\EventStore\StoreSuccess;
+use Daikon\EventSourcing\EventStore\StreamStoreInterface;
+use Daikon\EventSourcing\EventStore\UnitOfWork;
 use Daikon\MessageBus\Channel\Channel;
 use Daikon\MessageBus\Channel\ChannelMap;
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerList;
@@ -19,14 +19,14 @@ use Daikon\MessageBus\Channel\Subscription\Transport\InProcessTransport;
 use Daikon\MessageBus\Envelope;
 use Daikon\MessageBus\MessageBus;
 use Daikon\MessageBus\MessageBusInterface;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\CommandHandler\RegisterAccountHandler;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AccountWasRegistered;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AuthenticationTokenWasAdded;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\VerificationTokenWasAdded;
-use Daikon\Tests\Cqrs\Fixture\LazyHandler;
-use Daikon\Tests\Cqrs\Fixture\NoOpHandler;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\CommandHandler\RegisterAccountHandler;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Account;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Event\AccountWasRegistered;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Event\AuthenticationTokenWasAdded;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Event\VerificationTokenWasAdded;
+use Daikon\Tests\EventSourcing\Fixture\LazyHandler;
+use Daikon\Tests\EventSourcing\Fixture\NoOpHandler;
 use PHPUnit\Framework\TestCase;
 
 final class PlaygroundTest extends TestCase

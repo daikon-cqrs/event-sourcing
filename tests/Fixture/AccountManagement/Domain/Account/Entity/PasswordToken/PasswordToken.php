@@ -1,12 +1,12 @@
 <?php
 
-namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken;
+namespace Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken;
 
 use Daikon\Entity\Entity\NestedEntity;
 use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\Entity\ValueObject\Uuid;
 use Daikon\Entity\ValueObject\ValueObjectInterface;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
 
 final class PasswordToken extends NestedEntity
 {

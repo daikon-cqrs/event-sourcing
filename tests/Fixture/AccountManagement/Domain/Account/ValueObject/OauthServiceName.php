@@ -1,6 +1,6 @@
 <?php
 
-namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject;
+namespace Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject;
 
 use Assert\Assertion;
 use Daikon\Entity\ValueObject\ValueObjectInterface;

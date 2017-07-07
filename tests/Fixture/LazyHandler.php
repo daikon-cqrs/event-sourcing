@@ -1,6 +1,6 @@
 <?php
 
-namespace Daikon\Tests\Cqrs\Fixture;
+namespace Daikon\Tests\EventSourcing\Fixture;
 
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Daikon\Cqrs\EventStore;
+namespace Daikon\EventSourcing\EventStore;
 
 use Assert\Assertion;
 use Daikon\Entity\ValueObject\ValueObjectInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AuthToken;
+namespace Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Entity\AuthToken;
 
 use Daikon\Entity\Entity\TypedEntityInterface;
 use Daikon\Entity\EntityType\Attribute;
@@ -8,7 +8,7 @@ use Daikon\Entity\EntityType\AttributeInterface;
 use Daikon\Entity\EntityType\EntityType;
 use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\Entity\ValueObject\Uuid;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
 
 final class AuthenticationTokenType extends EntityType
 {

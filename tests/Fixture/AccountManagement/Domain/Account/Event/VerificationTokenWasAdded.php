@@ -1,16 +1,16 @@
 <?php
 
-namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event;
+namespace Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Event;
 
-use Daikon\Cqrs\Aggregate\AggregateId;
-use Daikon\Cqrs\Aggregate\AggregateIdInterface;
-use Daikon\Cqrs\Aggregate\AggregateRevision;
-use Daikon\Cqrs\Aggregate\DomainEvent;
+use Daikon\EventSourcing\Aggregate\AggregateId;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\EventSourcing\Aggregate\DomainEvent;
 use Daikon\Entity\ValueObject\Uuid;
 use Daikon\MessageBus\MessageInterface;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Account;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
 
 final class VerificationTokenWasAdded extends DomainEvent
 {

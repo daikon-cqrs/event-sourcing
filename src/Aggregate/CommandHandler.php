@@ -8,11 +8,11 @@
 
 declare(strict_types=1);
 
-namespace Daikon\Cqrs\Aggregate;
+namespace Daikon\EventSourcing\Aggregate;
 
-use Daikon\Cqrs\EventStore\CommitInterface;
-use Daikon\Cqrs\EventStore\CommitStreamRevision;
-use Daikon\Cqrs\EventStore\UnitOfWorkInterface;
+use Daikon\EventSourcing\EventStore\CommitInterface;
+use Daikon\EventSourcing\EventStore\CommitStreamRevision;
+use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;

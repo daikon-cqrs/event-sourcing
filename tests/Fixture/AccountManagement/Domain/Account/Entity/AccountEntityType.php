@@ -1,22 +1,22 @@
 <?php
 
-namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity;
+namespace Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Entity;
 
-use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\Entity\Entity\TypedEntityInterface;
 use Daikon\Entity\EntityType\Attribute;
 use Daikon\Entity\EntityType\EntityType;
 use Daikon\Entity\EntityType\NestedEntityListAttribute;
 use Daikon\Entity\ValueObject\Email;
 use Daikon\Entity\ValueObject\Text;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AuthToken\AuthenticationTokenType;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\OauthToken\OauthTokenType;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken\PasswordTokenType;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\VerifyToken\VerificationTokenType;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\HashedPassword;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Locale;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Username;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Entity\AuthToken\AuthenticationTokenType;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Entity\OauthToken\OauthTokenType;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Entity\PasswordToken\PasswordTokenType;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Entity\VerifyToken\VerificationTokenType;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\HashedPassword;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\Locale;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\Username;
 
 final class AccountEntityType extends EntityType
 {

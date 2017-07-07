@@ -1,14 +1,14 @@
 <?php
 
-namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\OauthToken;
+namespace Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Entity\OauthToken;
 
 use Daikon\Entity\Entity\NestedEntity;
 use Daikon\Entity\ValueObject\Text;
 use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\Entity\ValueObject\Uuid;
 use Daikon\Entity\ValueObject\ValueObjectInterface;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\RandomToken;
 
 final class OauthToken extends NestedEntity
 {

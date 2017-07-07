@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Daikon\Cqrs\Aggregate;
+namespace Daikon\EventSourcing\Aggregate;
 
 abstract class Command implements CommandInterface
 {

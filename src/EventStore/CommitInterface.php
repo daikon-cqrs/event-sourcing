@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace Daikon\Cqrs\EventStore;
+namespace Daikon\EventSourcing\EventStore;
 
-use Daikon\Cqrs\Aggregate\AggregateRevision;
-use Daikon\Cqrs\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\EventSourcing\Aggregate\DomainEventSequence;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 

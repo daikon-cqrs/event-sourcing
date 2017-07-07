@@ -1,15 +1,15 @@
 <?php
 
-namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command;
+namespace Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\Command;
 
-use Daikon\Cqrs\Aggregate\AggregateId;
-use Daikon\Cqrs\Aggregate\AggregateIdInterface;
-use Daikon\Cqrs\Aggregate\Command;
+use Daikon\EventSourcing\Aggregate\AggregateId;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\EventSourcing\Aggregate\Command;
 use Daikon\Entity\ValueObject\Text;
 use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\MessageBus\MessageInterface;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\AccessRole;
+use Daikon\Tests\EventSourcing\Fixture\AccountManagement\Domain\Account\ValueObject\OauthServiceName;
 
 final class RegisterOauthAccount extends Command
 {
