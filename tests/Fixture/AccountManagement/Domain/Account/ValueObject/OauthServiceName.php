@@ -15,6 +15,7 @@ final class OauthServiceName implements ValueObjectInterface
 
     public const ALLOWED_SERVICE_NAMES = [ self::FACEBOOK, self::TWITTER, self::GITHUB ];
 
+    /** @var string */
     private $serviceName;
 
     public static function fromNative($serviceName): ValueObjectInterface

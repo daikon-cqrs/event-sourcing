@@ -42,7 +42,7 @@ final class OauthAccountWasRegistered extends DomainEvent
     public function toArray(): array
     {
         return array_merge([
-            "role" => $this->role->toNative(),
+            "role" => $this->role->toNative()
         ], parent::toArray());
     }
 

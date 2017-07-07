@@ -9,8 +9,10 @@ final class Locale implements ValueObjectInterface
 {
     public const ALLOWED_LOCALES = [ "en_US", "de_DE", "it_IT", "es_ES", "fr_FR", "en_GB" ];
 
+    /** @var string */
     private $languageCode;
 
+    /** @var string */
     private $countryCode;
 
     public static function fromNative($nativeState): ValueObjectInterface

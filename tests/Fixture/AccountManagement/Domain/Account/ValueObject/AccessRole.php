@@ -13,6 +13,7 @@ final class AccessRole implements ValueObjectInterface
 
     public const ALLOWED_ROLES = [ self::ADMIN, self::USER ];
 
+    /** @var string */
     private $role;
 
     public static function fromNative($role): ValueObjectInterface

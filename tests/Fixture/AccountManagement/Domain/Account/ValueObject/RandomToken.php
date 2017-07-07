@@ -7,6 +7,7 @@ use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class RandomToken implements ValueObjectInterface
 {
+    /** @var null|string */
     private $token;
 
     public static function generate(): self

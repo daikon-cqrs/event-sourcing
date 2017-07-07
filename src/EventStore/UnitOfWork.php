@@ -35,7 +35,7 @@ final class UnitOfWork implements UnitOfWorkInterface
     public function __construct(
         string $aggregateRootType,
         StreamStoreInterface $streamStore,
-        StreamProcessorInterface $streamProcessor,
+        StreamProcessorInterface $streamProcessor = null,
         string $streamImplementor = CommitStream::class
     ) {
         $this->aggregateRootType = $aggregateRootType;
@@ -53,7 +53,7 @@ final class UnitOfWork implements UnitOfWorkInterface
             $stream = $this->trackedCommitStreams->get((string)$streamId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($stream);
         } elseif ($tailRevision->isInitial()) {
-            $stream = $this->streamImplementor::fromStreamId($streamId);
+            $stream = call_user_func([ $this->streamImplementor, 'fromStreamId' ], $streamId);
         } else {
             throw new \Exception("Existing aggregate-roots must be checked out before they may be comitted.");
         }
@@ -70,16 +70,29 @@ final class UnitOfWork implements UnitOfWorkInterface
         AggregateIdInterface $aggregateId,
         CommitStreamRevision $revision = null
     ): AggregateRootInterface {
+        /** @var $streamId CommitStreamId */
         $streamId = CommitStreamId::fromNative($aggregateId->toNative());
         $stream = $this->streamStore->checkout($streamId, $revision);
+        $aggregateRoot = call_user_func(
+            [ $this->aggregateRootType, 'reconstituteFromHistory' ],
+            $aggregateId,
+            $this->buildEventHistory($stream)
+        );
+        $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
+        return $aggregateRoot;
+    }
+
+    private function buildEventHistory(CommitStreamInterface $stream): DomainEventSequence
+    {
         $history = DomainEventSequence::makeEmpty();
-        foreach ($this->streamProcessor->process($stream) as $commit) {
+        if ($this->streamProcessor) {
+            $stream = $this->streamProcessor->process($stream);
+        }
+        foreach ($stream as $commit) {
             foreach ($commit->getEventLog() as $event) {
                 $history = $history->push($event);
             }
         }
-        $aggregateRoot = $this->aggregateRootType::reconstituteFromHistory($aggregateId, $history);
-        $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
-        return $aggregateRoot;
+        return $history;
     }
 }

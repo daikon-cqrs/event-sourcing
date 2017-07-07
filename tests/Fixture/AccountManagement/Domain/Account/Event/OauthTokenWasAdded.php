@@ -61,6 +61,11 @@ final class OauthTokenWasAdded extends DomainEvent
         return Account::class;
     }
 
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
+
     public function getTokenId(): Text
     {
         return $this->tokenId;
@@ -88,7 +93,7 @@ final class OauthTokenWasAdded extends DomainEvent
             "tokenId" => $this->tokenId->toNative(),
             "id" => $this->id->toNative(),
             "service" => $this->service->toNative(),
-            "token" => $this->token->toNative(),
+            "token" => $this->token->toNative()
         ], parent::toArray());
     }
 

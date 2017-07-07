@@ -57,7 +57,7 @@ final class VerificationTokenWasAdded extends DomainEvent
     {
         return array_merge([
             "id" => $this->id->toNative(),
-            "token" => $this->token->toNative(),
+            "token" => $this->token->toNative()
         ], parent::toArray());
     }
 

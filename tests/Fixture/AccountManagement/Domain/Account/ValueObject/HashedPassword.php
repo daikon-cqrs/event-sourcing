@@ -11,6 +11,7 @@ final class HashedPassword implements ValueObjectInterface
 
     public const MAX_LENGTH = 50;
 
+    /** @var string */
     private $passwordHash;
 
     public static function fromNative($passwordHash): ValueObjectInterface

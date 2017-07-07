@@ -69,7 +69,7 @@ final class AccountWasRegistered extends DomainEvent
         return array_merge([
             "role" => $this->role->toNative(),
             "locale" => $this->locale->toNative(),
-            "username" => $this->username->toNative(),
+            "username" => $this->username->toNative()
         ], parent::toArray());
     }
 

@@ -7,7 +7,6 @@ use Daikon\Cqrs\Aggregate\AggregateRootInterface;
 use Daikon\Cqrs\EventStore\Commit;
 use Daikon\Cqrs\EventStore\CommitStream;
 use Daikon\Cqrs\EventStore\CommitStreamRevision;
-use Daikon\Cqrs\EventStore\NoopStreamProcessor;
 use Daikon\Cqrs\EventStore\StoreSuccess;
 use Daikon\Cqrs\EventStore\StreamStoreInterface;
 use Daikon\Cqrs\EventStore\UnitOfWork;
@@ -23,7 +22,6 @@ use Daikon\MessageBus\MessageBusInterface;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\CommandHandler\RegisterAccountHandler;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Account;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Command\RegisterAccount;
-use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity\AccountEntityType;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AccountWasRegistered;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\AuthenticationTokenWasAdded;
 use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Event\VerificationTokenWasAdded;
@@ -47,7 +45,7 @@ final class PlaygroundTest extends TestCase
     public function testRegister()
     {
         $registerCommand = $this->createCommand();
-        $account = Account::register($registerCommand, new AccountEntityType);
+        $account = Account::register($registerCommand);
         $this->assertInstanceOf(AggregateRootInterface::CLASS, $account);
         $this->assertEquals(3, $account->getRevision()->toNative());
     }
@@ -76,8 +74,7 @@ final class PlaygroundTest extends TestCase
             ->willReturn(new StoreSuccess);
 
         $handler = new RegisterAccountHandler(
-            new AccountEntityType,
-            new UnitOfWork(Account::class, $streamStoreMock, new NoopStreamProcessor),
+            new UnitOfWork(Account::class, $streamStoreMock),
             $messageBusMock
         );
         $registerCommand = $this->createCommand();
@@ -109,13 +106,12 @@ final class PlaygroundTest extends TestCase
 
     private function setupMessageBus()
     {
-        $messageBus = false;
+        $messageBus = null;
         $streamStoreMock = $this->createMock(StreamStoreInterface::class);
         $streamStoreMock->method("commit")->willReturn(new StoreSuccess);
         $registerAccountFactory = function () use (&$messageBus, $streamStoreMock) {
             return new RegisterAccountHandler(
-                new AccountEntityType,
-                new UnitOfWork(Account::class, $streamStoreMock, new NoopStreamProcessor),
+                new UnitOfWork(Account::class, $streamStoreMock),
                 $messageBus
             );
         };
@@ -135,14 +131,16 @@ final class PlaygroundTest extends TestCase
         return $messageBus;
     }
 
-    private function createCommand()
+    private function createCommand(): RegisterAccount
     {
-        return RegisterAccount::fromArray([
+        /** @var $registerAccount RegisterAccount */
+        $registerAccount = RegisterAccount::fromArray([
             "aggregateId" => self::ACCOUNT_ID,
             "role" => self::ROLE,
             "username" => "sheila",
             "locale" => "en_US",
             "expiresAt" => (new \DatetimeImmutable)->modify("+2hours")->format("Y-m-d\TH:i:s.uP")
         ]);
+        return $registerAccount;
     }
 }

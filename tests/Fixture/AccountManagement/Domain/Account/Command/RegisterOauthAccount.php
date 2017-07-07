@@ -67,7 +67,7 @@ final class RegisterOauthAccount extends Command
             "expiresAt" => $this->expiresAt->toNative(),
             "role" => $this->role->toNative(),
             "service" => $this->service->toNative(),
-            "tokenId" => $this->tokenId->toNative(),
+            "tokenId" => $this->tokenId->toNative()
         ], parent::toArray());
     }
 

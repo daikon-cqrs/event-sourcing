@@ -2,7 +2,7 @@
 
 namespace Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\Entity;
 
-use Daikon\Cqrs\Aggregate\AggregateId;
+use Daikon\Cqrs\Aggregate\AggregateIdInterface;
 use Daikon\Entity\Entity\Entity;
 use Daikon\Entity\Entity\NestedEntityList;
 use Daikon\Entity\ValueObject\Email;
@@ -20,7 +20,7 @@ final class AccountEntity extends Entity
         return $this->get("identity");
     }
 
-    public function withIdentity(AggregateId $aggregateId): self
+    public function withIdentity(AggregateIdInterface $aggregateId): self
     {
         return $this->withValue("identity", $aggregateId);
     }
@@ -100,22 +100,22 @@ final class AccountEntity extends Entity
         return $this->get("tokens");
     }
 
-    public function addAuthenticationToken(array $tokenPayload): self
+    public function withAuthenticationTokenAdded(array $tokenPayload): self
     {
         return $this->addToken($tokenPayload, "authentication_token");
     }
 
-    public function addVerificationToken(array $tokenPayload): self
+    public function withVerificationTokenAdded(array $tokenPayload): self
     {
         return $this->addToken($tokenPayload, "verification_token");
     }
 
-    public function addOauthToken(array $tokenPayload): self
+    public function withOauthTokenAdded(array $tokenPayload): self
     {
         return $this->addToken($tokenPayload, "oauth_token");
     }
 
-    public function addPasswordToken(array $tokenPayload): self
+    public function withPasswordTokenAdded(array $tokenPayload): self
     {
         return $this->addToken($tokenPayload, "password_token");
     }

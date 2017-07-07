@@ -7,8 +7,10 @@ use Daikon\MessageBus\EnvelopeInterface;
 
 final class LazyHandler implements MessageHandlerInterface
 {
+    /** @var callable */
     private $factory;
 
+    /** @var MessageHandlerInterface */
     private $handler;
 
     public function __construct(callable $factory)

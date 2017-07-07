@@ -11,6 +11,7 @@ final class Username implements ValueObjectInterface
 
     public const MAX_LENGTH = 50;
 
+    /** @var string */
     private $username;
 
     public static function fromNative($username): ValueObjectInterface

@@ -69,7 +69,7 @@ final class PasswordTokenWasAdded extends DomainEvent
         return array_merge([
             "expiresAt" => $this->expiresAt->toNative(),
             "id" => $this->id->toNative(),
-            "token" => $this->token->toNative(),
+            "token" => $this->token->toNative()
         ], parent::toArray());
     }
 

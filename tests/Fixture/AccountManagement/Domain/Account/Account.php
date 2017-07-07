@@ -20,22 +20,22 @@ final class Account extends AggregateRoot
     /** @var AccountEntity */
     private $accountState;
 
-    public static function register(RegisterAccount $registerAccount, AccountEntityType $accountStateType): self
+    public static function register(RegisterAccount $registerAccount): self
     {
-        return (new Account($registerAccount->getAggregateId(), $accountStateType))
-            ->reflectThat(AccountWasRegistered::viaCommand($registerAccount))
+        $account = new self($registerAccount->getAggregateId());
+        $account = $account->reflectThat(AccountWasRegistered::viaCommand($registerAccount))
             ->reflectThat(AuthenticationTokenWasAdded::viaCommand($registerAccount))
             ->reflectThat(VerificationTokenWasAdded::viaCommand($registerAccount));
+        return $account;
     }
 
-    public static function registerOauth(
-        RegisterOauthAccount $registerOauthAccount,
-        AccountEntityType $accountStateType
-    ): self {
-        return (new Account($registerOauthAccount->getAggregateId(), $accountStateType))
-            ->reflectThat(OauthAccountWasRegistered::viaCommand($registerOauthAccount))
+    public static function registerOauth(RegisterOauthAccount $registerOauthAccount): self
+    {
+        $account = new self($registerOauthAccount->getAggregateId());
+        $account = $account->reflectThat(OauthAccountWasRegistered::viaCommand($registerOauthAccount))
             ->reflectThat(AuthenticationTokenWasAdded::viaCommand($registerOauthAccount))
             ->reflectThat(OauthTokenWasAdded::viaCommand($registerOauthAccount));
+        return $account;
     }
 
     protected function whenAccountWasRegistered(AccountWasRegistered $accountWasRegistered)
@@ -55,7 +55,7 @@ final class Account extends AggregateRoot
 
     protected function whenAuthenticationTokenWasAdded(AuthenticationTokenWasAdded $tokenWasAdded)
     {
-        $this->accountState = $this->accountState->addAuthenticationToken([
+        $this->accountState = $this->accountState->withAuthenticationTokenAdded([
             "id" => $tokenWasAdded->getId(),
             "token" => $tokenWasAdded->getToken(),
             "expires_at" => $tokenWasAdded->getExpiresAt()
@@ -64,7 +64,7 @@ final class Account extends AggregateRoot
 
     protected function whenVerificationTokenWasAdded(VerificationTokenWasAdded $tokenWasAdded)
     {
-        $this->accountState = $this->accountState->addVerificationToken([
+        $this->accountState = $this->accountState->withVerificationTokenAdded([
             "id" => $tokenWasAdded->getId(),
             "token" => $tokenWasAdded->getToken()
         ]);
@@ -72,7 +72,7 @@ final class Account extends AggregateRoot
 
     protected function whenOauthTokenWasAdded(OauthTokenWasAdded $tokenWasAdded)
     {
-        $this->accountState = $this->accountState->addOauthToken([
+        $this->accountState = $this->accountState->withOauthTokenAdded([
             "id" => $tokenWasAdded->getId(),
             "token" => $tokenWasAdded->getToken(),
             "token_id" => $tokenWasAdded->getTokenId(),
@@ -86,9 +86,9 @@ final class Account extends AggregateRoot
         // @todd implement
     }
 
-    protected function __construct(AggregateIdInterface $aggregateId, AccountEntityType $accountStateType)
+    protected function __construct(AggregateIdInterface $aggregateId)
     {
         parent::__construct($aggregateId);
-        $this->accountState = $accountStateType->makeEntity([ "identity" => $aggregateId ]);
+        $this->accountState = (new AccountEntityType)->makeEntity([ "identity" => $aggregateId ]);
     }
 }

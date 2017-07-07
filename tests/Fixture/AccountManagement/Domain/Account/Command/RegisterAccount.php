@@ -14,12 +14,16 @@ use Daikon\Tests\Cqrs\Fixture\AccountManagement\Domain\Account\ValueObject\Usern
 
 final class RegisterAccount extends Command
 {
+    /** @var Timestamp */
     private $expiresAt;
 
+    /** @var AccessRole */
     private $role;
 
+    /** @var Locale */
     private $locale;
 
+    /** @var Username */
     private $username;
 
     public static function fromArray(array $nativeArray): MessageInterface
@@ -64,7 +68,7 @@ final class RegisterAccount extends Command
             "expiresAt" => $this->expiresAt->toNative(),
             "role" => $this->role->toNative(),
             "locale" => $this->locale->toNative(),
-            "username" => $this->username->toNative(),
+            "username" => $this->username->toNative()
         ], parent::toArray());
     }
 
