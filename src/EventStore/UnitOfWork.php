@@ -35,17 +35,22 @@ final class UnitOfWork implements UnitOfWorkInterface
     /** @var StreamMap */
     private $trackedCommitStreams;
 
+    /** @var int */
+    private $maxResolutionAttempts;
+
     public function __construct(
         string $aggregateRootType,
         StreamStoreInterface $streamStore,
         StreamProcessorInterface $streamProcessor = null,
-        string $streamImplementor = Stream::class
+        string $streamImplementor = Stream::class,
+        int $maxResolutionAttempts = self::MAX_RESOLUTION_ATTEMPTS
     ) {
         $this->aggregateRootType = $aggregateRootType;
         $this->streamStore = $streamStore;
         $this->streamProcessor = $streamProcessor;
         $this->streamImplementor = $streamImplementor;
         $this->trackedCommitStreams = StreamMap::makeEmpty();
+        $this->maxResolutionAttempts = $maxResolutionAttempts;
     }
 
     public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence
@@ -62,7 +67,7 @@ final class UnitOfWork implements UnitOfWorkInterface
             }
             $resolvedStream = $conflictingStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
             $result = $this->streamStore->commit($resolvedStream, $conflictingStream->getStreamRevision());
-            if (++$resolutionAttempts >= self::MAX_RESOLUTION_ATTEMPTS) {
+            if (++$resolutionAttempts >= $this->maxResolutionAttempts) {
                 throw new ConcurrencyRaceLost($conflictingStream->getStreamId(), $aggregateRoot->getTrackedEvents());
             }
         }
