@@ -18,7 +18,7 @@ use Daikon\MessageBus\Metadata\Metadata;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {
-    private const MAX_RESOLUTION_ATTEMPTS = 5;
+    private const MAX_RACE_ATTEMPTS = 5;
 
     /** @var string */
     private $aggregateRootType;
@@ -36,21 +36,21 @@ final class UnitOfWork implements UnitOfWorkInterface
     private $trackedCommitStreams;
 
     /** @var int */
-    private $maxResolutionAttempts;
+    private $maxRaceAttempts;
 
     public function __construct(
         string $aggregateRootType,
         StreamStoreInterface $streamStore,
         StreamProcessorInterface $streamProcessor = null,
         string $streamImplementor = Stream::class,
-        int $maxResolutionAttempts = self::MAX_RESOLUTION_ATTEMPTS
+        int $maxRaceAttempts = self::MAX_RACE_ATTEMPTS
     ) {
         $this->aggregateRootType = $aggregateRootType;
         $this->streamStore = $streamStore;
         $this->streamProcessor = $streamProcessor;
         $this->streamImplementor = $streamImplementor;
         $this->trackedCommitStreams = StreamMap::makeEmpty();
-        $this->maxResolutionAttempts = $maxResolutionAttempts;
+        $this->maxRaceAttempts = $maxRaceAttempts;
     }
 
     public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence
@@ -58,9 +58,9 @@ final class UnitOfWork implements UnitOfWorkInterface
         $prevStream = $this->getTrackedStream($aggregateRoot);
         $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
         $result = $this->streamStore->commit($updatedStream, $prevStream->getStreamRevision());
-        $resolutionAttempts = 0;
+        $raceCount = 0;
         while ($result instanceof ConcurrencyError) {
-            if (++$resolutionAttempts > $this->maxResolutionAttempts) {
+            if (++$raceCount > $this->maxRaceAttempts) {
                 throw new ConcurrencyRaceLost($prevStream->getStreamId(), $aggregateRoot->getTrackedEvents());
             }
             $prevStream = $this->streamStore->checkout($updatedStream->getStreamId());
