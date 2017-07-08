@@ -22,9 +22,9 @@ final class DomainEventSequence implements IteratorAggregate, Countable
 
     public static function fromArray(array $eventsArray): DomainEventSequence
     {
-        return new static(array_map(function (array $eventState) {
+        return new static(array_map(function (array $eventState): DomainEventInterface {
             $eventFqcn = self::resolveEventFqcn($eventState);
-            return $eventFqcn::fromArray($eventState);
+            return call_user_func([ $eventFqcn, 'fromArray' ], $eventState);
         }, $eventsArray));
     }
 
@@ -35,21 +35,32 @@ final class DomainEventSequence implements IteratorAggregate, Countable
 
     public function __construct(array $events = [])
     {
-        (function (DomainEventInterface ...$events) {
+        (function (DomainEventInterface ...$events): void {
             $this->compositeVector = new Vector($events);
         })(...$events);
     }
 
-    public function push(DomainEventInterface $event): self
+    public function push(DomainEventInterface $event): DomainEventSequence
     {
-        if (!$this->isEmpty() && !$this->getHeadRevision()->increment()->equals($event->getAggregateRevision())) {
+        $expectedRevision = $this->getHeadRevision()->increment();
+        if (!$this->isEmpty() && !$expectedRevision->equals($event->getAggregateRevision())) {
             throw new \Exception(sprintf(
-                "Trying to add unexpected revision %s to event-sequence. Expected revision is $nextRevision",
-                $event->getAggregateRevision()
+                'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
+                $event->getAggregateRevision(),
+                $expectedRevision
             ));
         }
         $eventSequence = clone $this;
         $eventSequence->compositeVector->push($event);
+        return $eventSequence;
+    }
+
+    public function append(DomainEventSequence $events): DomainEventSequence
+    {
+        $eventSequence = clone $this;
+        foreach ($events as $event) {
+            $eventSequence = $eventSequence->push($event);
+        }
         return $eventSequence;
     }
 
@@ -58,7 +69,7 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         $nativeList = [];
         foreach ($this as $event) {
             $nativeRep = $event->toArray();
-            $nativeRep["@type"] = get_class($event);
+            $nativeRep['@type'] = get_class($event);
             $nativeList[] = $nativeRep;
         }
         return $nativeList;
@@ -111,12 +122,12 @@ final class DomainEventSequence implements IteratorAggregate, Countable
 
     private static function resolveEventFqcn(array $eventState): string
     {
-        if (!isset($eventState["@type"])) {
-            throw new \Exception("Missing expected typeinfo for event at key '@type' within given state-array.");
+        if (!isset($eventState['@type'])) {
+            throw new \Exception('Missing expected typeinfo for event at key "@type" within given state-array.');
         }
-        $eventFqcn = $eventState["@type"];
+        $eventFqcn = $eventState['@type'];
         if (!class_exists($eventFqcn)) {
-            throw new \Exception("Can't load event-class '$eventFqcn' given within state-array.");
+            throw new \Exception(sprintf('Can not load event-class "%s" given within state-array.', $eventFqcn));
         }
         return $eventFqcn;
     }

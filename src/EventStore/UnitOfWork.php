@@ -60,17 +60,16 @@ final class UnitOfWork implements UnitOfWorkInterface
         $result = $this->streamStore->commit($updatedStream, $prevStream->getStreamRevision());
         $resolutionAttempts = 0;
         while ($result instanceof ConcurrencyError) {
-            if ($resolutionAttempts >= $this->maxResolutionAttempts) {
+            if (++$resolutionAttempts > $this->maxResolutionAttempts) {
                 throw new ConcurrencyRaceLost($prevStream->getStreamId(), $aggregateRoot->getTrackedEvents());
             }
             $prevStream = $this->streamStore->checkout($updatedStream->getStreamId());
-            $conflictingEvents = $this->detectConflictingEvents($aggregateRoot, $prevStream);
+            $conflictingEvents = $this->getConflicts($aggregateRoot, $prevStream);
             if (!$conflictingEvents->isEmpty()) {
                 throw new UnresolvableConflict($prevStream->getStreamId(), $conflictingEvents);
             }
             $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
             $result = $this->streamStore->commit($updatedStream, $prevStream->getStreamRevision());
-            $resolutionAttempts++;
         }
         $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getStreamId());
         return $updatedStream->getCommitRange($prevStream->getStreamRevision(), $updatedStream->getStreamRevision());
@@ -84,7 +83,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         $aggregateRoot = call_user_func(
             [ $this->aggregateRootType, 'reconstituteFromHistory' ],
             $aggregateId,
-            $this->buildEventHistory($stream, $revision)
+            $this->prepareHistory($stream, $revision)
         );
         $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         return $aggregateRoot;
@@ -105,31 +104,26 @@ final class UnitOfWork implements UnitOfWorkInterface
         return $stream;
     }
 
-    private function buildEventHistory(StreamInterface $stream, AggregateRevision $to): DomainEventSequence
+    private function prepareHistory(StreamInterface $stream, AggregateRevision $targetRevision): DomainEventSequence
     {
+        $stream = $this->streamProcessor ? $this->streamProcessor->process($stream) : $stream;
         $history = DomainEventSequence::makeEmpty();
-        if ($this->streamProcessor) {
-            $stream = $this->streamProcessor->process($stream);
-        }
         foreach ($stream as $commit) {
-            if (!$to->isEmpty() && $commit->getAggregateRevision()->isGreaterThan($to)) {
+            if (!$targetRevision->isEmpty() && $commit->getAggregateRevision()->isGreaterThan($targetRevision)) {
                 break;
             }
-            foreach ($commit->getEventLog() as $event) {
-                $history = $history->push($event);
-            }
+            $history = $history->append($commit->getEventLog());
         }
         return $history;
     }
 
-    private function detectConflictingEvents(
-        AggregateRootInterface $aggregateRoot,
-        StreamInterface $stream
-    ): DomainEventSequence {
+    private function getConflicts(AggregateRootInterface $aggregateRoot, StreamInterface $stream): DomainEventSequence
+    {
         $conflictingEvents = DomainEventSequence::makeEmpty();
-        foreach ($aggregateRoot->getTrackedEvents() as $newEvent) {
-            foreach ($stream->findCommitsSince($aggregateRoot->getRevision()) as $previousCommit) {
-                foreach ($previousCommit->getEventLog() as $previousEvent) {
+        $prevCommits = $stream->findCommitsSince($aggregateRoot->getRevision());
+        foreach ($prevCommits as $previousCommit) {
+            foreach ($previousCommit->getEventLog() as $previousEvent) {
+                foreach ($aggregateRoot->getTrackedEvents() as $newEvent) {
                     if ($newEvent->conflictsWith($previousEvent)) {
                         $conflictingEvents = $conflictingEvents->push($newEvent);
                     }
