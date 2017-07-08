@@ -34,8 +34,8 @@ final class CommitSequence implements IteratorAggregate, Countable
 
     public function __construct(array $commits = [])
     {
-        (function (CommitInterface ...$commits) {
-            $this->compositeVector = new Vector($commits);
+        $this->compositeVector = (function (CommitInterface ...$commits): Vector {
+            return new Vector($commits);
         })(...$commits);
     }
 
@@ -57,7 +57,7 @@ final class CommitSequence implements IteratorAggregate, Countable
 
     public function toNative(): array
     {
-        return array_map(function (CommitInterface $commit) {
+        return array_map(function (CommitInterface $commit): array {
             $nativeRep = $commit->toArray();
             $nativeRep["@type"] = get_class($commit);
             return $nativeRep;
