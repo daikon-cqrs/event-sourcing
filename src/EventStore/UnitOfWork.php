@@ -60,7 +60,7 @@ final class UnitOfWork implements UnitOfWorkInterface
             if (!$conflictingEvents->isEmpty()) {
                 throw new UnresolvableConflict($conflictingStream->getStreamId(), $conflictingEvents);
             }
-            $resolvedStream = $conflictingStream->appendEvents($aggregateRoot->getTrackedEvents());
+            $resolvedStream = $conflictingStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
             $result = $this->streamStore->commit($resolvedStream, $conflictingStream->getStreamRevision());
             if (++$resolutionAttempts >= self::MAX_RESOLUTION_ATTEMPTS) {
                 throw new ConcurrencyRaceLost($conflictingStream->getStreamId(), $aggregateRoot->getTrackedEvents());
@@ -72,12 +72,13 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     public function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface
     {
+        /** @var $streamId StreamId */
         $streamId = StreamId::fromNative($aggregateId->toNative());
         $stream = $this->streamStore->checkout($streamId, $revision);
         $aggregateRoot = call_user_func(
             [ $this->aggregateRootType, 'reconstituteFromHistory' ],
             $aggregateId,
-            $this->buildEventHistory($stream)
+            $this->buildEventHistory($stream, $revision)
         );
         $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         return $aggregateRoot;
@@ -93,7 +94,7 @@ final class UnitOfWork implements UnitOfWorkInterface
             $stream = call_user_func([ $this->streamImplementor, 'fromStreamId' ], $streamId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         } else {
-            throw new \Exception("Existing aggregate-roots must be checked out before they may be comitted.");
+            throw new \Exception("AggregateRoots must be checked out before they may be committed.");
         }
         return $stream;
     }
@@ -115,14 +116,16 @@ final class UnitOfWork implements UnitOfWorkInterface
         return $history;
     }
 
-    private function detectConflictingEvents(AggregateRootInterface $aggregateRoot, StreamInterface $stream): array
-    {
-        $conflictingEvents = [];
-        foreach ($newEvents as $newEvent) {
+    private function detectConflictingEvents(
+        AggregateRootInterface $aggregateRoot,
+        StreamInterface $stream
+    ): DomainEventSequence {
+        $conflictingEvents = DomainEventSequence::makeEmpty();
+        foreach ($aggregateRoot->getTrackedEvents() as $newEvent) {
             foreach ($stream->findCommitsSince($aggregateRoot->getRevision()) as $previousCommit) {
                 foreach ($previousCommit->getEventLog() as $previousEvent) {
                     if ($newEvent->conflictsWith($previousEvent)) {
-                        $conflictingEvents[] = [ $previousEvent, $newEvent ];
+                        $conflictingEvents = $conflictingEvents->push($newEvent);
                     }
                 }
             }
