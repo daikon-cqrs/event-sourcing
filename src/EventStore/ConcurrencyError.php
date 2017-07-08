@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore;
 
-final class PossibleConflict implements StoreResultInterface
+final class ConcurrencyError implements StoreResultInterface
 {
 
 }

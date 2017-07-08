@@ -37,10 +37,10 @@ final class StreamMap implements IteratorAggregate, Countable
         return $copy;
     }
 
-    public function unregister(StreamInterface $commitStream): self
+    public function unregister(StreamId $streamId): self
     {
         $copy = clone $this;
-        $copy->compositeMap->remove((string)$commitStream->getStreamId());
+        $copy->compositeMap->remove((string)$streamId);
         return $copy;
     }
 

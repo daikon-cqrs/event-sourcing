@@ -59,19 +59,20 @@ final class UnitOfWork implements UnitOfWorkInterface
         $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
         $result = $this->streamStore->commit($updatedStream, $prevStream->getStreamRevision());
         $resolutionAttempts = 0;
-        while ($result instanceof PossibleConflict) {
-            $conflictingStream = $this->streamStore->checkout($updatedStream->getStreamId());
-            $conflictingEvents = $this->detectConflictingEvents($aggregateRoot, $conflictingStream);
+        while ($result instanceof ConcurrencyError) {
+            if ($resolutionAttempts >= $this->maxResolutionAttempts) {
+                throw new ConcurrencyRaceLost($prevStream->getStreamId(), $aggregateRoot->getTrackedEvents());
+            }
+            $prevStream = $this->streamStore->checkout($updatedStream->getStreamId());
+            $conflictingEvents = $this->detectConflictingEvents($aggregateRoot, $prevStream);
             if (!$conflictingEvents->isEmpty()) {
-                throw new UnresolvableConflict($conflictingStream->getStreamId(), $conflictingEvents);
+                throw new UnresolvableConflict($prevStream->getStreamId(), $conflictingEvents);
             }
-            $resolvedStream = $conflictingStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-            $result = $this->streamStore->commit($resolvedStream, $conflictingStream->getStreamRevision());
-            if (++$resolutionAttempts >= $this->maxResolutionAttempts) {
-                throw new ConcurrencyRaceLost($conflictingStream->getStreamId(), $aggregateRoot->getTrackedEvents());
-            }
+            $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
+            $result = $this->streamStore->commit($updatedStream, $prevStream->getStreamRevision());
+            $resolutionAttempts++;
         }
-        $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream);
+        $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getStreamId());
         return $updatedStream->getCommitRange($prevStream->getStreamRevision(), $updatedStream->getStreamRevision());
     }
 
