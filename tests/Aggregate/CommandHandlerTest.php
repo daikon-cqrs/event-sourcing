@@ -40,8 +40,7 @@ final class CommandHandlerTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([ $commitMock ]));
 
-        $unitOfWorkMock = $this->getMockBuilder(UnitOfWorkInterface::class)
-            ->setMethods([ 'commit', 'checkout' ])->getMock();
+        $unitOfWorkMock = $this->createMock(UnitOfWorkInterface::class);
         $unitOfWorkMock
             ->expects($this->once())
             ->method('commit')
@@ -55,8 +54,7 @@ final class CommandHandlerTest extends TestCase
             ))
             ->willReturn($commitSequenceMock);
 
-        $messageBusMock = $this->getMockBuilder(MessageBusInterface::class)
-            ->setMethods(['publish', 'receive'])->getMock();
+        $messageBusMock = $this->createMock(MessageBusInterface::class);
         $messageBusMock
             ->expects($this->once())
             ->method('publish')
