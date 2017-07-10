@@ -47,7 +47,6 @@ final class AggregateRootTest extends TestCase
                 'ingredients' => $ingredients
             ])
         ]);
-        ;
         /** @var $pizza Pizza */
         $pizza = Pizza::reconstituteFromHistory($pizzaId, $history);
 
@@ -77,7 +76,7 @@ final class AggregateRootTest extends TestCase
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Given event-identifier pizza-23-22-5
-                                 does not match expected AR identifier at pizza-42-6-23
+     *                           does not match expected AR identifier at pizza-42-6-23
      */
     public function testReconstituteWithUnexpectedId()
     {
