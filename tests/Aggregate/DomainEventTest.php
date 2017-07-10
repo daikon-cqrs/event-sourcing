@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing;
 
-use Daikon\EventSourcing\Aggregate\DomainEventInterface;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaWasBaked;
 use PHPUnit\Framework\TestCase;
 
