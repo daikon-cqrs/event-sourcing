@@ -56,6 +56,18 @@ final class AggregateRootTest extends TestCase
         $this->assertCount(0, $pizza->getTrackedEvents());
     }
 
+    public function testMarkClean()
+    {
+        $ingredients = [ 'mushrooms', 'tomatoes', 'onions' ];
+        /** @var $bakePizza BakePizza */
+        $bakePizza = BakePizza::fromArray([
+            'aggregateId' => 'pizza-42-6-23',
+            'ingredients' => $ingredients
+        ]);
+        $pizza = Pizza::bake($bakePizza)->markClean();
+        $this->assertCount(0, $pizza->getTrackedEvents());
+    }
+
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Given event-revision 2 does not match expected AR revision at 1

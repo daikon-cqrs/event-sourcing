@@ -79,17 +79,6 @@ trait AggregateRootTrait
         return $aggRoot;
     }
 
-    private function invokeEventHandler(DomainEventInterface $event): void
-    {
-        $handlerName = preg_replace("/Event$/", "", (new \ReflectionClass($event))->getShortName());
-        $handlerMethod = "when".ucfirst($handlerName);
-        $handler = [ $this, $handlerMethod ];
-        if (!is_callable($handler)) {
-            throw new \Exception("Handler '$handlerMethod' isn't callable on ".static::class);
-        }
-        call_user_func($handler, $event);
-    }
-
     private function assertExpectedRevision(DomainEventInterface $event, AggregateRevision $expectedRevision): void
     {
         if (!$expectedRevision->equals($event->getAggregateRevision())) {
@@ -110,5 +99,16 @@ trait AggregateRootTrait
                 $expectedId
             ));
         }
+    }
+
+    private function invokeEventHandler(DomainEventInterface $event): void
+    {
+        $handlerName = preg_replace("/Event$/", "", (new \ReflectionClass($event))->getShortName());
+        $handlerMethod = "when".ucfirst($handlerName);
+        $handler = [ $this, $handlerMethod ];
+        if (!is_callable($handler)) {
+            throw new \Exception("Handler '$handlerMethod' isn't callable on ".static::class);
+        }
+        call_user_func($handler, $event);
     }
 }
