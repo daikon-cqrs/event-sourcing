@@ -17,18 +17,24 @@ final class Pizza implements AggregateRootInterface
 {
     use AggregateRootTrait;
 
-    private $ingredients;
+    private $ingredients = [];
 
     public static function bake(BakePizza $bakePizza): self
     {
         $pizza = new static($bakePizza->getAggregateId());
-        $pizza = $pizza->reflectThat(
-            PizzaWasBaked::withIngredients($bakePizza->getAggregateId(), $bakePizza->getIngredients())
-        );
+        $pizza = $pizza->reflectThat(PizzaWasBaked::withIngredients($bakePizza));
         return $pizza;
     }
 
-    protected function whenPizzaWasBaked(PizzaWasBaked $pizzaWasBaked)
+    /**
+     * @return string[]
+     */
+    public function getIngredients(): array
+    {
+        return $this->ingredients;
+    }
+
+    protected function whenPizzaWasBaked(PizzaWasBaked $pizzaWasBaked): void
     {
         $this->ingredients = $pizzaWasBaked->getIngredients();
     }

@@ -48,7 +48,7 @@ abstract class CommandHandler implements MessageHandlerInterface
     {
         $committed = false;
         foreach ($this->unitOfWork->commit($aggregateRoot, $metadata) as $newCommit) {
-            if ($this->dispatch($newCommit) && !$committed) {
+            if ($this->messageBus->publish($newCommit, "commits") && !$committed) {
                 $committed = true;
             }
         }
@@ -60,15 +60,5 @@ abstract class CommandHandler implements MessageHandlerInterface
         AggregateRevision $revision = null
     ): AggregateRootInterface {
         return $this->unitOfWork->checkout($aggregateId, $revision);
-    }
-
-    private function dispatch(CommitInterface $commit): bool
-    {
-        $commitPublished = $this->messageBus->publish($commit, "commits");
-        // @todo might wanna send these from within the commit channel to guarantee order?
-        foreach ($commit->getEventLog() as $committedEvent) {
-            $this->messageBus->publish($committedEvent, "events");
-        }
-        return $commitPublished;
     }
 }

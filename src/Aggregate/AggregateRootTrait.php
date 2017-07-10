@@ -63,27 +63,23 @@ trait AggregateRootTrait
 
     protected function reflectThat(DomainEventInterface $eventOccured, bool $track = true): self
     {
+        $this->assertExpectedIdentifier($eventOccured, $this->getIdentifier());
         $aggRoot = clone $this;
         if ($track) {
             $aggRoot->revision = $aggRoot->revision->increment();
-            $eventOccured = $eventOccured->withAggregateRevision($aggRoot->revision);
+            $eventOccured = $eventOccured
+                ->withAggregateRevision($aggRoot->revision);
             $aggRoot->trackedEvents = $aggRoot->trackedEvents->push($eventOccured);
         } else {
             $expectedAggregateRevision = $aggRoot->revision->increment();
-            if (!$expectedAggregateRevision->equals($eventOccured->getAggregateRevision())) {
-                throw new \Exception(sprintf(
-                    "Given event-revision %s does not match expected AR revision at %s",
-                    $eventOccured->getAggregateRevision(),
-                    $expectedAggregateRevision
-                ));
-            }
+            $this->assertExpectedRevision($eventOccured, $expectedAggregateRevision);
             $aggRoot->revision = $expectedAggregateRevision;
         }
         $aggRoot->invokeEventHandler($eventOccured);
         return $aggRoot;
     }
 
-    private function invokeEventHandler(DomainEventInterface $event)
+    private function invokeEventHandler(DomainEventInterface $event): void
     {
         $handlerName = preg_replace("/Event$/", "", (new \ReflectionClass($event))->getShortName());
         $handlerMethod = "when".ucfirst($handlerName);
@@ -92,5 +88,27 @@ trait AggregateRootTrait
             throw new \Exception("Handler '$handlerMethod' isn't callable on ".static::class);
         }
         call_user_func($handler, $event);
+    }
+
+    private function assertExpectedRevision(DomainEventInterface $event, AggregateRevision $expectedRevision): void
+    {
+        if (!$expectedRevision->equals($event->getAggregateRevision())) {
+            throw new \Exception(sprintf(
+                "Given event-revision %s does not match expected AR revision at %s",
+                $event->getAggregateRevision(),
+                $expectedRevision
+            ));
+        }
+    }
+
+    private function assertExpectedIdentifier(DomainEventInterface $event, AggregateIdInterface $expectedId): void
+    {
+        if (!$expectedId->equals($event->getAggregateId())) {
+            throw new \Exception(sprintf(
+                "Given event-identifier %s does not match expected AR identifier at %s",
+                $event->getAggregateId(),
+                $expectedId
+            ));
+        }
     }
 }

@@ -41,10 +41,10 @@ final class Commit implements CommitInterface
     public static function fromArray(array $state): MessageInterface
     {
         return new self(
-            StreamId::fromNative($state["streamId"]),
-            StreamRevision::fromNative((int)$state["streamRevision"]),
-            DomainEventSequence::fromArray($state["eventLog"]),
-            Metadata::fromArray($state["metadata"])
+            StreamId::fromNative($state['streamId']),
+            StreamRevision::fromNative((int)$state['streamRevision']),
+            DomainEventSequence::fromArray($state['eventLog']),
+            Metadata::fromArray($state['metadata'])
         );
     }
 
@@ -76,10 +76,11 @@ final class Commit implements CommitInterface
     public function toArray(): array
     {
         return [
-            "streamId" => $this->streamId->toNative(),
-            "streamRevision" => $this->streamRevision->toNative(),
-            "eventLog" => $this->eventLog->toNative(),
-            "metadata" => $this->metadata->toArray()
+            '@type' => static::class,
+            'streamId' => $this->streamId->toNative(),
+            'streamRevision' => $this->streamRevision->toNative(),
+            'eventLog' => $this->eventLog->toNative(),
+            'metadata' => $this->metadata->toArray()
         ];
     }
 

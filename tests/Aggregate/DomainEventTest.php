@@ -18,21 +18,24 @@ final class DomainEventTest extends TestCase
 {
     public function testFromArray()
     {
+        /** @var $pizzaWasBaked PizzaWasBaked */
         $pizzaWasBaked = PizzaWasBaked::fromArray([
             'aggregateId' => 'pizza-42-6-23',
             'aggregateRevision' => 1,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ]);
-        $this->assertInstanceOf(DomainEventInterface::class, $pizzaWasBaked);
+        $this->assertEquals('pizza-42-6-23', $pizzaWasBaked->getAggregateId());
+        $this->assertEquals(1, $pizzaWasBaked->getAggregateRevision()->toNative());
+        $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $pizzaWasBaked->getIngredients());
     }
 
     public function testToArrayRoundTrip()
     {
-        $pizza = [
+        $pizzaWasBakedArray = [
             'aggregateId' => 'pizza-42-6-23',
             'aggregateRevision' => 1,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ];
-        $this->assertEquals($pizza, PizzaWasBaked::fromArray($pizza)->toArray());
+        $this->assertEquals($pizzaWasBakedArray, PizzaWasBaked::fromArray($pizzaWasBakedArray)->toArray());
     }
 }

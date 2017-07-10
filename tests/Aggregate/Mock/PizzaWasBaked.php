@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
 use Daikon\EventSourcing\Aggregate\AggregateId;
-use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\DomainEvent;
 use Daikon\EventSourcing\Aggregate\DomainEventInterface;
@@ -22,10 +21,10 @@ final class PizzaWasBaked extends DomainEvent
     /** @var string[] */
     private $ingredients;
 
-    public static function withIngredients(AggregateIdInterface $pizzaId, array $ingredients): self
+    public static function withIngredients(BakePizza $bakePizza): self
     {
-        $pizzaBaked = new static($pizzaId);
-        $pizzaBaked->ingredients = $ingredients;
+        $pizzaBaked = new static($bakePizza->getAggregateId());
+        $pizzaBaked->ingredients = $bakePizza->getIngredients();
         return $pizzaBaked;
     }
 
