@@ -24,28 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 final class CommandHandlerTest extends TestCase
 {
-    public function testHandleWithCommitExpectation()
-    {
-        $unitOfWorkMock = $this->getMockBuilder(UnitOfWorkInterface::class)
-            ->setMethods([ 'commit', 'checkout' ])->getMock();
-        $unitOfWorkMock->expects($this->once())
-            ->method('commit')
-            ->with($this->callback(function (Pizza $pizza) {
-                $this->assertEquals(1, $pizza->getRevision()->toNative());
-                $this->assertEquals('pizza-42-6-23', $pizza->getIdentifier()->toNative());
-                $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $pizza->getIngredients());
-                return true;
-            }))->willReturn(CommitSequence::makeEmpty());
-        $messageBusStub = $this->createMock(MessageBusInterface::class);
-
-        (new BakePizzaHandler($unitOfWorkMock, $messageBusStub))
-            ->handle(Envelope::wrap(BakePizza::fromArray([
-                'aggregateId' => 'pizza-42-6-23',
-                'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
-            ])));
-    }
-
-    public function testHandleWithMessageBusExpectation()
+    public function testHandleNewAggregate()
     {
         $commitExpectation = [
             '@type' => Commit::class,
@@ -59,21 +38,36 @@ final class CommandHandlerTest extends TestCase
                 'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
             ]]
         ];
-        $unitOfWorkStub = $this->getMockBuilder(UnitOfWorkInterface::class)
-            ->setMethods(['commit', 'checkout'])->getMock();
-        $unitOfWorkStub->method('commit')->willReturn(new CommitSequence([
-            Commit::fromArray($commitExpectation)
-        ]));
+
+        $unitOfWorkMock = $this->getMockBuilder(UnitOfWorkInterface::class)
+            ->setMethods([ 'commit', 'checkout' ])->getMock();
+        $unitOfWorkMock
+            ->expects($this->once())
+            ->method('commit')
+            ->with($this->callback(
+                function (Pizza $pizza) {
+                    $this->assertEquals(1, $pizza->getRevision()->toNative());
+                    $this->assertEquals('pizza-42-6-23', $pizza->getIdentifier()->toNative());
+                    $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $pizza->getIngredients());
+                    return true;
+                }
+            ))
+            ->willReturn(CommitSequence::fromArray([ $commitExpectation ]));
+
         $messageBusMock = $this->getMockBuilder(MessageBusInterface::class)
             ->setMethods(['publish', 'receive'])->getMock();
-        $messageBusMock->expects($this->once())
+        $messageBusMock
+            ->expects($this->once())
             ->method('publish')
-            ->with($this->callback(function (CommitInterface $commit) use ($commitExpectation) {
-                $this->assertEquals($commitExpectation, $commit->toArray());
-                return true;
-            }))->willReturn(true);
+            ->with($this->callback(
+                function (CommitInterface $commit) use ($commitExpectation) {
+                    $this->assertEquals($commitExpectation, $commit->toArray());
+                    return true;
+                }
+            ))
+            ->willReturn(true);
 
-        (new BakePizzaHandler($unitOfWorkStub, $messageBusMock))
+        (new BakePizzaHandler($unitOfWorkMock, $messageBusMock))
             ->handle(Envelope::wrap(BakePizza::fromArray([
                 'aggregateId' => 'pizza-42-6-23',
                 'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
