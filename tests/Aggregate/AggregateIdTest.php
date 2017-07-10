@@ -47,5 +47,5 @@ final class AggregateIdTest extends TestCase
     public function testMakeEmpty()
     {
         AggregateId::makeEmpty();
-    }
+    } // @codeCoverageIgnore
 }

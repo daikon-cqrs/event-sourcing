@@ -95,5 +95,5 @@ final class AggregateRevisionTest extends TestCase
     public function testMakeFromNonInteger()
     {
         AggregateRevision::fromNative("not an int");
-    }
+    } // @codeCoverageIgnore
 }

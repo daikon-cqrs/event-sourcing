@@ -83,7 +83,7 @@ final class AggregateRootTest extends TestCase
                 'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
             ])
         ]));
-    }
+    } // @codeCoverageIgnore
 
     /**
      * @expectedException \Exception
@@ -101,5 +101,5 @@ final class AggregateRootTest extends TestCase
                 'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
             ])
         ]));
-    }
+    } // @codeCoverageIgnore
 }
