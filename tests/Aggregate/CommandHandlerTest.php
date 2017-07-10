@@ -58,17 +58,7 @@ final class CommandHandlerTest extends TestCase
             ))
             ->willReturn(true);
 
-        $envelopeMock = $this->getMockBuilder(EnvelopeInterface::class)
-            ->setMethods([
-                'getMessage',
-                'getMetadata',
-                'withMetadata',
-                'getTimestamp',
-                'getUuid',
-                'toArray',
-                'fromArray',
-                'wrap'
-            ])->getMock();
+        $envelopeMock = $this->createMock(EnvelopeInterface::class);
         $envelopeMock
             ->expects($this->once())
             ->method('getMessage')
