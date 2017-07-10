@@ -24,6 +24,7 @@ final class AggregateRevision implements ValueObjectInterface
 
     public static function fromNative($revision): ValueObjectInterface
     {
+        Assertion::integer($revision);
         return new self($revision);
     }
 

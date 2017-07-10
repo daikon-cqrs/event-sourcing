@@ -87,4 +87,13 @@ final class AggregateRevisionTest extends TestCase
         $this->assertTrue($revision->isLessThanOrEqual(AggregateRevision::fromNative(42)));
         $this->assertFalse($revision->isLessThanOrEqual(AggregateRevision::fromNative(41)));
     }
+
+    /**
+     * @expectedException \Assert\InvalidArgumentException
+     * @expectedExceptionMessage Value "not an int" is not an integer.
+     */
+    public function testMakeFromNonInteger()
+    {
+        AggregateRevision::fromNative("not an int");
+    }
 }
