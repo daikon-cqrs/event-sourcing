@@ -10,24 +10,28 @@ declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing;
 
-use Daikon\EventSourcing\EventStore\Commit;
 use Daikon\EventSourcing\EventStore\CommitInterface;
 use Daikon\EventSourcing\EventStore\CommitSequence;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
-use Daikon\MessageBus\Envelope;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizzaHandler;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\Pizza;
-use Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaWasBaked;
 use PHPUnit\Framework\TestCase;
 
 final class CommandHandlerTest extends TestCase
 {
     public function testHandleNewAggregate()
     {
+        $aggregateId = 'pizza-42-6-23';
+        $ingredients = [ 'mushrooms', 'tomatoes', 'onions' ];
+        $bakePizzaCommand = BakePizza::fromArray([
+            'aggregateId' => $aggregateId,
+            'ingredients' => $ingredients
+        ]);
+
         $commitMock = $this->createMock(CommitInterface::class);
 
         $unitOfWorkMock = $this->getMockBuilder(UnitOfWorkInterface::class)
@@ -36,10 +40,10 @@ final class CommandHandlerTest extends TestCase
             ->expects($this->once())
             ->method('commit')
             ->with($this->callback(
-                function (Pizza $pizza) {
+                function (Pizza $pizza) use ($aggregateId, $ingredients) {
                     $this->assertEquals(1, $pizza->getRevision()->toNative());
-                    $this->assertEquals('pizza-42-6-23', $pizza->getIdentifier()->toNative());
-                    $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $pizza->getIngredients());
+                    $this->assertEquals($aggregateId, $pizza->getIdentifier()->toNative());
+                    $this->assertEquals($ingredients, $pizza->getIngredients());
                     return true;
                 }
             ))
@@ -62,10 +66,7 @@ final class CommandHandlerTest extends TestCase
         $envelopeMock
             ->expects($this->once())
             ->method('getMessage')
-            ->willReturn(BakePizza::fromArray([
-                'aggregateId' => 'pizza-42-6-23',
-                'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
-            ]));
+            ->willReturn($bakePizzaCommand);
         $envelopeMock
             ->expects($this->once())
             ->method('getMetadata')
