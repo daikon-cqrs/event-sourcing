@@ -27,6 +27,7 @@ final class CommandHandlerTest extends TestCase
     public function testHandleNewAggregate()
     {
         $commitMock = $this->createMock(CommitInterface::class);
+
         $unitOfWorkMock = $this->getMockBuilder(UnitOfWorkInterface::class)
             ->setMethods([ 'commit', 'checkout' ])->getMock();
         $unitOfWorkMock
