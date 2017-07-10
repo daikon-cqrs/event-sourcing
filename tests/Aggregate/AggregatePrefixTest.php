@@ -19,7 +19,7 @@ final class AggregatePrefixTest extends TestCase
     public function testFromFqcn()
     {
         $prefix = AggregatePrefix::fromFqcn(Pizza::class);
-        $this->markTestIncomplete("what to expect here?");
+        $this->markTestIncomplete('what to expect here?');
     }
 
     /**

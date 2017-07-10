@@ -43,8 +43,9 @@ final class CommitSequence implements CommitSequenceInterface
             $nextRevision = $this->getHead()->getAggregateRevision()->increment();
             if (!$nextRevision->equals($commit->getAggregateRevision())) {
                 throw new \Exception(sprintf(
-                    "Trying to add unexpected revision %s to event-sequence. Expected revision is $nextRevision",
-                    $commit->getAggregateRevision()
+                    'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
+                    $commit->getAggregateRevision(),
+                    $nextRevision
                 ));
             }
         }
@@ -57,7 +58,7 @@ final class CommitSequence implements CommitSequenceInterface
     {
         return array_map(function (CommitInterface $commit): array {
             $nativeRep = $commit->toArray();
-            $nativeRep["@type"] = get_class($commit);
+            $nativeRep['@type'] = get_class($commit);
             return $nativeRep;
         }, $this->compositeVector->toArray());
     }

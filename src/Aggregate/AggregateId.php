@@ -25,7 +25,7 @@ final class AggregateId implements AggregateIdInterface
 
     public static function makeEmpty(): ValueObjectInterface
     {
-        throw new \Exception("Creating empty aggregate-ids is not supported.");
+        throw new \Exception('Creating empty aggregate-ids is not supported.');
     }
 
     public function toNative()

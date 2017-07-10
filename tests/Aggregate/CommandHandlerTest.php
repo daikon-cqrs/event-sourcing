@@ -63,7 +63,7 @@ final class CommandHandlerTest extends TestCase
                     $this->assertEquals($commit, $commitMock);
                     return true;
                 }
-            ), "commits")
+            ), 'commits')
             ->willReturn(true);
 
         $envelopeMock = $this->createMock(EnvelopeInterface::class);

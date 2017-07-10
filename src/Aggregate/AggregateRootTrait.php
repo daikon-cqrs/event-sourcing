@@ -83,7 +83,7 @@ trait AggregateRootTrait
     {
         if (!$expectedRevision->equals($event->getAggregateRevision())) {
             throw new \Exception(sprintf(
-                "Given event-revision %s does not match expected AR revision at %s",
+                'Given event-revision %s does not match expected AR revision at %s',
                 $event->getAggregateRevision(),
                 $expectedRevision
             ));
@@ -94,7 +94,7 @@ trait AggregateRootTrait
     {
         if (!$expectedId->equals($event->getAggregateId())) {
             throw new \Exception(sprintf(
-                "Given event-identifier %s does not match expected AR identifier at %s",
+                'Given event-identifier %s does not match expected AR identifier at %s',
                 $event->getAggregateId(),
                 $expectedId
             ));
@@ -103,11 +103,11 @@ trait AggregateRootTrait
 
     private function invokeEventHandler(DomainEventInterface $event): void
     {
-        $handlerName = preg_replace("/Event$/", "", (new \ReflectionClass($event))->getShortName());
-        $handlerMethod = "when".ucfirst($handlerName);
+        $handlerName = preg_replace('/Event$/', '', (new \ReflectionClass($event))->getShortName());
+        $handlerMethod = 'when'.ucfirst($handlerName);
         $handler = [ $this, $handlerMethod ];
         if (!is_callable($handler)) {
-            throw new \Exception("Handler '$handlerMethod' isn't callable on ".static::class);
+            throw new \Exception(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
         }
         call_user_func($handler, $event);
     }

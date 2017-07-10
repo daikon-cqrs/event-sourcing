@@ -25,7 +25,7 @@ final class AggregatePrefix implements AggregateIdInterface
 
     public static function makeEmpty(): ValueObjectInterface
     {
-        throw new \Exception("Creating empty aggregate prefixes is not supported.");
+        throw new \Exception('Creating empty aggregate prefixes is not supported.');
     }
 
     public static function fromFqcn(string $fqcn): ValueObjectInterface

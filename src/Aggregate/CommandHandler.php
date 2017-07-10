@@ -34,10 +34,10 @@ abstract class CommandHandler implements MessageHandlerInterface
     {
         $commandMessage = $envelope->getMessage();
         $handlerName = (new \ReflectionClass($commandMessage))->getShortName();
-        $handlerMethod = "handle".ucfirst($handlerName);
+        $handlerMethod = 'handle'.ucfirst($handlerName);
         $handler = [ $this, $handlerMethod ];
         if (!is_callable($handler)) {
-            throw new \Exception("Handler '$handlerMethod' isn't callable on ".static::class);
+            throw new \Exception(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
         }
         return call_user_func($handler, $commandMessage, $envelope->getMetadata());
     }
@@ -46,7 +46,7 @@ abstract class CommandHandler implements MessageHandlerInterface
     {
         $committed = false;
         foreach ($this->unitOfWork->commit($aggregateRoot, $metadata) as $newCommit) {
-            if ($this->messageBus->publish($newCommit, "commits") && !$committed) {
+            if ($this->messageBus->publish($newCommit, 'commits') && !$committed) {
                 $committed = true;
             }
         }

@@ -99,7 +99,7 @@ final class UnitOfWork implements UnitOfWorkInterface
             $stream = call_user_func([ $this->streamImplementor, 'fromStreamId' ], $streamId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         } else {
-            throw new \Exception("AggregateRoots must be checked out before they may be committed.");
+            throw new \Exception('AggregateRoot must be checked out before it may be committed.');
         }
         return $stream;
     }
