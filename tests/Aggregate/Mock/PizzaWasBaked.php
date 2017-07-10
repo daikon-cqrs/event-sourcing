@@ -16,6 +16,9 @@ use Daikon\EventSourcing\Aggregate\DomainEvent;
 use Daikon\EventSourcing\Aggregate\DomainEventInterface;
 use Daikon\MessageBus\MessageInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class PizzaWasBaked extends DomainEvent
 {
     /** @var string[] */

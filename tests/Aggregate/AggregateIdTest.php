@@ -15,16 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 final class AggregateIdTest extends TestCase
 {
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Creating empty aggregate-ids is not supported.
-     */
-    public function testMakeEmpty()
-    {
-        AggregateId::makeEmpty();
-    }
-
-    public function testFromNativeToNative()
+    public function testFromNativeToNativeRoundtrip()
     {
         $this->assertEquals(
             'testing.blog.article-123',
@@ -34,10 +25,7 @@ final class AggregateIdTest extends TestCase
 
     public function testToString()
     {
-        $this->assertEquals(
-            'testing.blog.article-123',
-            (string)AggregateId::fromNative('testing.blog.article-123')
-        );
+        $this->assertEquals('testing.blog.article-123', (string)AggregateId::fromNative('testing.blog.article-123'));
     }
 
     public function testEquals()
@@ -50,5 +38,14 @@ final class AggregateIdTest extends TestCase
     public function testIsEmpty()
     {
         $this->assertFalse(AggregateId::fromNative('testing.blog.article-123')->isEmpty());
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Creating empty aggregate-ids is not supported.
+     */
+    public function testMakeEmpty()
+    {
+        AggregateId::makeEmpty();
     }
 }

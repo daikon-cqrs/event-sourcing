@@ -14,8 +14,12 @@ use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\Command;
 use Daikon\MessageBus\MessageInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class BakePizza extends Command
 {
+    /** @var string[] */
     private $ingredients;
 
     public static function getAggregateRootClass(): string

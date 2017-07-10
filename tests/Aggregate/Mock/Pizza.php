@@ -13,6 +13,9 @@ namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRootTrait;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Pizza implements AggregateRootInterface
 {
     use AggregateRootTrait;

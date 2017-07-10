@@ -13,6 +13,9 @@ namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 use Daikon\EventSourcing\Aggregate\CommandHandler;
 use Daikon\MessageBus\Metadata\Metadata;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class BakePizzaHandler extends CommandHandler
 {
     protected function handleBakePizza(BakePizza $bakePizza, Metadata $metadata)
