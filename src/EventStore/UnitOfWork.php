@@ -53,7 +53,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         $this->maxRaceAttempts = $maxRaceAttempts;
     }
 
-    public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence
+    public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequenceInterface
     {
         $prevStream = $this->getTrackedStream($aggregateRoot);
         $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);

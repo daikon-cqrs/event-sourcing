@@ -12,6 +12,7 @@ namespace Daikon\Tests\EventSourcing;
 
 use Daikon\EventSourcing\EventStore\CommitInterface;
 use Daikon\EventSourcing\EventStore\CommitSequence;
+use Daikon\EventSourcing\EventStore\CommitSequenceInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
@@ -33,6 +34,11 @@ final class CommandHandlerTest extends TestCase
         ]);
 
         $commitMock = $this->createMock(CommitInterface::class);
+        $commitSequenceMock = $this->createMock(CommitSequenceInterface::class);
+        $commitSequenceMock
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([ $commitMock ]));
 
         $unitOfWorkMock = $this->getMockBuilder(UnitOfWorkInterface::class)
             ->setMethods([ 'commit', 'checkout' ])->getMock();
@@ -47,7 +53,7 @@ final class CommandHandlerTest extends TestCase
                     return true;
                 }
             ))
-            ->willReturn(new CommitSequence([ $commitMock ]));
+            ->willReturn($commitSequenceMock);
 
         $messageBusMock = $this->getMockBuilder(MessageBusInterface::class)
             ->setMethods(['publish', 'receive'])->getMock();
@@ -59,7 +65,7 @@ final class CommandHandlerTest extends TestCase
                     $this->assertEquals($commit, $commitMock);
                     return true;
                 }
-            ))
+            ), "commits")
             ->willReturn(true);
 
         $envelopeMock = $this->createMock(EnvelopeInterface::class);

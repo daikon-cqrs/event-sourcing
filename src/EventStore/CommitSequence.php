@@ -10,24 +10,22 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore;
 
-use Countable;
 use Ds\Vector;
 use Iterator;
-use IteratorAggregate;
 
-final class CommitSequence implements IteratorAggregate, Countable
+final class CommitSequence implements CommitSequenceInterface
 {
     /** @var Vector */
     private $compositeVector;
 
-    public static function fromArray(array $commitsArray): CommitSequence
+    public static function fromArray(array $commitsArray): CommitSequenceInterface
     {
         return new static(array_map(function (array $commitState) {
             return Commit::fromArray($commitState);
         }, $commitsArray));
     }
 
-    public static function makeEmpty(): CommitSequence
+    public static function makeEmpty(): CommitSequenceInterface
     {
         return new self;
     }
@@ -39,7 +37,7 @@ final class CommitSequence implements IteratorAggregate, Countable
         })(...$commits);
     }
 
-    public function push(CommitInterface $commit): self
+    public function push(CommitInterface $commit): CommitSequenceInterface
     {
         if (!$this->isEmpty()) {
             $nextRevision = $this->getHead()->getAggregateRevision()->increment();
@@ -82,7 +80,7 @@ final class CommitSequence implements IteratorAggregate, Countable
         return null;
     }
 
-    public function getSlice(StreamRevision $start, StreamRevision $end): self
+    public function getSlice(StreamRevision $start, StreamRevision $end): CommitSequenceInterface
     {
         return $this->compositeVector->reduce(
             function (CommitSequence $commits, CommitInterface $commit) use ($start, $end): CommitSequence {

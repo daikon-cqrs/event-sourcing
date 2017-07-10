@@ -17,7 +17,7 @@ use Daikon\MessageBus\Metadata\Metadata;
 
 interface UnitOfWorkInterface
 {
-    public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequence;
+    public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequenceInterface;
 
     public function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface;
 }
