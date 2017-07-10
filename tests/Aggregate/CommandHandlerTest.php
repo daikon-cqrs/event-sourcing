@@ -15,7 +15,9 @@ use Daikon\EventSourcing\EventStore\CommitInterface;
 use Daikon\EventSourcing\EventStore\CommitSequence;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\Envelope;
+use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
+use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizzaHandler;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\Pizza;
@@ -56,10 +58,29 @@ final class CommandHandlerTest extends TestCase
             ))
             ->willReturn(true);
 
-        (new BakePizzaHandler($unitOfWorkMock, $messageBusMock))
-            ->handle(Envelope::wrap(BakePizza::fromArray([
+        $envelopeMock = $this->getMockBuilder(EnvelopeInterface::class)
+            ->setMethods([
+                'getMessage',
+                'getMetadata',
+                'withMetadata',
+                'getTimestamp',
+                'getUuid',
+                'toArray',
+                'fromArray',
+                'wrap'
+            ])->getMock();
+        $envelopeMock
+            ->expects($this->once())
+            ->method('getMessage')
+            ->willReturn(BakePizza::fromArray([
                 'aggregateId' => 'pizza-42-6-23',
                 'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
-            ])));
+            ]));
+        $envelopeMock
+            ->expects($this->once())
+            ->method('getMetadata')
+            ->willReturn(Metadata::makeEmpty());
+
+        (new BakePizzaHandler($unitOfWorkMock, $messageBusMock))->handle($envelopeMock);
     }
 }
