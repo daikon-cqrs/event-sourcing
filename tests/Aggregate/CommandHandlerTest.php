@@ -26,19 +26,7 @@ final class CommandHandlerTest extends TestCase
 {
     public function testHandleNewAggregate()
     {
-        $commitExpectation = [
-            '@type' => Commit::class,
-            'streamId' => 'pizza-42-6-23',
-            'streamRevision' => 1,
-            'metadata' => [],
-            'eventLog' => [[
-                '@type' => PizzaWasBaked::class,
-                'aggregateId' => 'pizza-42-6-23',
-                'aggregateRevision' => 1,
-                'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
-            ]]
-        ];
-
+        $commitMock = $this->createMock(CommitInterface::class);
         $unitOfWorkMock = $this->getMockBuilder(UnitOfWorkInterface::class)
             ->setMethods([ 'commit', 'checkout' ])->getMock();
         $unitOfWorkMock
@@ -52,7 +40,7 @@ final class CommandHandlerTest extends TestCase
                     return true;
                 }
             ))
-            ->willReturn(CommitSequence::fromArray([ $commitExpectation ]));
+            ->willReturn(new CommitSequence([ $commitMock ]));
 
         $messageBusMock = $this->getMockBuilder(MessageBusInterface::class)
             ->setMethods(['publish', 'receive'])->getMock();
@@ -60,8 +48,8 @@ final class CommandHandlerTest extends TestCase
             ->expects($this->once())
             ->method('publish')
             ->with($this->callback(
-                function (CommitInterface $commit) use ($commitExpectation) {
-                    $this->assertEquals($commitExpectation, $commit->toArray());
+                function (CommitInterface $commit) use ($commitMock) {
+                    $this->assertEquals($commit, $commitMock);
                     return true;
                 }
             ))
