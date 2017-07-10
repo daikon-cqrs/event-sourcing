@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\Aggregate;
 
-abstract class AggregateRoot implements AggregateRootInterface
+trait AggregateRootTrait
 {
     /** @var AggregateIdInterface */
     private $identifier;
