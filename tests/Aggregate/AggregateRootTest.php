@@ -62,11 +62,10 @@ final class AggregateRootTest extends TestCase
 
     public function testMarkClean()
     {
-        $ingredients = ['mushrooms', 'tomatoes', 'onions'];
         /** @var $bakePizza BakePizza */
         $bakePizza = BakePizza::fromArray([
             'aggregateId' => 'pizza-42-6-23',
-            'ingredients' => $ingredients
+            'ingredients' => ['mushrooms', 'tomatoes', 'onions']
         ]);
         $pizza = Pizza::bake($bakePizza)->markClean();
         $this->assertCount(0, $pizza->getTrackedEvents());
