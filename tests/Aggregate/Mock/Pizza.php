@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
+use Daikon\EventSourcing\Aggregate\AggregateAlias;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRootTrait;
 
@@ -20,7 +21,13 @@ final class Pizza implements AggregateRootInterface
 {
     use AggregateRootTrait;
 
+    /** @var string[] */
     private $ingredients = [];
+
+    public static function getAlias(): AggregateAlias
+    {
+        return AggregateAlias::fromNative('testing.mock.pizza');
+    }
 
     public static function bake(BakePizza $bakePizza): self
     {

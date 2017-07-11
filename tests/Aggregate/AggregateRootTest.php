@@ -21,7 +21,7 @@ final class AggregateRootTest extends TestCase
 {
     public function testStartAggregateRootLifecycle()
     {
-        $ingredients = [ 'mushrooms', 'tomatoes', 'onions' ];
+        $ingredients = ['mushrooms', 'tomatoes', 'onions'];
         /** @var $bakePizza BakePizza */
         $bakePizza = BakePizza::fromArray([
             'aggregateId' => 'pizza-42-6-23',
@@ -39,17 +39,17 @@ final class AggregateRootTest extends TestCase
     {
         /** @var $pizzaId AggregateId */
         $pizzaId = AggregateId::fromNative('pizza-42-6-23');
-        $ingredients = [ 'mushrooms', 'tomatoes', 'onions' ];
+        $ingredients = ['mushrooms', 'tomatoes', 'onions'];
 
         $domainEventSequenceMock = $this->createMock(DomainEventSequenceInterface::class);
         $domainEventSequenceMock
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([ PizzaWasBaked::fromArray([
+            ->willReturn(new \ArrayIterator([PizzaWasBaked::fromArray([
                 'aggregateId' => (string)$pizzaId,
                 'aggregateRevision' => 1,
                 'ingredients' => $ingredients
-            ]) ]));
+            ])]));
 
         /** @var $pizza Pizza */
         $pizza = Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
@@ -62,7 +62,7 @@ final class AggregateRootTest extends TestCase
 
     public function testMarkClean()
     {
-        $ingredients = [ 'mushrooms', 'tomatoes', 'onions' ];
+        $ingredients = ['mushrooms', 'tomatoes', 'onions'];
         /** @var $bakePizza BakePizza */
         $bakePizza = BakePizza::fromArray([
             'aggregateId' => 'pizza-42-6-23',
@@ -70,6 +70,11 @@ final class AggregateRootTest extends TestCase
         ]);
         $pizza = Pizza::bake($bakePizza)->markClean();
         $this->assertCount(0, $pizza->getTrackedEvents());
+    }
+
+    public function testGetAlias()
+    {
+        $this->assertEquals('testing.mock.pizza', Pizza::getAlias());
     }
 
     /**

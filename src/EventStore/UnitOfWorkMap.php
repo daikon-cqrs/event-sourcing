@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\DataStructure\TypedMapTrait;
-use Daikon\EventSourcing\Aggregate\AggregatePrefix;
+use Daikon\EventSourcing\Aggregate\AggregateAlias;
 
 final class UnitOfWorkMap implements \IteratorAggregate, \Countable
 {
@@ -22,9 +22,8 @@ final class UnitOfWorkMap implements \IteratorAggregate, \Countable
         $this->init($unitsOfWork, UnitOfWorkInterface::class);
     }
 
-    public function getByAggregatePrefix(AggregatePrefix $aggregatePrefix)
+    public function getByAggregatePrefix(AggregateAlias $aggregatePrefix)
     {
-        $key = explode('-', $aggregatePrefix->toNative(), 2)[0];
-        return $this->get($key);
+        return $this->get((string)$aggregatePrefix);
     }
 }

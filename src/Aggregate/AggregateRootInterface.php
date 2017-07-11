@@ -12,6 +12,8 @@ namespace Daikon\EventSourcing\Aggregate;
 
 interface AggregateRootInterface
 {
+    public static function getAlias(): AggregateAlias;
+
     public static function reconstituteFromHistory(
         AggregateIdInterface $aggregateId,
         DomainEventSequenceInterface $history
