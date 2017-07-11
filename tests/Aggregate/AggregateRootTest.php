@@ -40,16 +40,17 @@ final class AggregateRootTest extends TestCase
         /** @var $pizzaId AggregateId */
         $pizzaId = AggregateId::fromNative('pizza-42-6-23');
         $ingredients = ['mushrooms', 'tomatoes', 'onions'];
+        $pizzaWasBaked = PizzaWasBaked::fromArray([
+            'aggregateId' => (string)$pizzaId,
+            'aggregateRevision' => 1,
+            'ingredients' => $ingredients
+        ]);
 
         $domainEventSequenceMock = $this->createMock(DomainEventSequenceInterface::class);
         $domainEventSequenceMock
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([PizzaWasBaked::fromArray([
-                'aggregateId' => (string)$pizzaId,
-                'aggregateRevision' => 1,
-                'ingredients' => $ingredients
-            ])]));
+            ->willReturn(new \ArrayIterator([ $pizzaWasBaked ]));
 
         /** @var $pizza Pizza */
         $pizza = Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
@@ -68,6 +69,7 @@ final class AggregateRootTest extends TestCase
             'ingredients' => ['mushrooms', 'tomatoes', 'onions']
         ]);
         $pizza = Pizza::bake($bakePizza)->markClean();
+
         $this->assertCount(0, $pizza->getTrackedEvents());
     }
 
