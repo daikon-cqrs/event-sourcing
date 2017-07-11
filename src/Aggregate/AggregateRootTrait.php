@@ -18,12 +18,12 @@ trait AggregateRootTrait
     /** @var AggregateRevision */
     private $revision;
 
-    /** @var DomainEventSequence */
+    /** @var DomainEventSequenceInterface */
     private $trackedEvents;
 
     public static function reconstituteFromHistory(
         AggregateIdInterface $aggregateId,
-        DomainEventSequence $history
+        DomainEventSequenceInterface $history
     ): AggregateRootInterface {
         $aggRoot = new static($aggregateId);
         foreach ($history as $eventOccured) {
@@ -42,7 +42,7 @@ trait AggregateRootTrait
         return $this->revision;
     }
 
-    public function getTrackedEvents(): DomainEventSequence
+    public function getTrackedEvents(): DomainEventSequenceInterface
     {
         return $this->trackedEvents;
     }

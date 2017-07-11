@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Daikon\Tests\EventSourcing;
 
 use Daikon\EventSourcing\EventStore\CommitInterface;
-use Daikon\EventSourcing\EventStore\CommitSequence;
 use Daikon\EventSourcing\EventStore\CommitSequenceInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\EnvelopeInterface;

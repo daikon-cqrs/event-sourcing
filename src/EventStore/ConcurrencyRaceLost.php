@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\DomainEventInterface;
-use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Exception;
 
 final class ConcurrencyRaceLost extends Exception
@@ -22,7 +22,7 @@ final class ConcurrencyRaceLost extends Exception
     /** @var  DomainEventInterface */
     private $lostEvents;
 
-    public function __construct(StreamId $streamId, DomainEventSequence $lostEvents)
+    public function __construct(StreamId $streamId, DomainEventSequenceInterface $lostEvents)
     {
         $this->streamId = $streamId;
         $this->lostEvents = $lostEvents;
@@ -34,7 +34,7 @@ final class ConcurrencyRaceLost extends Exception
         return $this->streamId;
     }
 
-    public function getLostEvents(): DomainEventSequence
+    public function getLostEvents(): DomainEventSequenceInterface
     {
         return $this->lostEvents;
     }

@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
@@ -23,7 +23,7 @@ final class Commit implements CommitInterface
     /** @var StreamRevision */
     private $streamRevision;
 
-    /** @var DomainEventSequence */
+    /** @var DomainEventSequenceInterface */
     private $eventLog;
 
     /** @var Metadata */
@@ -32,7 +32,7 @@ final class Commit implements CommitInterface
     public static function make(
         StreamId $streamId,
         StreamRevision $streamRevision,
-        DomainEventSequence $eventLog,
+        DomainEventSequenceInterface $eventLog,
         Metadata $metadata
     ): CommitInterface {
         return new self($streamId, $streamRevision, $eventLog, $metadata);
@@ -43,7 +43,7 @@ final class Commit implements CommitInterface
         return new self(
             StreamId::fromNative($state['streamId']),
             StreamRevision::fromNative((int)$state['streamRevision']),
-            DomainEventSequence::fromArray($state['eventLog']),
+            DomainEventSequenceInterface::fromArray($state['eventLog']),
             Metadata::fromArray($state['metadata'])
         );
     }
@@ -63,7 +63,7 @@ final class Commit implements CommitInterface
         return $this->eventLog->getHeadRevision();
     }
 
-    public function getEventLog(): DomainEventSequence
+    public function getEventLog(): DomainEventSequenceInterface
     {
         return $this->eventLog;
     }
@@ -87,7 +87,7 @@ final class Commit implements CommitInterface
     private function __construct(
         StreamId $streamId,
         StreamRevision $streamRevision,
-        DomainEventSequence $eventLog,
+        DomainEventSequenceInterface $eventLog,
         Metadata $metadata
     ) {
         $this->streamId = $streamId;

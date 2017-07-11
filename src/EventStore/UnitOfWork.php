@@ -13,7 +13,8 @@ namespace Daikon\EventSourcing\EventStore;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
-use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventInterface;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
 final class UnitOfWork implements UnitOfWorkInterface
@@ -104,10 +105,13 @@ final class UnitOfWork implements UnitOfWorkInterface
         return $stream;
     }
 
-    private function prepareHistory(StreamInterface $stream, AggregateRevision $targetRevision): DomainEventSequence
-    {
+    private function prepareHistory(
+        StreamInterface $stream,
+        AggregateRevision $targetRevision
+    ): DomainEventSequenceInterface {
         $stream = $this->streamProcessor ? $this->streamProcessor->process($stream) : $stream;
-        $history = DomainEventSequence::makeEmpty();
+        $history = DomainEventSequenceInterface::makeEmpty();
+        /** @var $commit CommitInterface */
         foreach ($stream as $commit) {
             if (!$targetRevision->isEmpty() && $commit->getAggregateRevision()->isGreaterThan($targetRevision)) {
                 break;
@@ -117,12 +121,17 @@ final class UnitOfWork implements UnitOfWorkInterface
         return $history;
     }
 
-    private function getConflicts(AggregateRootInterface $aggregateRoot, StreamInterface $stream): DomainEventSequence
-    {
-        $conflictingEvents = DomainEventSequence::makeEmpty();
+    private function getConflicts(
+        AggregateRootInterface $aggregateRoot,
+        StreamInterface $stream
+    ): DomainEventSequenceInterface {
+        $conflictingEvents = DomainEventSequenceInterface::makeEmpty();
         $prevCommits = $stream->findCommitsSince($aggregateRoot->getRevision());
+        /** @var $previousCommit CommitInterface */
         foreach ($prevCommits as $previousCommit) {
+            /** @var $previousEvent DomainEventInterface */
             foreach ($previousCommit->getEventLog() as $previousEvent) {
+                /** @var $newEvent DomainEventInterface */
                 foreach ($aggregateRoot->getTrackedEvents() as $newEvent) {
                     if ($newEvent->conflictsWith($previousEvent)) {
                         $conflictingEvents = $conflictingEvents->push($newEvent);

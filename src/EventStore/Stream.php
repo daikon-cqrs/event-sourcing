@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
 final class Stream implements StreamInterface
@@ -64,7 +64,7 @@ final class Stream implements StreamInterface
         return $this->commitSequence->getHead()->getAggregateRevision();
     }
 
-    public function appendEvents(DomainEventSequence $eventLog, Metadata $metadata): StreamInterface
+    public function appendEvents(DomainEventSequenceInterface $eventLog, Metadata $metadata): StreamInterface
     {
         return $this->appendCommit(
             call_user_func(
@@ -113,7 +113,7 @@ final class Stream implements StreamInterface
         return $this->commitSequence->getIterator();
     }
 
-    public function findCommitsSince(AggregateRevision $incomingRevision): CommitSequence
+    public function findCommitsSince(AggregateRevision $incomingRevision): CommitSequenceInterface
     {
         $previousCommits = [];
         $prevCommit = $this->getHead();

@@ -28,7 +28,7 @@ final class DomainEventTest extends TestCase
         $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $pizzaWasBaked->getIngredients());
     }
 
-    public function testToArrayRoundTrip()
+    public function testToArray()
     {
         $pizzaWasBakedArray = [
             'aggregateId' => 'pizza-42-6-23',

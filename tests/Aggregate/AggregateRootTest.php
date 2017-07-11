@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\Tests\EventSourcing;
 
 use Daikon\EventSourcing\Aggregate\AggregateId;
-use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\Pizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaWasBaked;
@@ -40,15 +40,19 @@ final class AggregateRootTest extends TestCase
         /** @var $pizzaId AggregateId */
         $pizzaId = AggregateId::fromNative('pizza-42-6-23');
         $ingredients = [ 'mushrooms', 'tomatoes', 'onions' ];
-        $history = new DomainEventSequence([
-            PizzaWasBaked::fromArray([
+
+        $domainEventSequenceMock = $this->createMock(DomainEventSequenceInterface::class);
+        $domainEventSequenceMock
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([ PizzaWasBaked::fromArray([
                 'aggregateId' => (string)$pizzaId,
                 'aggregateRevision' => 1,
                 'ingredients' => $ingredients
-            ])
-        ]);
+            ]) ]));
+
         /** @var $pizza Pizza */
-        $pizza = Pizza::reconstituteFromHistory($pizzaId, $history);
+        $pizza = Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
 
         $this->assertEquals($pizzaId, $pizza->getIdentifier());
         $this->assertEquals(1, $pizza->getRevision()->toNative());
@@ -76,13 +80,19 @@ final class AggregateRootTest extends TestCase
     {
         /** @var $pizzaId AggregateId */
         $pizzaId = AggregateId::fromNative('pizza-42-6-23');
-        Pizza::reconstituteFromHistory($pizzaId, new DomainEventSequence([
-            PizzaWasBaked::fromArray([
-                'aggregateId' => (string)$pizzaId,
-                'aggregateRevision' => 2, // unexpected revision
-                'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
-            ])
-        ]));
+        $pizzaWasBaked = PizzaWasBaked::fromArray([
+            'aggregateId' => (string)$pizzaId,
+            'aggregateRevision' => 2, // unexpected revision will trigger an error
+            'ingredients' => []
+        ]);
+
+        $domainEventSequenceMock = $this->createMock(DomainEventSequenceInterface::class);
+        $domainEventSequenceMock
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([ $pizzaWasBaked ]));
+
+        Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
     } // @codeCoverageIgnore
 
     /**
@@ -94,12 +104,18 @@ final class AggregateRootTest extends TestCase
     {
         /** @var $pizzaId AggregateId */
         $pizzaId = AggregateId::fromNative('pizza-42-6-23');
-        Pizza::reconstituteFromHistory($pizzaId, new DomainEventSequence([
-            PizzaWasBaked::fromArray([
-                'aggregateId' => 'pizza-23-22-5', // unexpected id
-                'aggregateRevision' => 1,
-                'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
-            ])
-        ]));
+        $pizzaWasBaked = PizzaWasBaked::fromArray([
+            'aggregateId' => 'pizza-23-22-5', // unexpected id will trigger an error
+            'aggregateRevision' => 1,
+            'ingredients' => []
+        ]);
+
+        $domainEventSequenceMock = $this->createMock(DomainEventSequenceInterface::class);
+        $domainEventSequenceMock
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([ $pizzaWasBaked ]));
+
+        Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
     } // @codeCoverageIgnore
 }

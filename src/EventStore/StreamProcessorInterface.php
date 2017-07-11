@@ -12,5 +12,5 @@ namespace Daikon\EventSourcing\EventStore;
 
 interface StreamProcessorInterface
 {
-    public function process(StreamInterface $commitStream): Stream;
+    public function process(StreamInterface $commitStream): StreamInterface;
 }

@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
@@ -20,7 +20,7 @@ interface CommitInterface extends MessageInterface
     public static function make(
         StreamId $streamId,
         StreamRevision $streamRevision,
-        DomainEventSequence $eventLog,
+        DomainEventSequenceInterface $eventLog,
         Metadata $metadata
     ): CommitInterface;
 
@@ -30,7 +30,7 @@ interface CommitInterface extends MessageInterface
 
     public function getAggregateRevision(): AggregateRevision;
 
-    public function getEventLog(): DomainEventSequence;
+    public function getEventLog(): DomainEventSequenceInterface;
 
     public function getMetadata(): Metadata;
 }

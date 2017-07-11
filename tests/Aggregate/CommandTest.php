@@ -20,7 +20,6 @@ final class CommandTest extends TestCase
         /** @var $bakePizza BakePizza */
         $bakePizza = BakePizza::fromArray([
             'aggregateId' => 'pizza-42-6-23',
-            'knownAggregateRevision' => 0,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ]);
         $this->assertEquals('pizza-42-6-23', $bakePizza->getAggregateId());
@@ -28,7 +27,7 @@ final class CommandTest extends TestCase
         $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $bakePizza->getIngredients());
     }
 
-    public function testToArrayRoundTrip()
+    public function testToArray()
     {
         $bakePizzaArray = [
             'aggregateId' => 'pizza-42-6-23',

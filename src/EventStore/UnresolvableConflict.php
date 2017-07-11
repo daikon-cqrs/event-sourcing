@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore;
 
-use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Exception;
 
 final class UnresolvableConflict extends Exception
@@ -18,10 +18,10 @@ final class UnresolvableConflict extends Exception
     /** @var StreamId */
     private $streamId;
 
-    /** @var DomainEventSequence */
+    /** @var DomainEventSequenceInterface */
     private $conflictingEvents;
 
-    public function __construct(StreamId $streamId, DomainEventSequence $conflictingEvents)
+    public function __construct(StreamId $streamId, DomainEventSequenceInterface $conflictingEvents)
     {
         $this->streamId = $streamId;
         $this->conflictingEvents = $conflictingEvents;
@@ -33,7 +33,7 @@ final class UnresolvableConflict extends Exception
         return $this->streamId;
     }
 
-    public function getConflictingEvents(): DomainEventSequence
+    public function getConflictingEvents(): DomainEventSequenceInterface
     {
         return $this->conflictingEvents;
     }

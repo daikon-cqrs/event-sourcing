@@ -10,17 +10,15 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Countable;
 use Ds\Vector;
 use Iterator;
-use IteratorAggregate;
 
-final class DomainEventSequence implements IteratorAggregate, Countable
+final class DomainEventSequence implements DomainEventSequenceInterface
 {
     /** @var Vector */
     private $compositeVector;
 
-    public static function fromArray(array $eventsArray): DomainEventSequence
+    public static function fromArray(array $eventsArray): DomainEventSequenceInterface
     {
         return new static(array_map(function (array $eventState): DomainEventInterface {
             $eventFqcn = self::resolveEventFqcn($eventState);
@@ -28,7 +26,7 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         }, $eventsArray));
     }
 
-    public static function makeEmpty(): DomainEventSequence
+    public static function makeEmpty(): DomainEventSequenceInterface
     {
         return new self;
     }
@@ -40,7 +38,7 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         })(...$events);
     }
 
-    public function push(DomainEventInterface $event): DomainEventSequence
+    public function push(DomainEventInterface $event): DomainEventSequenceInterface
     {
         $expectedRevision = $this->getHeadRevision()->increment();
         if (!$this->isEmpty() && !$expectedRevision->equals($event->getAggregateRevision())) {
@@ -55,7 +53,7 @@ final class DomainEventSequence implements IteratorAggregate, Countable
         return $eventSequence;
     }
 
-    public function append(DomainEventSequence $events): DomainEventSequence
+    public function append(DomainEventSequenceInterface $events): DomainEventSequenceInterface
     {
         $eventSequence = clone $this;
         foreach ($events as $event) {

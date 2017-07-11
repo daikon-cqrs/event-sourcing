@@ -14,14 +14,14 @@ interface AggregateRootInterface
 {
     public static function reconstituteFromHistory(
         AggregateIdInterface $aggregateId,
-        DomainEventSequence $history
+        DomainEventSequenceInterface $history
     ): AggregateRootInterface;
 
     public function getIdentifier(): AggregateIdInterface;
 
     public function getRevision(): AggregateRevision;
 
-    public function getTrackedEvents(): DomainEventSequence;
+    public function getTrackedEvents(): DomainEventSequenceInterface;
 
     public function markClean(): AggregateRootInterface;
 }
