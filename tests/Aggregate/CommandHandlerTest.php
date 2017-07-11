@@ -10,71 +10,63 @@ declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing;
 
+use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
+use Daikon\EventSourcing\Aggregate\CommandHandler;
+use Daikon\EventSourcing\Aggregate\CommandInterface;
 use Daikon\EventSourcing\EventStore\CommitInterface;
 use Daikon\EventSourcing\EventStore\CommitSequenceInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
 use Daikon\MessageBus\Metadata\Metadata;
-use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizza;
-use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizzaHandler;
-use Daikon\Tests\EventSourcing\Aggregate\Mock\Pizza;
 use PHPUnit\Framework\TestCase;
 
 final class CommandHandlerTest extends TestCase
 {
     public function testHandleNewAggregate()
     {
-        $aggregateId = 'pizza-42-6-23';
-        $ingredients = [ 'mushrooms', 'tomatoes', 'onions' ];
-        $bakePizzaCommand = BakePizza::fromArray([
-            'aggregateId' => $aggregateId,
-            'ingredients' => $ingredients
-        ]);
-
-        $commitMock = $this->createMock(CommitInterface::class);
-        $commitSequenceMock = $this->createMock(CommitSequenceInterface::class);
-        $commitSequenceMock
+        $commitStub = $this->createMock(CommitInterface::class);
+        $commitSequenceStub = $this->createMock(CommitSequenceInterface::class);
+        $commitSequenceStub
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([ $commitMock ]));
+            ->willReturn(new \ArrayIterator([ $commitStub ]));
 
-        $unitOfWorkMock = $this->createMock(UnitOfWorkInterface::class);
-        $unitOfWorkMock
+        $unitOfWorkStub = $this->createMock(UnitOfWorkInterface::class);
+        $unitOfWorkStub
             ->expects($this->once())
             ->method('commit')
-            ->with($this->callback(
-                function (Pizza $pizza) use ($aggregateId, $ingredients) {
-                    $this->assertEquals(1, $pizza->getRevision()->toNative());
-                    $this->assertEquals($aggregateId, $pizza->getIdentifier()->toNative());
-                    $this->assertEquals($ingredients, $pizza->getIngredients());
-                    return true;
-                }
-            ))
-            ->willReturn($commitSequenceMock);
+            ->with($this->isInstanceOf(AggregateRootInterface::class))
+            ->willReturn($commitSequenceStub);
 
-        $messageBusMock = $this->createMock(MessageBusInterface::class);
-        $messageBusMock
+        $messageBusStub = $this->createMock(MessageBusInterface::class);
+        $messageBusStub
             ->expects($this->once())
             ->method('publish')
-            ->with($this->callback(
-                function (CommitInterface $commit) use ($commitMock) {
-                    $this->assertEquals($commit, $commitMock);
-                    return true;
-                }
-            ), 'commits')
+            ->with($commitStub, 'commits')
             ->willReturn(true);
 
-        $envelopeMock = $this->createMock(EnvelopeInterface::class);
-        $envelopeMock
-            ->expects($this->once())
-            ->method('getMessage')
-            ->willReturn($bakePizzaCommand);
-        $envelopeMock
+        $envelopeStub = $this->createMock(EnvelopeInterface::class);
+        $envelopeStub
             ->expects($this->once())
             ->method('getMetadata')
             ->willReturn(Metadata::makeEmpty());
+        $envelopeStub
+            ->expects($this->once())
+            ->method('getMessage')
+            ->willReturn(
+                $this->getMockBuilder(CommandInterface::class)
+                    ->setMockClassName("FooBar")->getMock()
+            );
 
-        (new BakePizzaHandler($unitOfWorkMock, $messageBusMock))->handle($envelopeMock);
+        $commandHandler = $this->getMockBuilder(CommandHandler::class)
+            ->setConstructorArgs([ $unitOfWorkStub, $messageBusStub ])
+            ->setMethods([ 'handleFooBar' ])->getMock();
+        $commandHandler
+            ->expects($this->once())
+            ->method('handleFooBar')
+            ->willReturn([ $this->createMock(AggregateRootInterface::class), Metadata::makeEmpty() ]);
+
+        $commandHandler->handle($envelopeStub);
     }
 }

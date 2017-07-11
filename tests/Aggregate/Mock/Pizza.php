@@ -26,9 +26,7 @@ final class Pizza implements AggregateRootInterface
 
     public static function getAlias(): AggregateAlias
     {
-        static $alias;
-        $alias = AggregateAlias::fromNative('testing.mock.pizza');
-        return $alias;
+        return AggregateAlias::fromNative('testing.mock.pizza');
     }
 
     public static function bake(BakePizza $bakePizza): self

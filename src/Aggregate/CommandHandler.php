@@ -39,7 +39,7 @@ abstract class CommandHandler implements MessageHandlerInterface
         if (!is_callable($handler)) {
             throw new \Exception(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
         }
-        return call_user_func($handler, $commandMessage, $envelope->getMetadata());
+        return $this->commit(...call_user_func($handler, $commandMessage, $envelope->getMetadata()));
     }
 
     protected function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): bool
