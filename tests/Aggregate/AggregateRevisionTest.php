@@ -88,6 +88,21 @@ final class AggregateRevisionTest extends TestCase
         $this->assertFalse($revision->isLessThanOrEqual(AggregateRevision::fromNative(41)));
     }
 
+    public function testIsWithinRange()
+    {
+        /** @var $revision AggregateRevision */
+        $revision = AggregateRevision::fromNative(42);
+
+        $this->assertTrue($revision->isWithinRange(
+            AggregateRevision::fromNative(40),
+            AggregateRevision::fromNative(43)
+        ));
+        $this->assertFalse($revision->isWithinRange(
+            AggregateRevision::fromNative(23),
+            AggregateRevision::fromNative(30)
+        ));
+    }
+
     /**
      * @expectedException \Assert\InvalidArgumentException
      * @expectedExceptionMessage Value "not an int" is not an integer.
