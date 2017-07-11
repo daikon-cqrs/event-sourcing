@@ -13,7 +13,7 @@ namespace Daikon\EventSourcing\Aggregate;
 use Assert\Assertion;
 use Daikon\Entity\ValueObject\ValueObjectInterface;
 
-final class AggregateAlias implements AggregateIdInterface
+final class AggregateAlias implements ValueObjectInterface
 {
     /** @var string */
     private $alias;
