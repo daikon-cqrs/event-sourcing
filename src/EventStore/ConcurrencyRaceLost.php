@@ -19,7 +19,7 @@ final class ConcurrencyRaceLost extends Exception
     /** @var StreamId */
     private $streamId;
 
-    /** @var  DomainEventInterface */
+    /** @var  DomainEventSequenceInterface */
     private $lostEvents;
 
     public function __construct(StreamId $streamId, DomainEventSequenceInterface $lostEvents)
