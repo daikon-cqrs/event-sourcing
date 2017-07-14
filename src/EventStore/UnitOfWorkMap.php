@@ -22,8 +22,8 @@ final class UnitOfWorkMap implements \IteratorAggregate, \Countable
         $this->init($unitsOfWork, UnitOfWorkInterface::class);
     }
 
-    public function getByAggregatePrefix(AggregateAlias $aggregatePrefix)
+    public function getByAggregateAlias(AggregateAlias $aggregateAlias)
     {
-        return $this->get((string)$aggregatePrefix);
+        return $this->get((string)$aggregateAlias);
     }
 }
