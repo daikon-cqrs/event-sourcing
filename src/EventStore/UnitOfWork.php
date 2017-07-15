@@ -15,6 +15,7 @@ use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\Aggregate\DomainEventInterface;
 use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\Aggregate\DomainEventSequence;
 use Daikon\MessageBus\Metadata\Metadata;
 
 final class UnitOfWork implements UnitOfWorkInterface
@@ -110,7 +111,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         AggregateRevision $targetRevision
     ): DomainEventSequenceInterface {
         $stream = $this->streamProcessor ? $this->streamProcessor->process($stream) : $stream;
-        $history = DomainEventSequenceInterface::makeEmpty();
+        $history = DomainEventSequence::makeEmpty();
         /** @var $commit CommitInterface */
         foreach ($stream as $commit) {
             if (!$targetRevision->isEmpty() && $commit->getAggregateRevision()->isGreaterThan($targetRevision)) {
@@ -125,7 +126,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         AggregateRootInterface $aggregateRoot,
         StreamInterface $stream
     ): DomainEventSequenceInterface {
-        $conflictingEvents = DomainEventSequenceInterface::makeEmpty();
+        $conflictingEvents = DomainEventSequence::makeEmpty();
         $prevCommits = $stream->findCommitsSince($aggregateRoot->getRevision());
         /** @var $previousCommit CommitInterface */
         foreach ($prevCommits as $previousCommit) {
