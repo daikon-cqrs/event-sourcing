@@ -43,7 +43,7 @@ final class Commit implements CommitInterface
         return new self(
             StreamId::fromNative($state['streamId']),
             StreamRevision::fromNative((int)$state['streamRevision']),
-            DomainEventSequenceInterface::fromArray($state['eventLog']),
+            DomainEventSequence::fromArray($state['eventLog']),
             Metadata::fromArray($state['metadata'])
         );
     }
