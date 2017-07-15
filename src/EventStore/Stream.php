@@ -89,7 +89,7 @@ final class Stream implements StreamInterface
         return $this->commitSequence->isEmpty() ? null : $this->commitSequence->getHead();
     }
 
-    public function getCommitRange(StreamRevision $fromRev, StreamRevision $toRev = null): CommitSequence
+    public function getCommitRange(StreamRevision $fromRev, StreamRevision $toRev = null): CommitSequenceInterface
     {
         return $this->commitSequence->getSlice($fromRev, $toRev ?? $this->getStreamRevision());
     }
