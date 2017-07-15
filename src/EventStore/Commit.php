@@ -12,6 +12,7 @@ namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\Aggregate\DomainEventSequence;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
