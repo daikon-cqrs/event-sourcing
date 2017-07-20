@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\Aggregate;
 
+use Assert\Assertion;
+
 trait AggregateRootTrait
 {
     /** @var AggregateIdInterface */
@@ -25,7 +27,6 @@ trait AggregateRootTrait
         AggregateIdInterface $aggregateId,
         DomainEventSequenceInterface $history
     ): AggregateRootInterface {
-        /** @var AggregateRootInterface $aggRoot */
         $aggRoot = new static($aggregateId);
         foreach ($history as $eventOccured) {
             $aggRoot = $aggRoot->reflectThat($eventOccured, false);
@@ -50,7 +51,6 @@ trait AggregateRootTrait
 
     public function markClean(): AggregateRootInterface
     {
-        /** @var AggregateRootInterface $aggRoot */
         $aggRoot = clone $this;
         $aggRoot->trackedEvents = DomainEventSequence::makeEmpty();
         return $aggRoot;
@@ -66,7 +66,6 @@ trait AggregateRootTrait
     protected function reflectThat(DomainEventInterface $eventOccured, bool $track = true): AggregateRootInterface
     {
         $this->assertExpectedIdentifier($eventOccured, $this->getIdentifier());
-        /** @var AggregateRootInterface $aggRoot */
         $aggRoot = clone $this;
         if ($track) {
             $aggRoot->revision = $aggRoot->revision->increment();

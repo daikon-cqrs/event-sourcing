@@ -23,5 +23,5 @@ interface StreamStorageInterface
         AggregateRevision $to = null
     ): StreamInterface;
 
-    public function commit(StreamInterface $stream, StreamRevision $knownHead): StoreResultInterface;
+    public function commit(StreamInterface $stream, StreamRevision $knownHead): StorageResultInterface;
 }
