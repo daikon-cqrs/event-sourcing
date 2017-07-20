@@ -8,16 +8,16 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Storage;
 
 use Daikon\DataStructure\TypedMapTrait;
 
-final class StreamStoreMap implements \IteratorAggregate, \Countable
+final class StreamStorageMap implements \IteratorAggregate, \Countable
 {
     use TypedMapTrait;
 
     public function __construct(array $streamStores = [])
     {
-        $this->init($streamStores, StreamStoreInterface::class);
+        $this->init($streamStores, StreamStorageInterface::class);
     }
 }

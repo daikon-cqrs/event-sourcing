@@ -8,9 +8,10 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Countable;
+use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use IteratorAggregate;
 
 interface CommitSequenceInterface extends IteratorAggregate, Countable

@@ -8,25 +8,31 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Stream;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\EventStore\Commit\Commit;
+use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
+use Daikon\EventSourcing\EventStore\Commit\CommitSequence;
+use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
 final class Stream implements StreamInterface
 {
-    /** @var StreamId */
+    /** @var StreamIdInterface */
     private $streamId;
 
-    /** @var CommitSequence */
+    /** @var CommitSequenceInterface */
     private $commitSequence;
 
     /** @var string */
     private $commitImplementor;
 
-    public static function fromStreamId(StreamId $streamId, string $commitImplementor = Commit::class): StreamInterface
-    {
+    public static function fromStreamId(
+        StreamIdInterface $streamId,
+        string $commitImplementor = Commit::class
+    ): StreamInterface {
         return new static($streamId);
     }
 
@@ -40,8 +46,8 @@ final class Stream implements StreamInterface
     }
 
     public function __construct(
-        StreamId $streamId,
-        CommitSequence $commitSequence = null,
+        StreamIdInterface $streamId,
+        CommitSequenceInterface $commitSequence = null,
         string $commitImplementor = Commit::class
     ) {
         $this->streamId = $streamId;
@@ -49,7 +55,7 @@ final class Stream implements StreamInterface
         $this->commitImplementor = $commitImplementor;
     }
 
-    public function getStreamId(): StreamId
+    public function getStreamId(): StreamIdInterface
     {
         return $this->streamId;
     }
@@ -61,7 +67,8 @@ final class Stream implements StreamInterface
 
     public function getAggregateRevision(): AggregateRevision
     {
-        return $this->commitSequence->getHead()->getAggregateRevision();
+        $head = $this->commitSequence->getHead();
+        return $head ? $head->getAggregateRevision() : AggregateRevision::makeEmpty();
     }
 
     public function appendEvents(DomainEventSequenceInterface $eventLog, Metadata $metadata): StreamInterface
@@ -108,7 +115,7 @@ final class Stream implements StreamInterface
         ];
     }
 
-    public function getIterator(): \Iterator
+    public function getIterator(): \Traversable
     {
         return $this->commitSequence->getIterator();
     }

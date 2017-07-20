@@ -11,24 +11,25 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Exception;
 
 final class UnresolvableConflict extends Exception
 {
-    /** @var StreamId */
+    /** @var StreamIdInterface */
     private $streamId;
 
     /** @var DomainEventSequenceInterface */
     private $conflictingEvents;
 
-    public function __construct(StreamId $streamId, DomainEventSequenceInterface $conflictingEvents)
+    public function __construct(StreamIdInterface $streamId, DomainEventSequenceInterface $conflictingEvents)
     {
         $this->streamId = $streamId;
         $this->conflictingEvents = $conflictingEvents;
         parent::__construct('Unable to resolve conflict for stream: '.$this->streamId);
     }
 
-    public function getStreamId(): StreamId
+    public function getStreamId(): StreamIdInterface
     {
         return $this->streamId;
     }

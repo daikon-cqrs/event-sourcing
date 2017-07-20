@@ -37,18 +37,4 @@ final class AggregateAliasTest extends TestCase
         $this->assertTrue($aggregatePrefix->equals(AggregateAlias::fromNative('testing.mock.pizza')));
         $this->assertFalse($aggregatePrefix->equals(AggregateAlias::fromNative('testing.mock.radish')));
     }
-
-    public function testIsEmpty()
-    {
-        $this->assertFalse(AggregateAlias::fromNative('testing.mock.pizza')->isEmpty());
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Creating empty aggregate aliases is not supported.
-     */
-    public function testMakeEmpty()
-    {
-        AggregateAlias::makeEmpty();
-    } // @codeCoverageIgnore
 }

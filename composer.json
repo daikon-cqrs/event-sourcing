@@ -9,7 +9,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
-        "daikon/entity": "master@dev",
+        "beberlei/assert": "^2.7",
         "daikon/message-bus": "master@dev",
         "daikon/data-structure": "master@dev"
     },

@@ -10,26 +10,26 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore;
 
-use Daikon\EventSourcing\Aggregate\DomainEventInterface;
 use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Exception;
 
 final class ConcurrencyRaceLost extends Exception
 {
-    /** @var StreamId */
+    /** @var StreamIdInterface */
     private $streamId;
 
     /** @var  DomainEventSequenceInterface */
     private $lostEvents;
 
-    public function __construct(StreamId $streamId, DomainEventSequenceInterface $lostEvents)
+    public function __construct(StreamIdInterface $streamId, DomainEventSequenceInterface $lostEvents)
     {
         $this->streamId = $streamId;
         $this->lostEvents = $lostEvents;
         parent::__construct('Unable to catchup on stream: '.$this->streamId);
     }
 
-    public function getStreamId(): StreamId
+    public function getStreamId(): StreamIdInterface
     {
         return $this->streamId;
     }

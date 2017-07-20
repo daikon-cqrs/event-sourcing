@@ -8,12 +8,9 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Stream;
 
-use Assert\Assertion;
-use Daikon\Entity\ValueObject\ValueObjectInterface;
-
-final class StreamRevision implements ValueObjectInterface
+final class StreamRevision
 {
     private const INITIAL = 1;
 
@@ -22,12 +19,12 @@ final class StreamRevision implements ValueObjectInterface
     /** @var int */
     private $revision;
 
-    public static function fromNative($revision): ValueObjectInterface
+    public static function fromNative(int $revision): StreamRevision
     {
         return new self($revision);
     }
 
-    public static function makeEmpty(): ValueObjectInterface
+    public static function makeInitial(): StreamRevision
     {
         return new static(self::NONE);
     }
@@ -51,15 +48,9 @@ final class StreamRevision implements ValueObjectInterface
         return $copy;
     }
 
-    public function equals(ValueObjectInterface $otherValue): bool
+    public function equals(StreamRevision $revision): bool
     {
-        Assertion::isInstanceOf($otherValue, static::class);
-        return $otherValue->toNative() === $this->revision;
-    }
-
-    public function isEmpty(): bool
-    {
-        return $this->revision === self::NONE;
+        return $revision->toNative() === $this->revision;
     }
 
     public function isInitial(): bool
@@ -67,17 +58,17 @@ final class StreamRevision implements ValueObjectInterface
         return $this->revision === self::INITIAL;
     }
 
-    public function isWithinRange(StreamRevision $from, StreamRevision $to)
+    public function isWithinRange(StreamRevision $from, StreamRevision $to): bool
     {
         return $this->isGreaterThanOrEqual($from) && $this->isLessThanOrEqual($to);
     }
 
-    public function isGreaterThanOrEqual(StreamRevision $revision)
+    public function isGreaterThanOrEqual(StreamRevision $revision): bool
     {
         return $this->revision >= $revision->toNative();
     }
 
-    public function isLessThanOrEqual(StreamRevision $revision)
+    public function isLessThanOrEqual(StreamRevision $revision): bool
     {
         return $this->revision <= $revision->toNative();
     }

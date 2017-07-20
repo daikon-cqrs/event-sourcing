@@ -8,17 +8,20 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\EventStore\Stream\StreamId;
+use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
+use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
 final class Commit implements CommitInterface
 {
-    /** @var StreamId */
+    /** @var StreamIdInterface */
     private $streamId;
 
     /** @var StreamRevision */
@@ -31,7 +34,7 @@ final class Commit implements CommitInterface
     private $metadata;
 
     public static function make(
-        StreamId $streamId,
+        StreamIdInterface $streamId,
         StreamRevision $streamRevision,
         DomainEventSequenceInterface $eventLog,
         Metadata $metadata
@@ -49,7 +52,7 @@ final class Commit implements CommitInterface
         );
     }
 
-    public function getStreamId(): StreamId
+    public function getStreamId(): StreamIdInterface
     {
         return $this->streamId;
     }
@@ -86,7 +89,7 @@ final class Commit implements CommitInterface
     }
 
     private function __construct(
-        StreamId $streamId,
+        StreamIdInterface $streamId,
         StreamRevision $streamRevision,
         DomainEventSequenceInterface $eventLog,
         Metadata $metadata

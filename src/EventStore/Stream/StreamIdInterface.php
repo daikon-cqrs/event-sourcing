@@ -8,15 +8,15 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\Aggregate;
+namespace Daikon\EventSourcing\EventStore\Stream;
 
-interface AggregateIdInterface
+interface StreamIdInterface
 {
-    public static function fromNative(string $id): AggregateIdInterface;
+    public static function fromNative(string $id): StreamIdInterface;
 
     public function toNative(): string;
 
-    public function equals(AggregateIdInterface $aggregateId): bool;
+    public function equals(StreamIdInterface $streamId): bool;
 
     public function __toString(): string;
 }

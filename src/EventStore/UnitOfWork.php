@@ -14,8 +14,17 @@ use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\Aggregate\DomainEventInterface;
-use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
 use Daikon\EventSourcing\Aggregate\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
+use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
+use Daikon\EventSourcing\EventStore\Storage\StorageError;
+use Daikon\EventSourcing\EventStore\Storage\StreamStorageInterface;
+use Daikon\EventSourcing\EventStore\Stream\Stream;
+use Daikon\EventSourcing\EventStore\Stream\StreamId;
+use Daikon\EventSourcing\EventStore\Stream\StreamInterface;
+use Daikon\EventSourcing\EventStore\Stream\StreamMap;
+use Daikon\EventSourcing\EventStore\Stream\StreamProcessorInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
 final class UnitOfWork implements UnitOfWorkInterface
@@ -25,10 +34,10 @@ final class UnitOfWork implements UnitOfWorkInterface
     /** @var string */
     private $aggregateRootType;
 
-    /** @var StreamStoreInterface */
-    private $streamStore;
+    /** @var StreamStorageInterface */
+    private $streamStorage;
 
-    /** @var StreamProcessorInterface */
+    /** @var ?StreamProcessorInterface */
     private $streamProcessor;
 
     /** @var string */
@@ -42,13 +51,13 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     public function __construct(
         string $aggregateRootType,
-        StreamStoreInterface $streamStore,
+        StreamStorageInterface $streamStorage,
         StreamProcessorInterface $streamProcessor = null,
         string $streamImplementor = Stream::class,
         int $maxRaceAttempts = self::MAX_RACE_ATTEMPTS
     ) {
         $this->aggregateRootType = $aggregateRootType;
-        $this->streamStore = $streamStore;
+        $this->streamStorage = $streamStorage;
         $this->streamProcessor = $streamProcessor;
         $this->streamImplementor = $streamImplementor;
         $this->trackedCommitStreams = StreamMap::makeEmpty();
@@ -59,19 +68,19 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         $prevStream = $this->getTrackedStream($aggregateRoot);
         $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-        $result = $this->streamStore->commit($updatedStream, $prevStream->getStreamRevision());
+        $result = $this->streamStorage->commit($updatedStream, $prevStream->getStreamRevision());
         $raceCount = 0;
-        while ($result instanceof ConcurrencyError) {
+        while ($result instanceof StorageError) {
             if (++$raceCount > $this->maxRaceAttempts) {
                 throw new ConcurrencyRaceLost($prevStream->getStreamId(), $aggregateRoot->getTrackedEvents());
             }
-            $prevStream = $this->streamStore->checkout($updatedStream->getStreamId());
+            $prevStream = $this->streamStorage->checkout($updatedStream->getStreamId());
             $conflictingEvents = $this->getConflicts($aggregateRoot, $prevStream);
             if (!$conflictingEvents->isEmpty()) {
                 throw new UnresolvableConflict($prevStream->getStreamId(), $conflictingEvents);
             }
             $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-            $result = $this->streamStore->commit($updatedStream, $prevStream->getStreamRevision());
+            $result = $this->streamStorage->commit($updatedStream, $prevStream->getStreamRevision());
         }
         $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getStreamId());
         return $updatedStream->getCommitRange($prevStream->getStreamRevision(), $updatedStream->getStreamRevision());
@@ -79,9 +88,9 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     public function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface
     {
-        /** @var $streamId StreamId */
+        /** @var StreamId $streamId */
         $streamId = StreamId::fromNative($aggregateId->toNative());
-        $stream = $this->streamStore->checkout($streamId, $revision);
+        $stream = $this->streamStorage->checkout($streamId, $revision);
         $aggregateRoot = call_user_func(
             [ $this->aggregateRootType, 'reconstituteFromHistory' ],
             $aggregateId,
@@ -112,7 +121,7 @@ final class UnitOfWork implements UnitOfWorkInterface
     ): DomainEventSequenceInterface {
         $stream = $this->streamProcessor ? $this->streamProcessor->process($stream) : $stream;
         $history = DomainEventSequence::makeEmpty();
-        /** @var $commit CommitInterface */
+        /** @var CommitInterface $commit */
         foreach ($stream as $commit) {
             if (!$targetRevision->isEmpty() && $commit->getAggregateRevision()->isGreaterThan($targetRevision)) {
                 break;
@@ -128,11 +137,11 @@ final class UnitOfWork implements UnitOfWorkInterface
     ): DomainEventSequenceInterface {
         $conflictingEvents = DomainEventSequence::makeEmpty();
         $prevCommits = $stream->findCommitsSince($aggregateRoot->getRevision());
-        /** @var $previousCommit CommitInterface */
+        /** @var CommitInterface $previousCommit */
         foreach ($prevCommits as $previousCommit) {
-            /** @var $previousEvent DomainEventInterface */
+            /** @var DomainEventInterface $previousEvent */
             foreach ($previousCommit->getEventLog() as $previousEvent) {
-                /** @var $newEvent DomainEventInterface */
+                /** @var DomainEventInterface $newEvent */
                 foreach ($aggregateRoot->getTrackedEvents() as $newEvent) {
                     if ($newEvent->conflictsWith($previousEvent)) {
                         $conflictingEvents = $conflictingEvents->push($newEvent);

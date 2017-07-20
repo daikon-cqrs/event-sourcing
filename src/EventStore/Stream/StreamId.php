@@ -8,40 +8,28 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Stream;
 
 use Assert\Assertion;
-use Daikon\Entity\ValueObject\ValueObjectInterface;
 
-final class StreamId implements ValueObjectInterface
+final class StreamId implements StreamIdInterface
 {
     /** @var string */
     private $id;
 
-    public static function fromNative($id): ValueObjectInterface
+    public static function fromNative(string $id): StreamIdInterface
     {
         return new self(trim($id));
     }
 
-    public static function makeEmpty(): ValueObjectInterface
-    {
-        throw new \Exception('Creating empty stream-ids is not supported.');
-    }
-
-    public function toNative()
+    public function toNative(): string
     {
         return $this->id;
     }
 
-    public function equals(ValueObjectInterface $streamId): bool
+    public function equals(StreamIdInterface $streamId): bool
     {
-        Assertion::isInstanceOf($streamId, static::class);
         return $this->id === $streamId->toNative();
-    }
-
-    public function isEmpty(): bool
-    {
-        return false;
     }
 
     public function __toString(): string

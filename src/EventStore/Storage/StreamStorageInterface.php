@@ -8,14 +8,17 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Storage;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
+use Daikon\EventSourcing\EventStore\Stream\StreamInterface;
+use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 
-interface StreamStoreInterface
+interface StreamStorageInterface
 {
     public function checkout(
-        StreamId $streamId,
+        StreamIdInterface $streamId,
         AggregateRevision $from = null,
         AggregateRevision $to = null
     ): StreamInterface;

@@ -38,13 +38,6 @@ final class AggregateRevisionTest extends TestCase
         $this->assertFalse($revision->equals(AggregateRevision::fromNative(23)));
     }
 
-    public function testIsEmpty()
-    {
-        $this->assertTrue(AggregateRevision::makeEmpty()->isEmpty());
-        $this->assertTrue(AggregateRevision::fromNative(0)->isEmpty());
-        $this->assertFalse(AggregateRevision::fromNative(42)->isEmpty());
-    }
-
     public function testIsInitial()
     {
         $this->assertTrue(AggregateRevision::fromNative(1)->isInitial());
@@ -104,8 +97,7 @@ final class AggregateRevisionTest extends TestCase
     }
 
     /**
-     * @expectedException \Assert\InvalidArgumentException
-     * @expectedExceptionMessage Value "not an int" is not an integer.
+     * @expectedException \TypeError
      */
     public function testMakeFromNonInteger()
     {

@@ -11,37 +11,26 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
-use Daikon\Entity\ValueObject\ValueObjectInterface;
 
 final class AggregateId implements AggregateIdInterface
 {
     /** @var string */
     private $id;
 
-    public static function fromNative($id): ValueObjectInterface
+    public static function fromNative(string $id): AggregateIdInterface
     {
         return new self(trim($id));
     }
 
-    public static function makeEmpty(): ValueObjectInterface
-    {
-        throw new \Exception('Creating empty aggregate-ids is not supported.');
-    }
-
-    public function toNative()
+    public function toNative(): string
     {
         return $this->id;
     }
 
-    public function equals(ValueObjectInterface $streamId): bool
+    public function equals(AggregateIdInterface $streamId): bool
     {
         Assertion::isInstanceOf($streamId, static::class);
         return $this->id === $streamId->toNative();
-    }
-
-    public function isEmpty(): bool
-    {
-        return false;
     }
 
     public function __toString(): string

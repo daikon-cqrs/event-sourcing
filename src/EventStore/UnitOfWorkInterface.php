@@ -13,6 +13,7 @@ namespace Daikon\EventSourcing\EventStore;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
+use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 
 interface UnitOfWorkInterface

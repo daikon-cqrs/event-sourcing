@@ -34,18 +34,4 @@ final class AggregateIdTest extends TestCase
         $this->assertTrue($aggregateId1->equals(AggregateId::fromNative('testing.blog.article-123')));
         $this->assertFalse($aggregateId1->equals(AggregateId::fromNative('testing.blog.article-1234')));
     }
-
-    public function testIsEmpty()
-    {
-        $this->assertFalse(AggregateId::fromNative('testing.blog.article-123')->isEmpty());
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Creating empty aggregate-ids is not supported.
-     */
-    public function testMakeEmpty()
-    {
-        AggregateId::makeEmpty();
-    } // @codeCoverageIgnore
 }

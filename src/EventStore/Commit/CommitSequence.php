@@ -8,8 +8,9 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Commit;
 
+use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Ds\Vector;
 use Iterator;
 
@@ -20,7 +21,7 @@ final class CommitSequence implements CommitSequenceInterface
 
     public static function fromArray(array $commitsArray): CommitSequenceInterface
     {
-        return new static(array_map(function (array $commitState) {
+        return new static(array_map(function (array $commitState): CommitInterface {
             return Commit::fromArray($commitState);
         }, $commitsArray));
     }
@@ -83,16 +84,20 @@ final class CommitSequence implements CommitSequenceInterface
 
     public function getSlice(StreamRevision $start, StreamRevision $end): CommitSequenceInterface
     {
-        return $this->compositeVector->reduce(
-            function (CommitSequence $commits, CommitInterface $commit) use ($start, $end): CommitSequence {
-                if ($commit->getStreamRevision()->isWithinRange($start, $end)) {
-                    $commits = $commits->push($commit); /* @var CommitSequence $commits */
-                    return $commits;
-                }
+        return $this->compositeVector->reduce(function (
+            CommitSequenceInterface $commits,
+            CommitInterface $commit
+        ) use (
+            $start,
+            $end
+        ): CommitSequenceInterface {
+            if ($commit->getStreamRevision()->isWithinRange($start, $end)) {
+                /* @var CommitSequenceInterface $commits */
+                $commits = $commits->push($commit);
                 return $commits;
-            },
-            new static
-        );
+            }
+            return $commits;
+        }, new static);
     }
 
     public function isEmpty(): bool

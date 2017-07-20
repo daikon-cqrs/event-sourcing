@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Storage;
 
-final class ConcurrencyError implements StoreResultInterface
+final class StorageError implements StorageResultInterface
 {
 
 }

@@ -10,10 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Countable;
-use IteratorAggregate;
-
-interface DomainEventSequenceInterface extends IteratorAggregate, Countable
+interface DomainEventSequenceInterface extends \IteratorAggregate, \Countable
 {
     public static function fromArray(array $eventsArray): DomainEventSequenceInterface;
 

@@ -11,38 +11,25 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
-use Daikon\Entity\ValueObject\ValueObjectInterface;
 
-final class AggregateAlias implements ValueObjectInterface
+final class AggregateAlias
 {
     /** @var string */
     private $alias;
 
-    public static function fromNative($alias): ValueObjectInterface
+    public static function fromNative(string $alias): AggregateAlias
     {
-        Assertion::string($alias);
         return new static(trim($alias));
     }
 
-    public static function makeEmpty(): ValueObjectInterface
-    {
-        throw new \Exception('Creating empty aggregate aliases is not supported.');
-    }
-
-    public function toNative()
+    public function toNative(): string
     {
         return $this->alias;
     }
 
-    public function equals(ValueObjectInterface $alias): bool
+    public function equals(AggregateAlias $alias): bool
     {
-        Assertion::isInstanceOf($alias, static::class);
         return $this->alias === $alias->toNative();
-    }
-
-    public function isEmpty(): bool
-    {
-        return false;
     }
 
     public function __toString(): string

@@ -11,9 +11,8 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
-use Daikon\Entity\ValueObject\ValueObjectInterface;
 
-final class AggregateRevision implements ValueObjectInterface
+final class AggregateRevision
 {
     private const INITIAL = 1;
 
@@ -22,13 +21,12 @@ final class AggregateRevision implements ValueObjectInterface
     /** @var int */
     private $revision;
 
-    public static function fromNative($revision): ValueObjectInterface
+    public static function fromNative(int $revision): AggregateRevision
     {
-        Assertion::integer($revision);
         return new self($revision);
     }
 
-    public static function makeEmpty(): ValueObjectInterface
+    public static function makeEmpty(): AggregateRevision
     {
         return new static(self::NONE);
     }
@@ -45,15 +43,10 @@ final class AggregateRevision implements ValueObjectInterface
         return $copy;
     }
 
-    public function equals(ValueObjectInterface $otherValue): bool
+    public function equals(AggregateRevision $revision): bool
     {
-        Assertion::isInstanceOf($otherValue, static::class);
-        return $otherValue->toNative() === $this->revision;
-    }
-
-    public function isEmpty(): bool
-    {
-        return $this->revision === self::NONE;
+        Assertion::isInstanceOf($revision, static::class);
+        return $revision->toNative() === $this->revision;
     }
 
     public function isInitial(): bool
@@ -61,27 +54,32 @@ final class AggregateRevision implements ValueObjectInterface
         return $this->revision === self::INITIAL;
     }
 
-    public function isWithinRange(AggregateRevision $from, AggregateRevision $to)
+    public function isEmpty(): bool
+    {
+        return $this->revision === self::NONE;
+    }
+
+    public function isWithinRange(AggregateRevision $from, AggregateRevision $to): bool
     {
         return $this->isGreaterThanOrEqual($from) && $this->isLessThanOrEqual($to);
     }
 
-    public function isGreaterThanOrEqual(AggregateRevision $revision)
+    public function isGreaterThanOrEqual(AggregateRevision $revision): bool
     {
         return $this->revision >= $revision->toNative();
     }
 
-    public function isGreaterThan(AggregateRevision $revision)
+    public function isGreaterThan(AggregateRevision $revision): bool
     {
         return $this->revision > $revision->toNative();
     }
 
-    public function isLessThanOrEqual(AggregateRevision $revision)
+    public function isLessThanOrEqual(AggregateRevision $revision): bool
     {
         return $this->revision <= $revision->toNative();
     }
 
-    public function isLessThan(AggregateRevision $revision)
+    public function isLessThan(AggregateRevision $revision): bool
     {
         return $this->revision < $revision->toNative();
     }

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Stream;
 
 use Countable;
 use Ds\Map;
@@ -25,7 +25,7 @@ final class StreamMap implements IteratorAggregate, Countable
         return new self;
     }
 
-    public function __construct(Stream ...$commitStream)
+    public function __construct(StreamInterface ...$commitStream)
     {
         $this->compositeMap = new Map($commitStream);
     }
@@ -37,7 +37,7 @@ final class StreamMap implements IteratorAggregate, Countable
         return $copy;
     }
 
-    public function unregister(StreamId $streamId): self
+    public function unregister(StreamIdInterface $streamId): self
     {
         $copy = clone $this;
         $copy->compositeMap->remove((string)$streamId);
@@ -49,7 +49,7 @@ final class StreamMap implements IteratorAggregate, Countable
         return $this->compositeMap->hasKey($key);
     }
 
-    public function get(string $key): Stream
+    public function get(string $key): StreamInterface
     {
         return $this->compositeMap->get($key);
     }
@@ -83,7 +83,7 @@ final class StreamMap implements IteratorAggregate, Countable
         return $this->compositeMap->getIterator();
     }
 
-    public function __get(string $key): Stream
+    public function __get(string $key): StreamInterface
     {
         return $this->get($key);
     }

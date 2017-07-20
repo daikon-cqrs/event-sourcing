@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\EventStore;
+namespace Daikon\EventSourcing\EventStore\Stream;
 
-interface StoreResultInterface
+interface StreamProcessorInterface
 {
-
+    public function process(StreamInterface $commitStream): StreamInterface;
 }
