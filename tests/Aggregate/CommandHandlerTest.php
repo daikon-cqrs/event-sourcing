@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace Daikon\Tests\EventSourcing;
 
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
-use Daikon\EventSourcing\Aggregate\CommandHandler;
-use Daikon\EventSourcing\Aggregate\CommandInterface;
+use Daikon\EventSourcing\Aggregate\Command\CommandHandler;
+use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;

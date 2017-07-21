@@ -12,8 +12,8 @@ namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
 use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\DomainEvent;
-use Daikon\EventSourcing\Aggregate\DomainEventInterface;
+use Daikon\EventSourcing\Aggregate\Event\DomainEvent;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 use Daikon\MessageBus\MessageInterface;
 
 /**

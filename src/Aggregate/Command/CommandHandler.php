@@ -8,8 +8,11 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\Aggregate;
+namespace Daikon\EventSourcing\Aggregate\Command;
 
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;

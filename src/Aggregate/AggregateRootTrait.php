@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Assert\Assertion;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 
 trait AggregateRootTrait
 {

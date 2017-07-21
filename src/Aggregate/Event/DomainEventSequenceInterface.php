@@ -8,7 +8,9 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\Aggregate;
+namespace Daikon\EventSourcing\Aggregate\Event;
+
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
 
 interface DomainEventSequenceInterface extends \IteratorAggregate, \Countable
 {

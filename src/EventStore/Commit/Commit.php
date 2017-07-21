@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\DomainEventSequence;
-use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamId;
 use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;

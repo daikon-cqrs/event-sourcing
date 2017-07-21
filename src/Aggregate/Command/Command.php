@@ -8,7 +8,10 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\Aggregate;
+namespace Daikon\EventSourcing\Aggregate\Command;
+
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
 
 abstract class Command implements CommandInterface
 {

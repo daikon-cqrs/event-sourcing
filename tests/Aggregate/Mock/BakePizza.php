@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
 use Daikon\EventSourcing\Aggregate\AggregateId;
-use Daikon\EventSourcing\Aggregate\Command;
+use Daikon\EventSourcing\Aggregate\Command\Command;
 use Daikon\MessageBus\MessageInterface;
 
 /**

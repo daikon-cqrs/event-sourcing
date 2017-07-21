@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore\Stream;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Commit\Commit;
 use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;

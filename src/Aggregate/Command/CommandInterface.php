@@ -8,19 +8,19 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\Aggregate;
+namespace Daikon\EventSourcing\Aggregate\Command;
 
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\MessageBus\MessageInterface;
 
-interface DomainEventInterface extends MessageInterface
+interface CommandInterface extends MessageInterface
 {
     public static function getAggregateRootClass(): string;
 
-    public function conflictsWith(DomainEventInterface $otherEvent): bool;
-
     public function getAggregateId(): AggregateIdInterface;
 
-    public function getAggregateRevision(): AggregateRevision;
+    public function getKnownAggregateRevision(): AggregateRevision;
 
-    public function withAggregateRevision(AggregateRevision $aggregateRevision): DomainEventInterface;
+    public function hasKnownAggregateRevision(): bool;
 }

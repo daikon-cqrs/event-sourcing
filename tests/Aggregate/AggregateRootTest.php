@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\Tests\EventSourcing;
 
 use Daikon\EventSourcing\Aggregate\AggregateId;
-use Daikon\EventSourcing\Aggregate\DomainEventSequenceInterface;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\Pizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaWasBaked;
