@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\Aggregate;
 
+use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
@@ -30,8 +31,8 @@ trait AggregateRootTrait
         DomainEventSequenceInterface $history
     ): AggregateRootInterface {
         $aggRoot = new static($aggregateId);
-        foreach ($history as $eventOccured) {
-            $aggRoot = $aggRoot->reflectThat($eventOccured, false);
+        foreach ($history as $historicalEvent) {
+            $aggRoot = $aggRoot->reconstitute($historicalEvent);
         }
         return $aggRoot;
     }
@@ -65,44 +66,44 @@ trait AggregateRootTrait
         $this->trackedEvents = DomainEventSequence::makeEmpty();
     }
 
-    protected function reflectThat(DomainEventInterface $eventOccured, bool $track = true): AggregateRootInterface
+    protected function reflectThat(DomainEventInterface $eventOccured): AggregateRootInterface
     {
         $this->assertExpectedIdentifier($eventOccured, $this->getIdentifier());
         $aggRoot = clone $this;
-        if ($track) {
-            $aggRoot->revision = $aggRoot->revision->increment();
-            $eventOccured = $eventOccured
-                ->withAggregateRevision($aggRoot->revision);
-            $aggRoot->trackedEvents = $aggRoot->trackedEvents->push($eventOccured);
-        } else {
-            $expectedAggregateRevision = $aggRoot->revision->increment();
-            $this->assertExpectedRevision($eventOccured, $expectedAggregateRevision);
-            $aggRoot->revision = $expectedAggregateRevision;
-        }
+        $aggRoot->revision = $aggRoot->revision->increment();
+        $eventOccured = $eventOccured->withAggregateRevision($aggRoot->revision);
+        $aggRoot->trackedEvents = $aggRoot->trackedEvents->push($eventOccured);
         $aggRoot->invokeEventHandler($eventOccured);
+        return $aggRoot;
+    }
+
+    private function reconstitute(DomainEventInterface $historicalEvent): AggregateRootInterface
+    {
+        $this->assertExpectedIdentifier($historicalEvent, $this->getIdentifier());
+        $aggRoot = clone $this;
+        $expectedAggregateRevision = $aggRoot->revision->increment();
+        $this->assertExpectedRevision($historicalEvent, $expectedAggregateRevision);
+        $aggRoot->revision = $expectedAggregateRevision;
+        $aggRoot->invokeEventHandler($historicalEvent);
         return $aggRoot;
     }
 
     private function assertExpectedRevision(DomainEventInterface $event, AggregateRevision $expectedRevision): void
     {
-        if (!$expectedRevision->equals($event->getAggregateRevision())) {
-            throw new \Exception(sprintf(
-                'Given event-revision %s does not match expected AR revision at %s',
-                $event->getAggregateRevision(),
-                $expectedRevision
-            ));
-        }
+        Assertion::true($expectedRevision->equals($event->getAggregateRevision()), sprintf(
+            'Given event-revision %s does not match expected AR revision at %s',
+            $event->getAggregateRevision(),
+            $expectedRevision
+        ));
     }
 
     private function assertExpectedIdentifier(DomainEventInterface $event, AggregateIdInterface $expectedId): void
     {
-        if (!$expectedId->equals($event->getAggregateId())) {
-            throw new \Exception(sprintf(
-                'Given event-identifier %s does not match expected AR identifier at %s',
-                $event->getAggregateId(),
-                $expectedId
-            ));
-        }
+        Assertion::true($expectedId->equals($event->getAggregateId()), sprintf(
+            'Given event-identifier %s does not match expected AR identifier at %s',
+            $event->getAggregateId(),
+            $expectedId
+        ));
     }
 
     private function invokeEventHandler(DomainEventInterface $event): void
