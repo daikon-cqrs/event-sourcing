@@ -94,7 +94,10 @@ final class UnitOfWork implements UnitOfWorkInterface
         $aggregateRoot = call_user_func(
             [ $this->aggregateRootType, 'reconstituteFromHistory' ],
             $aggregateId,
-            $this->prepareHistory($stream, $revision)
+            $this->prepareHistory(
+                $this->streamProcessor ? $this->streamProcessor->process($stream) : $stream,
+                $revision
+            )
         );
         $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         return $aggregateRoot;
@@ -119,14 +122,13 @@ final class UnitOfWork implements UnitOfWorkInterface
         StreamInterface $stream,
         AggregateRevision $targetRevision
     ): DomainEventSequenceInterface {
-        $stream = $this->streamProcessor ? $this->streamProcessor->process($stream) : $stream;
         $history = DomainEventSequence::makeEmpty();
         /** @var CommitInterface $commit */
         foreach ($stream as $commit) {
+            $history = $history->append($commit->getEventLog());
             if (!$targetRevision->isEmpty() && $commit->getAggregateRevision()->isGreaterThan($targetRevision)) {
                 break;
             }
-            $history = $history->append($commit->getEventLog());
         }
         return $history;
     }
