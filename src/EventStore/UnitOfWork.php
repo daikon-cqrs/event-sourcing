@@ -75,7 +75,7 @@ final class UnitOfWork implements UnitOfWorkInterface
                 throw new ConcurrencyRaceLost($prevStream->getStreamId(), $aggregateRoot->getTrackedEvents());
             }
             $prevStream = $this->streamStorage->checkout($updatedStream->getStreamId());
-            $conflictingEvents = $this->getConflicts($aggregateRoot, $prevStream);
+            $conflictingEvents = $this->determineConflicts($aggregateRoot, $prevStream);
             if (!$conflictingEvents->isEmpty()) {
                 throw new UnresolvableConflict($prevStream->getStreamId(), $conflictingEvents);
             }
@@ -133,7 +133,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         return $history;
     }
 
-    private function getConflicts(
+    private function determineConflicts(
         AggregateRootInterface $aggregateRoot,
         StreamInterface $stream
     ): DomainEventSequenceInterface {
