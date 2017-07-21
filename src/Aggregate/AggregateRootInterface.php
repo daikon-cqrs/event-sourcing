@@ -26,6 +26,4 @@ interface AggregateRootInterface
     public function getRevision(): AggregateRevision;
 
     public function getTrackedEvents(): DomainEventSequenceInterface;
-
-    public function markClean(): AggregateRootInterface;
 }

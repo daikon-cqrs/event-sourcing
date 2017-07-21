@@ -52,13 +52,6 @@ trait AggregateRootTrait
         return $this->trackedEvents;
     }
 
-    public function markClean(): AggregateRootInterface
-    {
-        $aggRoot = clone $this;
-        $aggRoot->trackedEvents = DomainEventSequence::makeEmpty();
-        return $aggRoot;
-    }
-
     protected function __construct(AggregateIdInterface $aggregateId)
     {
         $this->identifier = $aggregateId;

@@ -61,18 +61,6 @@ final class AggregateRootTest extends TestCase
         $this->assertCount(0, $pizza->getTrackedEvents());
     }
 
-    public function testMarkClean()
-    {
-        /** @var $bakePizza BakePizza */
-        $bakePizza = BakePizza::fromArray([
-            'aggregateId' => 'pizza-42-6-23',
-            'ingredients' => ['mushrooms', 'tomatoes', 'onions']
-        ]);
-        $pizza = Pizza::bake($bakePizza)->markClean();
-
-        $this->assertCount(0, $pizza->getTrackedEvents());
-    }
-
     public function testGetAlias()
     {
         $this->assertEquals('testing.mock.pizza', Pizza::getAlias());
