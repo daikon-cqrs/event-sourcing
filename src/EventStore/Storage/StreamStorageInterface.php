@@ -17,11 +17,11 @@ use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 
 interface StreamStorageInterface
 {
-    public function checkout(
+    public function load(
         StreamIdInterface $streamId,
         AggregateRevision $from = null,
         AggregateRevision $to = null
     ): StreamInterface;
 
-    public function commit(StreamInterface $stream, StreamRevision $knownHead): StorageResultInterface;
+    public function append(StreamInterface $stream, StreamRevision $knownHead): StorageResultInterface;
 }

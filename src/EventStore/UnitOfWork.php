@@ -68,19 +68,19 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         $prevStream = $this->getTrackedStream($aggregateRoot);
         $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-        $result = $this->streamStorage->commit($updatedStream, $prevStream->getStreamRevision());
+        $result = $this->streamStorage->append($updatedStream, $prevStream->getStreamRevision());
         $raceCount = 0;
         while ($result instanceof StorageError) {
             if (++$raceCount > $this->maxRaceAttempts) {
                 throw new ConcurrencyRaceLost($prevStream->getStreamId(), $aggregateRoot->getTrackedEvents());
             }
-            $prevStream = $this->streamStorage->checkout($updatedStream->getStreamId());
+            $prevStream = $this->streamStorage->load($updatedStream->getStreamId());
             $conflictingEvents = $this->determineConflicts($aggregateRoot, $prevStream);
             if (!$conflictingEvents->isEmpty()) {
                 throw new UnresolvableConflict($prevStream->getStreamId(), $conflictingEvents);
             }
             $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-            $result = $this->streamStorage->commit($updatedStream, $prevStream->getStreamRevision());
+            $result = $this->streamStorage->append($updatedStream, $prevStream->getStreamRevision());
         }
         $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getStreamId());
         return $updatedStream->getCommitRange($prevStream->getStreamRevision(), $updatedStream->getStreamRevision());
@@ -90,7 +90,7 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         /** @var StreamId $streamId */
         $streamId = StreamId::fromNative($aggregateId->toNative());
-        $stream = $this->streamStorage->checkout($streamId, $revision);
+        $stream = $this->streamStorage->load($streamId, $revision);
         $aggregateRoot = call_user_func(
             [ $this->aggregateRootType, 'reconstituteFromHistory' ],
             $aggregateId,
