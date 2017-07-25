@@ -56,7 +56,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
 
     public function append(DomainEventSequenceInterface $events): DomainEventSequenceInterface
     {
-        $eventSequence = clone $this;
+        $eventSequence = $this;
         foreach ($events as $event) {
             $eventSequence = $eventSequence->push($event);
         }
