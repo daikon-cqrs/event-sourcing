@@ -91,6 +91,9 @@ final class UnitOfWork implements UnitOfWorkInterface
         /** @var StreamId $streamId */
         $streamId = StreamId::fromNative($aggregateId->toNative());
         $stream = $this->streamStorage->load($streamId, $revision);
+        if ($stream->isEmpty()) {
+            throw new \Exception('Checking out empty streams is not supported.');
+        }
         $aggregateRoot = call_user_func(
             [ $this->aggregateRootType, 'reconstituteFromHistory' ],
             $aggregateId,
