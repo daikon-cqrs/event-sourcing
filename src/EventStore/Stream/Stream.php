@@ -106,6 +106,11 @@ final class Stream implements StreamInterface
         return $this->commitSequence->count();
     }
 
+    public function isEmpty(): bool
+    {
+        return $this->count() === 0;
+    }
+
     public function toNative(): array
     {
         return [

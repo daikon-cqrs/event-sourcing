@@ -39,4 +39,6 @@ interface StreamInterface extends \IteratorAggregate, \Countable
     public function getHead(): ?CommitInterface;
 
     public function findCommitsSince(AggregateRevision $incomingRevision): CommitSequenceInterface;
+
+    public function isEmpty(): bool;
 }
