@@ -42,10 +42,10 @@ final class CommitSequence implements CommitSequenceInterface
     {
         if (!$this->isEmpty()) {
             $nextRevision = $this->getHead()->getAggregateRevision()->increment();
-            if (!$nextRevision->equals($commit->getAggregateRevision())) {
+            if (!$nextRevision->equals($commit->getEventLog()->getTailRevision())) {
                 throw new \Exception(sprintf(
                     'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
-                    $commit->getAggregateRevision(),
+                    $commit->getEventLog()->getTailRevision(),
                     $nextRevision
                 ));
             }
