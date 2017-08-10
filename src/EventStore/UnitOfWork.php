@@ -83,7 +83,7 @@ final class UnitOfWork implements UnitOfWorkInterface
             $result = $this->streamStorage->append($updatedStream, $prevStream->getStreamRevision());
         }
         $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getStreamId());
-        return $updatedStream->getCommitRange($prevStream->getStreamRevision(), $updatedStream->getStreamRevision());
+        return $updatedStream->getCommitRange($prevStream->getStreamRevision()->increment(), $updatedStream->getStreamRevision());
     }
 
     public function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface
