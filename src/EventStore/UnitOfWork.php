@@ -84,7 +84,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         }
         $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getStreamId());
         return $updatedStream->getCommitRange(
-            $prevStream->getStreamRevision()->increment(), 
+            $prevStream->getStreamRevision()->increment(),
             $updatedStream->getStreamRevision()
         );
     }

@@ -12,7 +12,6 @@ namespace Daikon\EventSourcing\Aggregate\Event;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Ds\Vector;
-use Iterator;
 
 final class DomainEventSequence implements DomainEventSequenceInterface
 {
@@ -76,12 +75,24 @@ final class DomainEventSequence implements DomainEventSequenceInterface
 
     public function getHeadRevision(): AggregateRevision
     {
-        return $this->isEmpty() ? AggregateRevision::makeEmpty() : $this->getHead()->getAggregateRevision();
+        if ($this->isEmpty()) {
+            return AggregateRevision::makeEmpty();
+        }
+        if (!$head = $this->getHead()) {
+            throw new \RuntimeException("Corrupt sequence! Head not retrieveable for non-empty seq.");
+        }
+        return $head->getAggregateRevision();
     }
 
     public function getTailRevision(): AggregateRevision
     {
-        return $this->isEmpty() ? AggregateRevision::makeEmpty() : $this->getTail()->getAggregateRevision();
+        if ($this->isEmpty()) {
+            return AggregateRevision::makeEmpty();
+        }
+        if (!$tail = $this->getTail()) {
+            throw new \RuntimeException("Corrupt sequence! Tail not retrieveable for non-empty seq.");
+        }
+        return $tail->getAggregateRevision();
     }
 
     public function getTail(): ?DomainEventInterface
@@ -106,7 +117,8 @@ final class DomainEventSequence implements DomainEventSequenceInterface
 
     public function indexOf(DomainEventInterface $event): int
     {
-        return $this->compositeVector->find($event);
+        $index = $this->compositeVector->find($event);
+        return is_bool($index) ? -1 : $index;
     }
 
     public function count(): int
@@ -114,7 +126,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return $this->compositeVector->count();
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): \Traversable
     {
         return $this->compositeVector->getIterator();
     }

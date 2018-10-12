@@ -18,6 +18,7 @@ use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\MessageBus\Metadata\MetadataInterface;
 
 final class Commit implements CommitInterface
 {
@@ -30,14 +31,14 @@ final class Commit implements CommitInterface
     /** @var DomainEventSequenceInterface */
     private $eventLog;
 
-    /** @var Metadata */
+    /** @var MetadataInterface */
     private $metadata;
 
     public static function make(
         StreamIdInterface $streamId,
         StreamRevision $streamRevision,
         DomainEventSequenceInterface $eventLog,
-        Metadata $metadata
+        MetadataInterface $metadata
     ): CommitInterface {
         return new self($streamId, $streamRevision, $eventLog, $metadata);
     }
@@ -72,7 +73,7 @@ final class Commit implements CommitInterface
         return $this->eventLog;
     }
 
-    public function getMetadata(): Metadata
+    public function getMetadata(): MetadataInterface
     {
         return $this->metadata;
     }
@@ -92,7 +93,7 @@ final class Commit implements CommitInterface
         StreamIdInterface $streamId,
         StreamRevision $streamRevision,
         DomainEventSequenceInterface $eventLog,
-        Metadata $metadata
+        MetadataInterface $metadata
     ) {
         $this->streamId = $streamId;
         $this->streamRevision = $streamRevision;

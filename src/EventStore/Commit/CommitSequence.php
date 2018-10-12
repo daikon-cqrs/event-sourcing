@@ -12,7 +12,7 @@ namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Ds\Vector;
-use Iterator;
+use Daikon\MessageBus\MessageInterface;
 
 final class CommitSequence implements CommitSequenceInterface
 {
@@ -21,7 +21,7 @@ final class CommitSequence implements CommitSequenceInterface
 
     public static function fromArray(array $commitsArray): CommitSequenceInterface
     {
-        return new static(array_map(function (array $commitState): CommitInterface {
+        return new static(array_map(function (array $commitState): MessageInterface {
             return Commit::fromArray($commitState);
         }, $commitsArray));
     }
@@ -41,7 +41,10 @@ final class CommitSequence implements CommitSequenceInterface
     public function push(CommitInterface $commit): CommitSequenceInterface
     {
         if (!$this->isEmpty()) {
-            $nextRevision = $this->getHead()->getAggregateRevision()->increment();
+            if (!$head = $this->getHead()) {
+                throw new \RuntimeException("Corrupt sequence! Head not retrieveable for non-empty seq.");
+            }
+            $nextRevision = $head->getAggregateRevision()->increment();
             if (!$nextRevision->equals($commit->getEventLog()->getTailRevision())) {
                 throw new \Exception(sprintf(
                     'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
@@ -107,7 +110,11 @@ final class CommitSequence implements CommitSequenceInterface
 
     public function revisionOf(CommitInterface $commit): StreamRevision
     {
-        return StreamRevision::fromNative($this->compositeVector->find($commit));
+        $revision = $this->compositeVector->find($commit);
+        if (is_bool($revision)) {
+            return StreamRevision::makeInitial();
+        }
+        return StreamRevision::fromNative($revision);
     }
 
     public function getLength(): int
@@ -120,7 +127,7 @@ final class CommitSequence implements CommitSequenceInterface
         return $this->compositeVector->count();
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): \Traversable
     {
         return $this->compositeVector->getIterator();
     }

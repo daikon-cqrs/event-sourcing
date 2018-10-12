@@ -38,7 +38,6 @@ abstract class CommandHandler implements MessageHandlerInterface
         $commandMessage = $envelope->getMessage();
         $handlerName = (new \ReflectionClass($commandMessage))->getShortName();
         $handlerMethod = 'handle'.ucfirst($handlerName);
-        /** @var callable $handler */
         $handler = [ $this, $handlerMethod ];
         if (!is_callable($handler)) {
             throw new \Exception(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));

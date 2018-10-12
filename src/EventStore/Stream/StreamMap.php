@@ -12,7 +12,6 @@ namespace Daikon\EventSourcing\EventStore\Stream;
 
 use Countable;
 use Ds\Map;
-use Iterator;
 use IteratorAggregate;
 
 final class StreamMap implements IteratorAggregate, Countable
@@ -78,7 +77,7 @@ final class StreamMap implements IteratorAggregate, Countable
         return $this->compositeMap->isEmpty();
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): \Traversable
     {
         return $this->compositeMap->getIterator();
     }
