@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d56e573de57e3f07bd8f7b22142a0ea",
+    "content-hash": "bacf7c3c00efa18e07b85f6796fac343",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -67,12 +67,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/data-structure.git",
-                "reference": "c2bae5b7be2c089189ed7b7b863759cd73ff5fd7"
+                "reference": "61e272167c17bcf2735670352e402da3ca426430"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/c2bae5b7be2c089189ed7b7b863759cd73ff5fd7",
-                "reference": "c2bae5b7be2c089189ed7b7b863759cd73ff5fd7",
+                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/61e272167c17bcf2735670352e402da3ca426430",
+                "reference": "61e272167c17bcf2735670352e402da3ca426430",
                 "shasum": ""
             },
             "require": {
@@ -109,7 +109,7 @@
                 "list",
                 "map"
             ],
-            "time": "2018-10-12T00:52:13+00:00"
+            "time": "2018-10-12T01:24:02+00:00"
         },
         {
             "name": "daikon/message-bus",
@@ -2522,8 +2522,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "daikon/message-bus": 20,
-        "daikon/data-structure": 20
+        "daikon/message-bus": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

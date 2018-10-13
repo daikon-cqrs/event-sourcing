@@ -61,11 +61,6 @@ final class AggregateRootTest extends TestCase
         $this->assertCount(0, $pizza->getTrackedEvents());
     }
 
-    public function testGetAlias()
-    {
-        $this->assertEquals('testing.mock.pizza', Pizza::getAlias());
-    }
-
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Given event-revision 2 does not match expected AR revision at 1

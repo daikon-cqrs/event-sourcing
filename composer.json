@@ -10,8 +10,7 @@
     "require": {
         "php": "^7.1",
         "beberlei/assert": "^v3.0",
-        "daikon/message-bus": "dev-upgrade-7.2",
-        "daikon/data-structure": "dev-upgrade-7.2"
+        "daikon/message-bus": "dev-upgrade-7.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4",

@@ -14,8 +14,6 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 
 interface AggregateRootInterface
 {
-    public static function getAlias(): AggregateAlias;
-
     public static function reconstituteFromHistory(
         AggregateIdInterface $aggregateId,
         DomainEventSequenceInterface $history
