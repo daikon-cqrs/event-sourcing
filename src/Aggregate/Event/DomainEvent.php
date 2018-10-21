@@ -15,10 +15,10 @@ use Daikon\EventSourcing\Aggregate\AggregateRevision;
 
 abstract class DomainEvent implements DomainEventInterface
 {
-    /** @var AggregateIdInterface */
+    /** @var Daikon\EventSourcing\Aggregate\AggregateIdInterface */
     private $aggregateId;
 
-    /** @var AggregateRevision */
+    /** @var Daikon\EventSourcing\Aggregate\AggregateRevision */
     private $aggregateRevision;
 
     public function getAggregateId(): AggregateIdInterface

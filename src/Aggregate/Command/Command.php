@@ -15,10 +15,10 @@ use Daikon\EventSourcing\Aggregate\AggregateRevision;
 
 abstract class Command implements CommandInterface
 {
-    /** @var AggregateIdInterface */
+    /** @var Daikon\EventSourcing\Aggregate\AggregateIdInterface */
     private $aggregateId;
 
-    /** @var AggregateRevision */
+    /** @var Daikon\EventSourcing\Aggregate\AggregateRevision */
     private $knownAggregateRevision;
 
     public function getAggregateId(): AggregateIdInterface
