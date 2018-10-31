@@ -49,7 +49,7 @@ abstract class CommandHandler implements MessageHandlerInterface
     {
         $committed = false;
         foreach ($this->unitOfWork->commit($aggregateRoot, $metadata) as $newCommit) {
-            if ($this->messageBus->publish($newCommit, 'commits') && !$committed) {
+            if ($this->messageBus->publish($newCommit, 'commits', $metadata) && !$committed) {
                 $committed = true;
             }
         }
