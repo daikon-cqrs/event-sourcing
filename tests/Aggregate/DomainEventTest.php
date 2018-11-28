@@ -15,10 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 final class DomainEventTest extends TestCase
 {
-    public function testFromArray()
+    public function testFromNative()
     {
         /** @var $pizzaWasBaked PizzaWasBaked */
-        $pizzaWasBaked = PizzaWasBaked::fromArray([
+        $pizzaWasBaked = PizzaWasBaked::fromNative([
             'aggregateId' => 'pizza-42-6-23',
             'aggregateRevision' => 1,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
@@ -28,13 +28,13 @@ final class DomainEventTest extends TestCase
         $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $pizzaWasBaked->getIngredients());
     }
 
-    public function testToArray()
+    public function testToNative()
     {
         $pizzaWasBakedArray = [
             'aggregateId' => 'pizza-42-6-23',
             'aggregateRevision' => 1,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ];
-        $this->assertEquals($pizzaWasBakedArray, PizzaWasBaked::fromArray($pizzaWasBakedArray)->toArray());
+        $this->assertEquals($pizzaWasBakedArray, PizzaWasBaked::fromNative($pizzaWasBakedArray)->toNative());
     }
 }

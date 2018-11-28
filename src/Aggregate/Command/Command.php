@@ -36,7 +36,7 @@ abstract class Command implements CommandInterface
         return !$this->knownAggregateRevision->isEmpty();
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
         return [
             'aggregateId' => $this->aggregateId->toNative(),

@@ -10,7 +10,10 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
-final class StreamRevision
+use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\ToNativeInterface;
+
+final class StreamRevision implements FromNativeInterface, ToNativeInterface
 {
     private const INITIAL = 1;
 
@@ -19,7 +22,7 @@ final class StreamRevision
     /** @var int */
     private $revision;
 
-    public static function fromNative(int $revision): StreamRevision
+    public static function fromNative($revision): StreamRevision
     {
         return new self($revision);
     }

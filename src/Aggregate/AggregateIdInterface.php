@@ -10,12 +10,11 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\Aggregate;
 
-interface AggregateIdInterface
+use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\ToNativeInterface;
+
+interface AggregateIdInterface extends FromNativeInterface, ToNativeInterface
 {
-    public static function fromNative(string $id): AggregateIdInterface;
-
-    public function toNative(): string;
-
     public function equals(AggregateIdInterface $aggregateId): bool;
 
     public function __toString(): string;

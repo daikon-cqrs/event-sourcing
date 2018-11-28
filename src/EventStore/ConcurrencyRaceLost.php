@@ -12,9 +12,8 @@ namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
-use Exception;
 
-final class ConcurrencyRaceLost extends Exception
+final class ConcurrencyRaceLost extends \Exception
 {
     /** @var StreamIdInterface */
     private $streamId;

@@ -41,7 +41,7 @@ final class PizzaWasBaked extends DomainEvent
         return false;
     }
 
-    public static function fromArray(array $data): MessageInterface
+    public static function fromNative($data): MessageInterface
     {
         $pizzaWasBaked = new static(
             AggregateId::fromNative($data['aggregateId']),
@@ -59,9 +59,9 @@ final class PizzaWasBaked extends DomainEvent
         return $this->ingredients;
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
-        $data = parent::toArray();
+        $data = parent::toNative();
         $data['ingredients'] = $this->ingredients;
         return $data;
     }

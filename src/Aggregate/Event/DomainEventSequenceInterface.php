@@ -11,18 +11,16 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate\Event;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\ToNativeInterface;
 
-interface DomainEventSequenceInterface extends \IteratorAggregate, \Countable
+interface DomainEventSequenceInterface extends \IteratorAggregate, \Countable, FromNativeInterface, ToNativeInterface
 {
-    public static function fromArray(array $eventsArray): DomainEventSequenceInterface;
-
     public static function makeEmpty(): DomainEventSequenceInterface;
 
     public function push(DomainEventInterface $event): DomainEventSequenceInterface;
 
     public function append(DomainEventSequenceInterface $events): DomainEventSequenceInterface;
-
-    public function toNative(): array;
 
     public function getHeadRevision(): AggregateRevision;
 

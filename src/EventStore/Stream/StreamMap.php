@@ -10,11 +10,10 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
-use Countable;
+use Daikon\Interop\ToNativeInterface;
 use Ds\Map;
-use IteratorAggregate;
 
-final class StreamMap implements IteratorAggregate, Countable
+final class StreamMap implements \IteratorAggregate, \Countable, ToNativeInterface
 {
     /** @var Map */
     private $compositeMap;
@@ -56,11 +55,6 @@ final class StreamMap implements IteratorAggregate, Countable
     public function count(): int
     {
         return count($this->compositeMap);
-    }
-
-    public function toArray(): array
-    {
-        return $this->compositeMap->toArray();
     }
 
     public function toNative(): array

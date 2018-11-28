@@ -11,8 +11,10 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
+use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\ToNativeInterface;
 
-final class AggregateRevision
+final class AggregateRevision implements FromNativeInterface, ToNativeInterface
 {
     private const INITIAL = 1;
 
@@ -21,7 +23,7 @@ final class AggregateRevision
     /** @var int */
     private $revision;
 
-    public static function fromNative(int $revision): AggregateRevision
+    public static function fromNative($revision): AggregateRevision
     {
         return new self($revision);
     }

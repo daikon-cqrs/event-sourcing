@@ -38,7 +38,7 @@ abstract class DomainEvent implements DomainEventInterface
         return $copy;
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
         return [
             'aggregateId' => $this->aggregateId->toNative(),

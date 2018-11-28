@@ -36,11 +36,11 @@ final class Stream implements StreamInterface
         return new static($streamId);
     }
 
-    public static function fromArray(array $streamState): Stream
+    public static function fromNative($streamState): Stream
     {
         return new static(
             StreamId::fromNative($streamState['commitStreamId']),
-            CommitSequence::fromArray($streamState['commitStreamSequence']),
+            CommitSequence::fromNative($streamState['commitStreamSequence']),
             $streamState['commitImplementor']
         );
     }

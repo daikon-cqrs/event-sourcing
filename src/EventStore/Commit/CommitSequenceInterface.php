@@ -10,19 +10,15 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Commit;
 
-use Countable;
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
-use IteratorAggregate;
+use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\ToNativeInterface;
 
-interface CommitSequenceInterface extends IteratorAggregate, Countable
+interface CommitSequenceInterface extends \IteratorAggregate, \Countable, FromNativeInterface, ToNativeInterface
 {
-    public static function fromArray(array $commitsArray): CommitSequenceInterface;
-
     public static function makeEmpty(): CommitSequenceInterface;
 
     public function push(CommitInterface $commit): CommitSequenceInterface;
-
-    public function toNative(): array;
 
     public function getTail(): ?CommitInterface;
 

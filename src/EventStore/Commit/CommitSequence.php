@@ -19,10 +19,10 @@ final class CommitSequence implements CommitSequenceInterface
     /** @var Vector */
     private $compositeVector;
 
-    public static function fromArray(array $commitsArray): CommitSequenceInterface
+    public static function fromNative($commitsArray): CommitSequenceInterface
     {
         return new static(array_map(function (array $commitState): MessageInterface {
-            return Commit::fromArray($commitState);
+            return Commit::fromNative($commitState);
         }, $commitsArray));
     }
 
@@ -61,7 +61,7 @@ final class CommitSequence implements CommitSequenceInterface
     public function toNative(): array
     {
         return array_map(function (CommitInterface $commit): array {
-            $nativeRep = $commit->toArray();
+            $nativeRep = $commit->toNative();
             $nativeRep['@type'] = get_class($commit);
             return $nativeRep;
         }, $this->compositeVector->toArray());

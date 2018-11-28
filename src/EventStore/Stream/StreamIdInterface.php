@@ -10,12 +10,11 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
-interface StreamIdInterface
+use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\ToNativeInterface;
+
+interface StreamIdInterface extends FromNativeInterface, ToNativeInterface
 {
-    public static function fromNative(string $id): StreamIdInterface;
-
-    public function toNative(): string;
-
     public function equals(StreamIdInterface $streamId): bool;
 
     public function __toString(): string;
