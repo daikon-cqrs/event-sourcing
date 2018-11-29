@@ -25,6 +25,12 @@
     "autoload-dev": {
         "psr-4": { "Daikon\\Tests\\EventSourcing\\": "tests" }
     },
+    "archive": {
+        "exclude": [
+            "/build",
+            "/vendor"
+        ]
+    },
     "scripts": {
         "build": [ "@sniff", "@tests" ],
         "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' src/ tests/",
