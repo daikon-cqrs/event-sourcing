@@ -18,12 +18,13 @@ final class DomainEventSequence implements DomainEventSequenceInterface
     /** @var Vector */
     private $compositeVector;
 
-    public static function fromNative($eventsArray): DomainEventSequenceInterface
+    /** @param array $events */
+    public static function fromNative($events): DomainEventSequenceInterface
     {
         return new static(array_map(function (array $eventState): DomainEventInterface {
             $eventFqcn = self::resolveEventFqcn($eventState);
             return call_user_func([ $eventFqcn, 'fromNative' ], $eventState);
-        }, $eventsArray));
+        }, $events));
     }
 
     public static function makeEmpty(): DomainEventSequenceInterface

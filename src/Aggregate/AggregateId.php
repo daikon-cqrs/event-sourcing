@@ -17,6 +17,7 @@ final class AggregateId implements AggregateIdInterface
     /** @var string */
     private $id;
 
+    /** @param string $id */
     public static function fromNative($id): AggregateIdInterface
     {
         return new self(trim($id));

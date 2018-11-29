@@ -19,11 +19,12 @@ final class CommitSequence implements CommitSequenceInterface
     /** @var Vector */
     private $compositeVector;
 
-    public static function fromNative($commitsArray): CommitSequenceInterface
+    /** @param array $commits */
+    public static function fromNative($commits): CommitSequenceInterface
     {
         return new static(array_map(function (array $commitState): MessageInterface {
             return Commit::fromNative($commitState);
-        }, $commitsArray));
+        }, $commits));
     }
 
     public static function makeEmpty(): CommitSequenceInterface

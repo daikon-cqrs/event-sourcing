@@ -43,6 +43,7 @@ final class Commit implements CommitInterface
         return new self($streamId, $streamRevision, $eventLog, $metadata);
     }
 
+    /** @param array $state */
     public static function fromNative($state): MessageInterface
     {
         return new self(

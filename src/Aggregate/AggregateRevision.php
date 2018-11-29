@@ -23,6 +23,7 @@ final class AggregateRevision implements FromNativeInterface, ToNativeInterface
     /** @var int */
     private $revision;
 
+    /** @param int $revision */
     public static function fromNative($revision): AggregateRevision
     {
         return new self($revision);

@@ -17,6 +17,7 @@ final class StreamId implements StreamIdInterface
     /** @var string */
     private $id;
 
+    /** @param string $id */
     public static function fromNative($id): StreamIdInterface
     {
         return new self(trim($id));

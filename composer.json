@@ -8,7 +8,7 @@
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "beberlei/assert": "^v3.0",
         "daikon/interop": "master@dev",
         "daikon/message-bus": "dev-upgrade/nativecalls"
