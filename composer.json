@@ -3,7 +3,7 @@
     "type": "library",
     "description": "CQRS and event-sourcing library for PHP7.",
     "keywords": [ "cqrs", "event-sourcing", "immutable" ],
-    "homepage": "https://github.com/daikon-cqrs/sourcing",
+    "homepage": "https://github.com/daikon-cqrs/event-sourcing",
     "license": "MPL-2.0",
     "prefer-stable": true,
     "minimum-stability": "dev",
