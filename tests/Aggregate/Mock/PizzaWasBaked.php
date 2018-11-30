@@ -31,11 +31,6 @@ final class PizzaWasBaked extends DomainEvent
         return $pizzaBaked;
     }
 
-    public static function getAggregateRootClass(): string
-    {
-        return Pizza::class;
-    }
-
     public function conflictsWith(DomainEventInterface $otherEvent): bool
     {
         return false;

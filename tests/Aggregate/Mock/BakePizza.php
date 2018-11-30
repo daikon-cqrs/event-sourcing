@@ -22,11 +22,6 @@ final class BakePizza extends Command
     /** @var string[] */
     private $ingredients;
 
-    public static function getAggregateRootClass(): string
-    {
-        return Pizza::class;
-    }
-
     /** @param array $state */
     public static function fromNative($state): MessageInterface
     {
