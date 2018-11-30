@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,13 +33,13 @@ final class Stream implements StreamInterface
         StreamIdInterface $streamId,
         string $commitImplementor = Commit::class
     ): StreamInterface {
-        return new static($streamId);
+        return new self($streamId);
     }
 
     /** @param array $state */
     public static function fromNative($state): Stream
     {
-        return new static(
+        return new self(
             StreamId::fromNative($state['commitStreamId']),
             CommitSequence::fromNative($state['commitStreamSequence']),
             $state['commitImplementor']

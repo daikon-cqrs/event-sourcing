@@ -41,13 +41,14 @@ final class PizzaWasBaked extends DomainEvent
         return false;
     }
 
-    public static function fromNative($data): MessageInterface
+    /** @param array $state */
+    public static function fromNative($state): MessageInterface
     {
-        $pizzaWasBaked = new static(
-            AggregateId::fromNative($data['aggregateId']),
-            AggregateRevision::fromNative($data['aggregateRevision'])
+        $pizzaWasBaked = new self(
+            AggregateId::fromNative($state['aggregateId']),
+            AggregateRevision::fromNative($state['aggregateRevision'])
         );
-        $pizzaWasBaked->ingredients = $data['ingredients'];
+        $pizzaWasBaked->ingredients = $state['ingredients'];
         return $pizzaWasBaked;
     }
 

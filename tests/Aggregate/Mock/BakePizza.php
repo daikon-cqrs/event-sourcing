@@ -27,10 +27,11 @@ final class BakePizza extends Command
         return Pizza::class;
     }
 
-    public static function fromNative($data): MessageInterface
+    /** @param array $state */
+    public static function fromNative($state): MessageInterface
     {
-        $bakePizza = new static(AggregateId::fromNative($data['aggregateId']));
-        $bakePizza->ingredients = $data['ingredients'];
+        $bakePizza = new self(AggregateId::fromNative($state['aggregateId']));
+        $bakePizza->ingredients = $state['ingredients'];
         return $bakePizza;
     }
 

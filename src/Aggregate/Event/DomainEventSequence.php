@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,9 +21,9 @@ final class DomainEventSequence implements DomainEventSequenceInterface
     /** @param array $events */
     public static function fromNative($events): DomainEventSequenceInterface
     {
-        return new static(array_map(function (array $eventState): DomainEventInterface {
-            $eventFqcn = self::resolveEventFqcn($eventState);
-            return call_user_func([ $eventFqcn, 'fromNative' ], $eventState);
+        return new self(array_map(function (array $state): DomainEventInterface {
+            $eventFqcn = self::resolveEventFqcn($state);
+            return call_user_func([ $eventFqcn, 'fromNative' ], $state);
         }, $events));
     }
 

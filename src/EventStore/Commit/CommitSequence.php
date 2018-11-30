@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,6 @@ namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Ds\Vector;
-use Daikon\MessageBus\MessageInterface;
 
 final class CommitSequence implements CommitSequenceInterface
 {
@@ -22,8 +21,8 @@ final class CommitSequence implements CommitSequenceInterface
     /** @param array $commits */
     public static function fromNative($commits): CommitSequenceInterface
     {
-        return new static(array_map(function (array $commitState): MessageInterface {
-            return Commit::fromNative($commitState);
+        return new self(array_map(function (array $state): CommitInterface {
+            return Commit::fromNative($state);
         }, $commits));
     }
 
@@ -101,7 +100,7 @@ final class CommitSequence implements CommitSequenceInterface
                 return $commits;
             }
             return $commits;
-        }, new static);
+        }, new self);
     }
 
     public function isEmpty(): bool

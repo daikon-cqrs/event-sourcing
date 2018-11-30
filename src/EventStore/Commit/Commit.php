@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,6 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamId;
 use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
-use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\MessageBus\Metadata\MetadataInterface;
 
@@ -44,7 +43,7 @@ final class Commit implements CommitInterface
     }
 
     /** @param array $state */
-    public static function fromNative($state): MessageInterface
+    public static function fromNative($state): CommitInterface
     {
         return new self(
             StreamId::fromNative($state['streamId']),
@@ -82,7 +81,7 @@ final class Commit implements CommitInterface
     public function toNative(): array
     {
         return [
-            '@type' => static::class,
+            '@type' => self::class,
             'streamId' => $this->streamId->toNative(),
             'streamRevision' => $this->streamRevision->toNative(),
             'eventLog' => $this->eventLog->toNative(),
