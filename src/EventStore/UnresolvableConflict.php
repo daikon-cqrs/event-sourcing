@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,8 @@ namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
-use Exception;
 
-final class UnresolvableConflict extends Exception
+final class UnresolvableConflict extends \Exception
 {
     /** @var StreamIdInterface */
     private $streamId;

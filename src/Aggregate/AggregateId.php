@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@ final class AggregateId implements AggregateIdInterface
     /** @var string */
     private $id;
 
-    public static function fromNative(string $id): AggregateIdInterface
+    /** @param string $id */
+    public static function fromNative($id): AggregateIdInterface
     {
         return new self(trim($id));
     }
@@ -29,7 +30,7 @@ final class AggregateId implements AggregateIdInterface
 
     public function equals(AggregateIdInterface $streamId): bool
     {
-        Assertion::isInstanceOf($streamId, static::class);
+        Assertion::isInstanceOf($streamId, self::class);
         return $this->id === $streamId->toNative();
     }
 

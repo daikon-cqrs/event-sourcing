@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,8 +11,10 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
+use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\ToNativeInterface;
 
-final class AggregateRevision
+final class AggregateRevision implements FromNativeInterface, ToNativeInterface
 {
     private const INITIAL = 1;
 
@@ -21,14 +23,15 @@ final class AggregateRevision
     /** @var int */
     private $revision;
 
-    public static function fromNative(int $revision): AggregateRevision
+    /** @param int $revision */
+    public static function fromNative($revision): AggregateRevision
     {
         return new self($revision);
     }
 
     public static function makeEmpty(): AggregateRevision
     {
-        return new static(self::NONE);
+        return new self(self::NONE);
     }
 
     public function toNative(): int
@@ -45,7 +48,7 @@ final class AggregateRevision
 
     public function equals(AggregateRevision $revision): bool
     {
-        Assertion::isInstanceOf($revision, static::class);
+        Assertion::isInstanceOf($revision, self::class);
         return $revision->toNative() === $this->revision;
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Daikon\MessageBus\MessageInterface;
-use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\MessageBus\Metadata\MetadataInterface;
 
 interface CommitInterface extends MessageInterface
 {
@@ -23,7 +23,7 @@ interface CommitInterface extends MessageInterface
         StreamIdInterface $streamId,
         StreamRevision $streamRevision,
         DomainEventSequenceInterface $eventLog,
-        Metadata $metadata
+        MetadataInterface $metadata
     ): CommitInterface;
 
     public function getStreamId(): StreamIdInterface;
@@ -34,5 +34,5 @@ interface CommitInterface extends MessageInterface
 
     public function getEventLog(): DomainEventSequenceInterface;
 
-    public function getMetadata(): Metadata;
+    public function getMetadata(): MetadataInterface;
 }

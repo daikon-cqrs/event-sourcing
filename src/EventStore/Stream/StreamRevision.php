@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,7 +10,10 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
-final class StreamRevision
+use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\ToNativeInterface;
+
+final class StreamRevision implements FromNativeInterface, ToNativeInterface
 {
     private const INITIAL = 1;
 
@@ -19,14 +22,15 @@ final class StreamRevision
     /** @var int */
     private $revision;
 
-    public static function fromNative(int $revision): StreamRevision
+    /** @param int $revision */
+    public static function fromNative($revision): StreamRevision
     {
         return new self($revision);
     }
 
     public static function makeInitial(): StreamRevision
     {
-        return new static(self::NONE);
+        return new self(self::NONE);
     }
 
     public function toNative(): int

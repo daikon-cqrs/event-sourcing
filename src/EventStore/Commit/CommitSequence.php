@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,18 +12,18 @@ namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Ds\Vector;
-use Iterator;
 
 final class CommitSequence implements CommitSequenceInterface
 {
     /** @var Vector */
     private $compositeVector;
 
-    public static function fromArray(array $commitsArray): CommitSequenceInterface
+    /** @param array $commits */
+    public static function fromNative($commits): CommitSequenceInterface
     {
-        return new static(array_map(function (array $commitState): CommitInterface {
-            return Commit::fromArray($commitState);
-        }, $commitsArray));
+        return new self(array_map(function (array $state): CommitInterface {
+            return Commit::fromNative($state);
+        }, $commits));
     }
 
     public static function makeEmpty(): CommitSequenceInterface
@@ -41,7 +41,10 @@ final class CommitSequence implements CommitSequenceInterface
     public function push(CommitInterface $commit): CommitSequenceInterface
     {
         if (!$this->isEmpty()) {
-            $nextRevision = $this->getHead()->getAggregateRevision()->increment();
+            if (!$head = $this->getHead()) {
+                throw new \RuntimeException("Corrupt sequence! Head not retrieveable for non-empty seq.");
+            }
+            $nextRevision = $head->getAggregateRevision()->increment();
             if (!$nextRevision->equals($commit->getEventLog()->getTailRevision())) {
                 throw new \Exception(sprintf(
                     'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
@@ -58,7 +61,7 @@ final class CommitSequence implements CommitSequenceInterface
     public function toNative(): array
     {
         return array_map(function (CommitInterface $commit): array {
-            $nativeRep = $commit->toArray();
+            $nativeRep = $commit->toNative();
             $nativeRep['@type'] = get_class($commit);
             return $nativeRep;
         }, $this->compositeVector->toArray());
@@ -97,7 +100,7 @@ final class CommitSequence implements CommitSequenceInterface
                 return $commits;
             }
             return $commits;
-        }, new static);
+        }, new self);
     }
 
     public function isEmpty(): bool
@@ -107,7 +110,11 @@ final class CommitSequence implements CommitSequenceInterface
 
     public function revisionOf(CommitInterface $commit): StreamRevision
     {
-        return StreamRevision::fromNative($this->compositeVector->find($commit));
+        $revision = $this->compositeVector->find($commit);
+        if (is_bool($revision)) {
+            return StreamRevision::makeInitial();
+        }
+        return StreamRevision::fromNative($revision);
     }
 
     public function getLength(): int
@@ -120,7 +127,7 @@ final class CommitSequence implements CommitSequenceInterface
         return $this->compositeVector->count();
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): \Traversable
     {
         return $this->compositeVector->getIterator();
     }

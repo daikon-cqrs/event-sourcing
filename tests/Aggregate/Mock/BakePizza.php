@@ -22,15 +22,11 @@ final class BakePizza extends Command
     /** @var string[] */
     private $ingredients;
 
-    public static function getAggregateRootClass(): string
+    /** @param array $state */
+    public static function fromNative($state): MessageInterface
     {
-        return Pizza::class;
-    }
-
-    public static function fromArray(array $data): MessageInterface
-    {
-        $bakePizza = new static(AggregateId::fromNative($data['aggregateId']));
-        $bakePizza->ingredients = $data['ingredients'];
+        $bakePizza = new self(AggregateId::fromNative($state['aggregateId']));
+        $bakePizza->ingredients = $state['ingredients'];
         return $bakePizza;
     }
 
@@ -42,9 +38,9 @@ final class BakePizza extends Command
         return $this->ingredients;
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
-        $data = parent::toArray();
+        $data = parent::toNative();
         $data['ingredients'] = $this->ingredients;
         return $data;
     }

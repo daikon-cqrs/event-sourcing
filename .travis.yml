@@ -1,0 +1,86 @@
+# use [ci skip] or [skip ci] to skip a build in Travis CI
+language: php
+
+git:
+  depth: 5 # default is 50
+
+php:
+  - '7.2'
+  - nightly
+
+branches:
+  except:
+    - gh-pages
+#    - legacy
+#  only:
+#  - master
+#  - /^(?i:deploy)-.*$/
+
+env:
+  global:
+    - TRAVIS_CI_IS_AWESOME="YES"
+  matrix:
+    - PREFER="update --prefer-source --prefer-lowest --prefer-stable"
+    - PREFER="update --prefer-source --prefer-stable"
+    - PREFER="install"
+
+matrix:
+#  fast_finish: true
+  allow_failures:
+    - php: nightly
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+# see https://docs.travis-ci.com/user/trusty-ci-environment (tl;dr: newer hhvm version)
+dist: trusty
+sudo: false
+
+#before_install:
+#  - sudo apt-get update -qq
+#  - sudo apt-get install -qq [packages]
+
+#install:
+
+before_script:
+#  - phpenv config-rm xdebug.ini
+#  - phpenv config-add myconfig.ini
+#  - echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - travis_retry composer self-update
+  - travis_retry composer $PREFER
+
+script:
+  - composer build
+
+#after_success:
+#  - travis_retry php vendor/bin/coveralls -v
+
+#after_failure:
+
+#before_deploy:
+#  - composer reports
+#  - composer docs
+
+#deploy:
+#  skip_cleanup: true
+#  # surge.sh deployment – needs SURGE_LOGIN and SURGE_TOKEN env variables set in Travis CI UI
+#  provider: surge
+#  project: ./build/coverage/
+#  domain: empty-php-project.surge.sh
+#  on: master
+
+#after_deploy:
+
+#after_script:
+
+#notifications:
+#  irc:
+#    channels:
+#      - chat.freenode.net#honeybee
+#    on_success: always
+#    on_failure: always
+#    use_notice: false
+#    skip_join: false
+#  slack:
+#    secure: YOURSLACKKEY

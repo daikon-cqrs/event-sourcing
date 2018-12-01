@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,19 +12,19 @@ namespace Daikon\EventSourcing\Aggregate\Event;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Ds\Vector;
-use Iterator;
 
 final class DomainEventSequence implements DomainEventSequenceInterface
 {
     /** @var Vector */
     private $compositeVector;
 
-    public static function fromArray(array $eventsArray): DomainEventSequenceInterface
+    /** @param array $events */
+    public static function fromNative($events): DomainEventSequenceInterface
     {
-        return new static(array_map(function (array $eventState): DomainEventInterface {
-            $eventFqcn = self::resolveEventFqcn($eventState);
-            return call_user_func([ $eventFqcn, 'fromArray' ], $eventState);
-        }, $eventsArray));
+        return new self(array_map(function (array $state): DomainEventInterface {
+            $eventFqcn = self::resolveEventFqcn($state);
+            return call_user_func([ $eventFqcn, 'fromNative' ], $state);
+        }, $events));
     }
 
     public static function makeEmpty(): DomainEventSequenceInterface
@@ -67,7 +67,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
     {
         $nativeList = [];
         foreach ($this as $event) {
-            $nativeRep = $event->toArray();
+            $nativeRep = $event->toNative();
             $nativeRep['@type'] = get_class($event);
             $nativeList[] = $nativeRep;
         }
@@ -76,12 +76,24 @@ final class DomainEventSequence implements DomainEventSequenceInterface
 
     public function getHeadRevision(): AggregateRevision
     {
-        return $this->isEmpty() ? AggregateRevision::makeEmpty() : $this->getHead()->getAggregateRevision();
+        if ($this->isEmpty()) {
+            return AggregateRevision::makeEmpty();
+        }
+        if (!$head = $this->getHead()) {
+            throw new \RuntimeException("Corrupt sequence! Head not retrieveable for non-empty seq.");
+        }
+        return $head->getAggregateRevision();
     }
 
     public function getTailRevision(): AggregateRevision
     {
-        return $this->isEmpty() ? AggregateRevision::makeEmpty() : $this->getTail()->getAggregateRevision();
+        if ($this->isEmpty()) {
+            return AggregateRevision::makeEmpty();
+        }
+        if (!$tail = $this->getTail()) {
+            throw new \RuntimeException("Corrupt sequence! Tail not retrieveable for non-empty seq.");
+        }
+        return $tail->getAggregateRevision();
     }
 
     public function getTail(): ?DomainEventInterface
@@ -106,7 +118,8 @@ final class DomainEventSequence implements DomainEventSequenceInterface
 
     public function indexOf(DomainEventInterface $event): int
     {
-        return $this->compositeVector->find($event);
+        $index = $this->compositeVector->find($event);
+        return is_bool($index) ? -1 : $index;
     }
 
     public function count(): int
@@ -114,7 +127,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return $this->compositeVector->count();
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): \Traversable
     {
         return $this->compositeVector->getIterator();
     }

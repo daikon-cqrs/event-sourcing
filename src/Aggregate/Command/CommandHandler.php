@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -38,7 +38,6 @@ abstract class CommandHandler implements MessageHandlerInterface
         $commandMessage = $envelope->getMessage();
         $handlerName = (new \ReflectionClass($commandMessage))->getShortName();
         $handlerMethod = 'handle'.ucfirst($handlerName);
-        /** @var callable $handler */
         $handler = [ $this, $handlerMethod ];
         if (!is_callable($handler)) {
             throw new \Exception(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
@@ -50,7 +49,7 @@ abstract class CommandHandler implements MessageHandlerInterface
     {
         $committed = false;
         foreach ($this->unitOfWork->commit($aggregateRoot, $metadata) as $newCommit) {
-            if ($this->messageBus->publish($newCommit, 'commits') && !$committed) {
+            if ($this->messageBus->publish($newCommit, 'commits', $metadata) && !$committed) {
                 $committed = true;
             }
         }

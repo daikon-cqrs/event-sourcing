@@ -15,10 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 final class CommandTest extends TestCase
 {
-    public function testFromArray()
+    public function testFromNative()
     {
         /** @var $bakePizza BakePizza */
-        $bakePizza = BakePizza::fromArray([
+        $bakePizza = BakePizza::fromNative([
             'aggregateId' => 'pizza-42-6-23',
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ]);
@@ -27,13 +27,13 @@ final class CommandTest extends TestCase
         $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $bakePizza->getIngredients());
     }
 
-    public function testToArray()
+    public function testToNative()
     {
         $bakePizzaArray = [
             'aggregateId' => 'pizza-42-6-23',
             'knownAggregateRevision' => 0,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ];
-        $this->assertEquals($bakePizzaArray, BakePizza::fromArray($bakePizzaArray)->toArray());
+        $this->assertEquals($bakePizzaArray, BakePizza::fromNative($bakePizzaArray)->toNative());
     }
 }

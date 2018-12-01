@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@ final class StreamId implements StreamIdInterface
     /** @var string */
     private $id;
 
-    public static function fromNative(string $id): StreamIdInterface
+    /** @param string $id */
+    public static function fromNative($id): StreamIdInterface
     {
         return new self(trim($id));
     }

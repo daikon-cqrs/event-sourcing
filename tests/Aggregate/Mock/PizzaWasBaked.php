@@ -31,23 +31,19 @@ final class PizzaWasBaked extends DomainEvent
         return $pizzaBaked;
     }
 
-    public static function getAggregateRootClass(): string
-    {
-        return Pizza::class;
-    }
-
     public function conflictsWith(DomainEventInterface $otherEvent): bool
     {
         return false;
     }
 
-    public static function fromArray(array $data): MessageInterface
+    /** @param array $state */
+    public static function fromNative($state): MessageInterface
     {
-        $pizzaWasBaked = new static(
-            AggregateId::fromNative($data['aggregateId']),
-            AggregateRevision::fromNative($data['aggregateRevision'])
+        $pizzaWasBaked = new self(
+            AggregateId::fromNative($state['aggregateId']),
+            AggregateRevision::fromNative($state['aggregateRevision'])
         );
-        $pizzaWasBaked->ingredients = $data['ingredients'];
+        $pizzaWasBaked->ingredients = $state['ingredients'];
         return $pizzaWasBaked;
     }
 
@@ -59,9 +55,9 @@ final class PizzaWasBaked extends DomainEvent
         return $this->ingredients;
     }
 
-    public function toArray(): array
+    public function toNative(): array
     {
-        $data = parent::toArray();
+        $data = parent::toNative();
         $data['ingredients'] = $this->ingredients;
         return $data;
     }

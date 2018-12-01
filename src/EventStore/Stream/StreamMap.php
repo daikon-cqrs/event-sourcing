@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,12 +10,10 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
-use Countable;
+use Daikon\Interop\ToNativeInterface;
 use Ds\Map;
-use Iterator;
-use IteratorAggregate;
 
-final class StreamMap implements IteratorAggregate, Countable
+final class StreamMap implements \IteratorAggregate, \Countable, ToNativeInterface
 {
     /** @var Map */
     private $compositeMap;
@@ -59,11 +57,6 @@ final class StreamMap implements IteratorAggregate, Countable
         return count($this->compositeMap);
     }
 
-    public function toArray(): array
-    {
-        return $this->compositeMap->toArray();
-    }
-
     public function toNative(): array
     {
         $commitStreams = [];
@@ -78,7 +71,7 @@ final class StreamMap implements IteratorAggregate, Countable
         return $this->compositeMap->isEmpty();
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): \Traversable
     {
         return $this->compositeMap->getIterator();
     }
