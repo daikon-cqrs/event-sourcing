@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3de2e2e7fc4d13e7a151ed2d281ed3c4",
+    "content-hash": "2c66e58550083d4e86b35c8b134d5f71",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -63,7 +63,7 @@
         },
         {
             "name": "daikon/data-structure",
-            "version": "dev-upgrade/nativecalls",
+            "version": "dev-upgrade-7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/data-structure.git",
@@ -111,12 +111,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/interop.git",
-                "reference": "5b9839d61879ab09f699d79f23555f5d53b7c65d"
+                "reference": "386f3c9140f59cdaa73213ed70a8a4dfd9635b1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/5b9839d61879ab09f699d79f23555f5d53b7c65d",
-                "reference": "5b9839d61879ab09f699d79f23555f5d53b7c65d",
+                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/386f3c9140f59cdaa73213ed70a8a4dfd9635b1f",
+                "reference": "386f3c9140f59cdaa73213ed70a8a4dfd9635b1f",
                 "shasum": ""
             },
             "require": {
@@ -138,24 +138,24 @@
             ],
             "description": "Interop interfaces used across Daikon components.",
             "homepage": "https://github.com/daikon-cqrs/interop",
-            "time": "2018-11-30T12:30:50+00:00"
+            "time": "2018-12-01T00:54:30+00:00"
         },
         {
             "name": "daikon/message-bus",
-            "version": "dev-upgrade/nativecalls",
+            "version": "dev-upgrade-7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/message-bus.git",
-                "reference": "cd6fd3bb834e4a5614abd1cad69eae2ff6320f61"
+                "reference": "e1c873b871ef794d85c89da1f60a6b1ad5579238"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/cd6fd3bb834e4a5614abd1cad69eae2ff6320f61",
-                "reference": "cd6fd3bb834e4a5614abd1cad69eae2ff6320f61",
+                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/e1c873b871ef794d85c89da1f60a6b1ad5579238",
+                "reference": "e1c873b871ef794d85c89da1f60a6b1ad5579238",
                 "shasum": ""
             },
             "require": {
-                "daikon/data-structure": "dev-upgrade/nativecalls",
+                "daikon/data-structure": "dev-upgrade-7.2",
                 "daikon/interop": "dev-upgrade-7.2",
                 "php": "^7.2",
                 "ramsey/uuid": "^3.8"
@@ -182,7 +182,7 @@
                 "message-bus",
                 "messaging"
             ],
-            "time": "2018-11-30T13:24:18+00:00"
+            "time": "2018-12-01T14:38:11+00:00"
         },
         {
             "name": "paragonie/random_compat",

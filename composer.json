@@ -11,7 +11,7 @@
         "php": "^7.2",
         "beberlei/assert": "^3.0",
         "daikon/interop": "dev-upgrade-7.2",
-        "daikon/message-bus": "dev-upgrade/nativecalls"
+        "daikon/message-bus": "dev-upgrade-7.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4",
