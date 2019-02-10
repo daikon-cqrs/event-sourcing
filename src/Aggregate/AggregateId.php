@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
+use Daikon\Interop\ValueObjectInterface;
 
 final class AggregateId implements AggregateIdInterface
 {
@@ -28,7 +29,7 @@ final class AggregateId implements AggregateIdInterface
         return $this->id;
     }
 
-    public function equals(AggregateIdInterface $streamId): bool
+    public function equals(ValueObjectInterface $streamId): bool
     {
         Assertion::isInstanceOf($streamId, self::class);
         return $this->id === $streamId->toNative();

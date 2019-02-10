@@ -11,10 +11,9 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
-use Daikon\Interop\FromNativeInterface;
-use Daikon\Interop\ToNativeInterface;
+use Daikon\Interop\ValueObjectInterface;
 
-final class AggregateRevision implements FromNativeInterface, ToNativeInterface
+final class AggregateRevision implements ValueObjectInterface
 {
     private const INITIAL = 1;
 
@@ -46,7 +45,7 @@ final class AggregateRevision implements FromNativeInterface, ToNativeInterface
         return $copy;
     }
 
-    public function equals(AggregateRevision $revision): bool
+    public function equals(ValueObjectInterface $revision): bool
     {
         Assertion::isInstanceOf($revision, self::class);
         return $revision->toNative() === $this->revision;
