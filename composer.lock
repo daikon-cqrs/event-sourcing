@@ -146,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/message-bus.git",
-                "reference": "875561fd445e9f915bda04a1c2c60b832d40c9fc"
+                "reference": "5644a7206798e0dace43ba2e925e974a0810ebad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/875561fd445e9f915bda04a1c2c60b832d40c9fc",
-                "reference": "875561fd445e9f915bda04a1c2c60b832d40c9fc",
+                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/5644a7206798e0dace43ba2e925e974a0810ebad",
+                "reference": "5644a7206798e0dace43ba2e925e974a0810ebad",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
                 "message-bus",
                 "messaging"
             ],
-            "time": "2019-02-10T17:09:02+00:00"
+            "time": "2019-02-13T13:01:45+00:00"
         },
         {
             "name": "paragonie/random_compat",

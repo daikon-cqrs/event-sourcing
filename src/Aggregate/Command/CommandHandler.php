@@ -33,27 +33,23 @@ abstract class CommandHandler implements MessageHandlerInterface
         $this->unitOfWork = $unitOfWork;
     }
 
-    public function handle(EnvelopeInterface $envelope): bool
+    public function handle(EnvelopeInterface $envelope): void
     {
         $commandMessage = $envelope->getMessage();
         $handlerName = (new \ReflectionClass($commandMessage))->getShortName();
         $handlerMethod = 'handle'.ucfirst($handlerName);
-        $handler = [ $this, $handlerMethod ];
+        $handler = [$this, $handlerMethod];
         if (!is_callable($handler)) {
             throw new \Exception(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
         }
-        return $this->commit(...call_user_func($handler, $commandMessage, $envelope->getMetadata()));
+        $this->commit(...call_user_func($handler, $commandMessage, $envelope->getMetadata()));
     }
 
-    protected function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): bool
+    protected function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): void
     {
-        $committed = false;
         foreach ($this->unitOfWork->commit($aggregateRoot, $metadata) as $newCommit) {
-            if ($this->messageBus->publish($newCommit, 'commits', $metadata) && !$committed) {
-                $committed = true;
-            }
+            $this->messageBus->publish($newCommit, 'commits', $metadata);
         }
-        return $committed;
     }
 
     protected function checkout(

@@ -43,8 +43,7 @@ final class CommandHandlerTest extends TestCase
         $messageBusStub
             ->expects($this->once())
             ->method('publish')
-            ->with($commitStub, 'commits')
-            ->willReturn(true);
+            ->with($commitStub, 'commits');
 
         $envelopeStub = $this->createMock(EnvelopeInterface::class);
         $envelopeStub
