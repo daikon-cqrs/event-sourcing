@@ -96,11 +96,9 @@ final class AggregateRevisionTest extends TestCase
         ));
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testMakeFromNonInteger()
     {
+        $this->expectException(\TypeError::class);
         AggregateRevision::fromNative('not an int');
     } // @codeCoverageIgnore
 }

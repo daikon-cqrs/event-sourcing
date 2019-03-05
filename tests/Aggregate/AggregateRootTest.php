@@ -61,12 +61,11 @@ final class AggregateRootTest extends TestCase
         $this->assertCount(0, $pizza->getTrackedEvents());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Given event-revision 2 does not match expected AR revision at 1
-     */
     public function testReconstituteWithUnexpectedRevision()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Given event-revision 2 does not match expected AR revision at 1');
+
         /** @var $pizzaId AggregateId */
         $pizzaId = AggregateId::fromNative('pizza-42-6-23');
         $pizzaWasBaked = PizzaWasBaked::fromNative([
@@ -84,13 +83,13 @@ final class AggregateRootTest extends TestCase
         Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
     } // @codeCoverageIgnore
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Given event-identifier pizza-23-22-5
-     *                           does not match expected AR identifier at pizza-42-6-23
-     */
     public function testReconstituteWithUnexpectedId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Given event-identifier pizza-23-22-5 does not match expected AR identifier at pizza-42-6-23'
+        );
+
         /** @var $pizzaId AggregateId */
         $pizzaId = AggregateId::fromNative('pizza-42-6-23');
         $pizzaWasBaked = PizzaWasBaked::fromNative([
