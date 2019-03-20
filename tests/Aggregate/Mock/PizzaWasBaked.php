@@ -10,23 +10,27 @@ declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
-use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\Event\DomainEvent;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
-use Daikon\MessageBus\MessageInterface;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventTrait;
 
 /**
  * @codeCoverageIgnore
+ * @aggregateId pizzaId
  */
-final class PizzaWasBaked extends DomainEvent
+final class PizzaWasBaked implements DomainEventInterface
 {
+    use DomainEventTrait;
+
+    /** @var PizzaId */
+    private $pizzaId;
+
     /** @var string[] */
     private $ingredients;
 
     public static function withIngredients(BakePizza $bakePizza): self
     {
-        $pizzaBaked = new static($bakePizza->getAggregateId());
+        $pizzaBaked = new static($bakePizza->getPizzaId());
         $pizzaBaked->ingredients = $bakePizza->getIngredients();
         return $pizzaBaked;
     }
@@ -36,29 +40,40 @@ final class PizzaWasBaked extends DomainEvent
         return false;
     }
 
+    public function getPizzaId(): PizzaId
+    {
+        return $this->pizzaId;
+    }
+
+    /** @return string[] */
+    public function getIngredients(): array
+    {
+        return $this->ingredients;
+    }
+
     /** @param array $state */
-    public static function fromNative($state): MessageInterface
+    public static function fromNative($state): self
     {
         $pizzaWasBaked = new self(
-            AggregateId::fromNative($state['aggregateId']),
+            PizzaId::fromNative($state['pizzaId']),
             AggregateRevision::fromNative($state['aggregateRevision'])
         );
         $pizzaWasBaked->ingredients = $state['ingredients'];
         return $pizzaWasBaked;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getIngredients(): array
-    {
-        return $this->ingredients;
-    }
-
     public function toNative(): array
     {
-        $data = parent::toNative();
-        $data['ingredients'] = $this->ingredients;
-        return $data;
+        return [
+            'pizzaId' => (string)$this->pizzaId,
+            'aggregateRevision' => $this->aggregateRevision->toNative(),
+            'ingredients' => $this->ingredients
+        ];
+    }
+
+    protected function __construct(PizzaId $pizzaId, AggregateRevision $aggregateRevision = null)
+    {
+        $this->pizzaId = $pizzaId;
+        $this->aggregateRevision = $aggregateRevision ?? AggregateRevision::makeEmpty();
     }
 }

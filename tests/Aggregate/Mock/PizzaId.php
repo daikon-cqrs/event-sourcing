@@ -8,12 +8,13 @@
 
 declare(strict_types=1);
 
-namespace Daikon\EventSourcing\Aggregate;
+namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
 use Assert\Assertion;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\Interop\ValueObjectInterface;
 
-final class AggregateId implements AggregateIdInterface
+final class PizzaId implements AggregateIdInterface
 {
     /** @var string */
     private $id;

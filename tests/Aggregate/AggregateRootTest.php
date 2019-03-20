@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing;
 
-use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\Pizza;
+use Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaId;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaWasBaked;
 use PHPUnit\Framework\TestCase;
 
@@ -22,9 +22,9 @@ final class AggregateRootTest extends TestCase
     public function testStartAggregateRootLifecycle()
     {
         $ingredients = ['mushrooms', 'tomatoes', 'onions'];
-        /** @var $bakePizza BakePizza */
+        /** @var BakePizza $bakePizza */
         $bakePizza = BakePizza::fromNative([
-            'aggregateId' => 'pizza-42-6-23',
+            'pizzaId' => 'pizza-42-6-23',
             'ingredients' => $ingredients
         ]);
         $pizza = Pizza::bake($bakePizza);
@@ -37,11 +37,11 @@ final class AggregateRootTest extends TestCase
 
     public function testReconstituteFromHistory()
     {
-        /** @var $pizzaId AggregateId */
-        $pizzaId = AggregateId::fromNative('pizza-42-6-23');
+        /** @var PizzaId $pizzaId */
+        $pizzaId = PizzaId::fromNative('pizza-42-6-23');
         $ingredients = ['mushrooms', 'tomatoes', 'onions'];
         $pizzaWasBaked = PizzaWasBaked::fromNative([
-            'aggregateId' => (string)$pizzaId,
+            'pizzaId' => (string)$pizzaId,
             'aggregateRevision' => 1,
             'ingredients' => $ingredients
         ]);
@@ -52,7 +52,7 @@ final class AggregateRootTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([ $pizzaWasBaked ]));
 
-        /** @var $pizza Pizza */
+        /** @var PizzaId $pizzaId */
         $pizza = Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
 
         $this->assertEquals($pizzaId, $pizza->getIdentifier());
@@ -66,10 +66,10 @@ final class AggregateRootTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Given event-revision 2 does not match expected AR revision at 1');
 
-        /** @var $pizzaId AggregateId */
-        $pizzaId = AggregateId::fromNative('pizza-42-6-23');
+        /** @var PizzaId $pizzaId */
+        $pizzaId = PizzaId::fromNative('pizza-42-6-23');
         $pizzaWasBaked = PizzaWasBaked::fromNative([
-            'aggregateId' => (string)$pizzaId,
+            'pizzaId' => (string)$pizzaId,
             'aggregateRevision' => 2, // unexpected revision will trigger an error
             'ingredients' => []
         ]);
@@ -90,10 +90,10 @@ final class AggregateRootTest extends TestCase
             'Given event-identifier pizza-23-22-5 does not match expected AR identifier at pizza-42-6-23'
         );
 
-        /** @var $pizzaId AggregateId */
-        $pizzaId = AggregateId::fromNative('pizza-42-6-23');
+        /** @var PizzaId $pizzaId */
+        $pizzaId = PizzaId::fromNative('pizza-42-6-23');
         $pizzaWasBaked = PizzaWasBaked::fromNative([
-            'aggregateId' => 'pizza-23-22-5', // unexpected id will trigger an error
+            'pizzaId' => 'pizza-23-22-5', // unexpected id will trigger an error
             'aggregateRevision' => 1,
             'ingredients' => []
         ]);

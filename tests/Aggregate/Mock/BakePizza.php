@@ -10,38 +10,55 @@ declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
-use Daikon\EventSourcing\Aggregate\AggregateId;
-use Daikon\EventSourcing\Aggregate\Command\Command;
-use Daikon\MessageBus\MessageInterface;
+use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
+use Daikon\EventSourcing\Aggregate\Command\CommandTrait;
 
 /**
  * @codeCoverageIgnore
+ * @aggregateId pizzaId
  */
-final class BakePizza extends Command
+final class BakePizza implements CommandInterface
 {
+    use CommandTrait;
+
+    /** @var PizzaId */
+    private $pizzaId;
+
     /** @var string[] */
     private $ingredients;
 
-    /** @param array $state */
-    public static function fromNative($state): MessageInterface
+    public function getPizzaId(): PizzaId
     {
-        $bakePizza = new self(AggregateId::fromNative($state['aggregateId']));
-        $bakePizza->ingredients = $state['ingredients'];
-        return $bakePizza;
+        return $this->pizzaId;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getIngredients(): array
     {
         return $this->ingredients;
     }
 
+    /** @param array $state */
+    public static function fromNative($state): self
+    {
+        $bakePizza = new self(PizzaId::fromNative($state['pizzaId']));
+        $bakePizza->ingredients = $state['ingredients'];
+        return $bakePizza;
+    }
+
     public function toNative(): array
     {
-        $data = parent::toNative();
-        $data['ingredients'] = $this->ingredients;
-        return $data;
+        return [
+            'pizzaId' => (string)$this->pizzaId,
+            'knownAggregateRevision' => $this->knownAggregateRevision->toNative(),
+            'ingredients' => $this->ingredients
+        ];
+    }
+
+    protected function __construct(PizzaId $pizzaId, AggregateRevision $knownAggregateRevision = null)
+    {
+        $this->pizzaId = $pizzaId;
+        $this->knownAggregateRevision = $knownAggregateRevision ?? AggregateRevision::makeEmpty();
     }
 }
