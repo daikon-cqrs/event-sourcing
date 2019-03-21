@@ -52,8 +52,10 @@ abstract class CommandHandler implements MessageHandlerInterface
         }
     }
 
-    protected function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface
-    {
-        return $this->unitOfWork->checkout($aggregateId, $revision);
+    protected function checkout(
+        AggregateIdInterface $aggregateId,
+        AggregateRevision $knownAggregateRevision
+    ): AggregateRootInterface {
+        return $this->unitOfWork->checkout($aggregateId, $knownAggregateRevision);
     }
 }

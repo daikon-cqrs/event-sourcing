@@ -16,7 +16,8 @@ use Daikon\EventSourcing\Aggregate\Command\CommandTrait;
 
 /**
  * @codeCoverageIgnore
- * @aggregateId pizzaId
+ * @id(pizzaId)
+ * @rev(revision)
  */
 final class BakePizza implements CommandInterface
 {
@@ -25,12 +26,20 @@ final class BakePizza implements CommandInterface
     /** @var PizzaId */
     private $pizzaId;
 
+    /** @var AggregateRevision */
+    private $revision;
+
     /** @var string[] */
     private $ingredients;
 
     public function getPizzaId(): PizzaId
     {
         return $this->pizzaId;
+    }
+
+    public function getRevision(): AggregateRevision
+    {
+        return $this->revision;
     }
 
     /** @return string[] */
@@ -51,14 +60,14 @@ final class BakePizza implements CommandInterface
     {
         return [
             'pizzaId' => (string)$this->pizzaId,
-            'knownAggregateRevision' => $this->knownAggregateRevision->toNative(),
+            'revision' => $this->revision->toNative(),
             'ingredients' => $this->ingredients
         ];
     }
 
-    protected function __construct(PizzaId $pizzaId, AggregateRevision $knownAggregateRevision = null)
+    protected function __construct(PizzaId $pizzaId, AggregateRevision $knownRevision = null)
     {
         $this->pizzaId = $pizzaId;
-        $this->knownAggregateRevision = $knownAggregateRevision ?? AggregateRevision::makeEmpty();
+        $this->revision = $knownRevision ?? AggregateRevision::makeEmpty();
     }
 }

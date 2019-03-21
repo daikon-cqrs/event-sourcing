@@ -11,25 +11,22 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate\Event;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\MapsAggregateId;
+use Daikon\EventSourcing\Aggregate\AnnotatesAggregate;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 
 trait DomainEventTrait
 {
-    use MapsAggregateId;
-
-    /** @var AggregateRevision */
-    private $aggregateRevision;
+    use AnnotatesAggregate;
 
     public function getAggregateRevision(): AggregateRevision
     {
-        return $this->aggregateRevision;
+        return $this->{static::getAnnotatedRevision()};
     }
 
     public function withAggregateRevision(AggregateRevision $aggregateRevision): DomainEventInterface
     {
         $copy = clone $this;
-        $copy->aggregateRevision = $aggregateRevision;
+        $copy->{static::getAnnotatedRevision()} = $aggregateRevision;
         return $copy;
     }
 }

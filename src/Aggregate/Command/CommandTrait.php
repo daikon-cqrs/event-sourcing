@@ -11,18 +11,15 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate\Command;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\MapsAggregateId;
+use Daikon\EventSourcing\Aggregate\AnnotatesAggregate;
 
 trait CommandTrait
 {
-    use MapsAggregateId;
-
-    /** @var AggregateRevision */
-    private $knownAggregateRevision;
+    use AnnotatesAggregate;
 
     public function getKnownAggregateRevision(): AggregateRevision
     {
-        return $this->knownAggregateRevision ?? AggregateRevision::makeEmpty();
+        return $this->{static::getAnnotatedRevision()};
     }
 
     public function hasKnownAggregateRevision(): bool

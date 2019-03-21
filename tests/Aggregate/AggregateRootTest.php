@@ -42,7 +42,7 @@ final class AggregateRootTest extends TestCase
         $ingredients = ['mushrooms', 'tomatoes', 'onions'];
         $pizzaWasBaked = PizzaWasBaked::fromNative([
             'pizzaId' => (string)$pizzaId,
-            'aggregateRevision' => 1,
+            'revision' => 1,
             'ingredients' => $ingredients
         ]);
 
@@ -70,7 +70,7 @@ final class AggregateRootTest extends TestCase
         $pizzaId = PizzaId::fromNative('pizza-42-6-23');
         $pizzaWasBaked = PizzaWasBaked::fromNative([
             'pizzaId' => (string)$pizzaId,
-            'aggregateRevision' => 2, // unexpected revision will trigger an error
+            'revision' => 2, // unexpected revision will trigger an error
             'ingredients' => []
         ]);
 
@@ -94,7 +94,7 @@ final class AggregateRootTest extends TestCase
         $pizzaId = PizzaId::fromNative('pizza-42-6-23');
         $pizzaWasBaked = PizzaWasBaked::fromNative([
             'pizzaId' => 'pizza-23-22-5', // unexpected id will trigger an error
-            'aggregateRevision' => 1,
+            'revision' => 1,
             'ingredients' => []
         ]);
 

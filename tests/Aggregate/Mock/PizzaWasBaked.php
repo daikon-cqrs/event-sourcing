@@ -16,7 +16,8 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventTrait;
 
 /**
  * @codeCoverageIgnore
- * @aggregateId pizzaId
+ * @id(pizzaId)
+ * @rev(revision)
  */
 final class PizzaWasBaked implements DomainEventInterface
 {
@@ -24,6 +25,9 @@ final class PizzaWasBaked implements DomainEventInterface
 
     /** @var PizzaId */
     private $pizzaId;
+
+    /** @var AggregateRevision */
+    private $revision;
 
     /** @var string[] */
     private $ingredients;
@@ -45,6 +49,11 @@ final class PizzaWasBaked implements DomainEventInterface
         return $this->pizzaId;
     }
 
+    public function getRevision(): AggregateRevision
+    {
+        return $this->revision;
+    }
+
     /** @return string[] */
     public function getIngredients(): array
     {
@@ -56,7 +65,7 @@ final class PizzaWasBaked implements DomainEventInterface
     {
         $pizzaWasBaked = new self(
             PizzaId::fromNative($state['pizzaId']),
-            AggregateRevision::fromNative($state['aggregateRevision'])
+            AggregateRevision::fromNative($state['revision'])
         );
         $pizzaWasBaked->ingredients = $state['ingredients'];
         return $pizzaWasBaked;
@@ -66,14 +75,14 @@ final class PizzaWasBaked implements DomainEventInterface
     {
         return [
             'pizzaId' => (string)$this->pizzaId,
-            'aggregateRevision' => $this->aggregateRevision->toNative(),
+            'revision' => $this->revision->toNative(),
             'ingredients' => $this->ingredients
         ];
     }
 
-    protected function __construct(PizzaId $pizzaId, AggregateRevision $aggregateRevision = null)
+    protected function __construct(PizzaId $pizzaId, AggregateRevision $revision = null)
     {
         $this->pizzaId = $pizzaId;
-        $this->aggregateRevision = $aggregateRevision ?? AggregateRevision::makeEmpty();
+        $this->revision = $revision ?? AggregateRevision::makeEmpty();
     }
 }

@@ -31,7 +31,7 @@ final class CommandTest extends TestCase
     {
         $bakePizzaArray = [
             'pizzaId' => 'pizza-42-6-23',
-            'knownAggregateRevision' => 0,
+            'revision' => 0,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ];
         $this->assertEquals($bakePizzaArray, BakePizza::fromNative($bakePizzaArray)->toNative());

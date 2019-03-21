@@ -20,11 +20,11 @@ final class DomainEventTest extends TestCase
         /** @var $pizzaWasBaked PizzaWasBaked */
         $pizzaWasBaked = PizzaWasBaked::fromNative([
             'pizzaId' => 'pizza-42-6-23',
-            'aggregateRevision' => 1,
+            'revision' => 1,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ]);
         $this->assertEquals('pizza-42-6-23', $pizzaWasBaked->getPizzaId());
-        $this->assertEquals(1, $pizzaWasBaked->getAggregateRevision()->toNative());
+        $this->assertEquals(1, $pizzaWasBaked->getRevision()->toNative());
         $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $pizzaWasBaked->getIngredients());
     }
 
@@ -32,7 +32,7 @@ final class DomainEventTest extends TestCase
     {
         $pizzaWasBakedArray = [
             'pizzaId' => 'pizza-42-6-23',
-            'aggregateRevision' => 1,
+            'revision' => 1,
             'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
         ];
         $this->assertEquals($pizzaWasBakedArray, PizzaWasBaked::fromNative($pizzaWasBakedArray)->toNative());

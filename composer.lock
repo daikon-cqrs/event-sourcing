@@ -67,12 +67,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/data-structure.git",
-                "reference": "9eac3ec4b1b3f8f00ef5c53d4b2e760acba6519b"
+                "reference": "9b6e87afb0de7c592b1a48755293fbe70e2f0c74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/9eac3ec4b1b3f8f00ef5c53d4b2e760acba6519b",
-                "reference": "9eac3ec4b1b3f8f00ef5c53d4b2e760acba6519b",
+                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/9b6e87afb0de7c592b1a48755293fbe70e2f0c74",
+                "reference": "9b6e87afb0de7c592b1a48755293fbe70e2f0c74",
                 "shasum": ""
             },
             "require": {
@@ -103,7 +103,7 @@
                 "list",
                 "map"
             ],
-            "time": "2019-03-05T09:05:05+00:00"
+            "time": "2019-03-20T22:15:55+00:00"
         },
         {
             "name": "daikon/interop",
@@ -111,12 +111,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/interop.git",
-                "reference": "2689dcef901a4c02984bb6c594f64f3972f84105"
+                "reference": "1f7de0b96886d2db554bf6c44a96c5bbe2d4108e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/2689dcef901a4c02984bb6c594f64f3972f84105",
-                "reference": "2689dcef901a4c02984bb6c594f64f3972f84105",
+                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/1f7de0b96886d2db554bf6c44a96c5bbe2d4108e",
+                "reference": "1f7de0b96886d2db554bf6c44a96c5bbe2d4108e",
                 "shasum": ""
             },
             "require": {
@@ -138,7 +138,7 @@
             ],
             "description": "Interop traits used across Daikon components.",
             "homepage": "https://github.com/daikon-cqrs/interop",
-            "time": "2019-03-05T09:02:43+00:00"
+            "time": "2019-03-20T22:10:38+00:00"
         },
         {
             "name": "daikon/message-bus",
@@ -146,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/message-bus.git",
-                "reference": "64a4c786a3922073c24b5a82e8784f119dfce23b"
+                "reference": "66479ddcb5ad3df45b910c5b7b2542039eb6327d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/64a4c786a3922073c24b5a82e8784f119dfce23b",
-                "reference": "64a4c786a3922073c24b5a82e8784f119dfce23b",
+                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/66479ddcb5ad3df45b910c5b7b2542039eb6327d",
+                "reference": "66479ddcb5ad3df45b910c5b7b2542039eb6327d",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
                 "message-bus",
                 "messaging"
             ],
-            "time": "2019-03-05T09:12:32+00:00"
+            "time": "2019-03-20T22:22:31+00:00"
         },
         {
             "name": "paragonie/random_compat",
