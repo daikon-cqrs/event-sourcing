@@ -49,7 +49,7 @@ final class AggregateRevision implements ValueObjectInterface
     public function equals($comparator): bool
     {
         Assertion::isInstanceOf($comparator, self::class);
-        return $comparator->toNative() === $this->comparator;
+        return $this->toNative() === $comparator->toNative();
     }
 
     public function isInitial(): bool
