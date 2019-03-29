@@ -30,7 +30,8 @@ final class PizzaId implements AggregateIdInterface
         return $this->id;
     }
 
-    public function equals(ValueObjectInterface $comparator): bool
+    /** @param self $comparator */
+    public function equals($comparator): bool
     {
         Assertion::isInstanceOf($comparator, self::class);
         return $this->id === $comparator->toNative();

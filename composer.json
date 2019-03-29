@@ -11,7 +11,8 @@
         "php": "^7.2",
         "beberlei/assert": "^3.0",
         "daikon/interop": "master@dev",
-        "daikon/message-bus": "master@dev"
+        "daikon/message-bus": "master@dev",
+        "daikon/value-object": "master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",

@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
-use Daikon\Interop\ValueObjectInterface;
+use Daikon\ValueObject\ValueObjectInterface;
 
 final class AggregateRevision implements ValueObjectInterface
 {
@@ -45,10 +45,11 @@ final class AggregateRevision implements ValueObjectInterface
         return $copy;
     }
 
-    public function equals(ValueObjectInterface $revision): bool
+    /** @param self $comparator */
+    public function equals($comparator): bool
     {
-        Assertion::isInstanceOf($revision, self::class);
-        return $revision->toNative() === $this->revision;
+        Assertion::isInstanceOf($comparator, self::class);
+        return $comparator->toNative() === $this->comparator;
     }
 
     public function isInitial(): bool

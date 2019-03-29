@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Daikon\Interop\ValueObjectInterface;
+use Daikon\ValueObject\ValueObjectInterface;
 
 interface AggregateIdInterface extends ValueObjectInterface
 {
