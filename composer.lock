@@ -190,12 +190,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/value-object.git",
-                "reference": "7213c5213d804acb56bfeb385d963e19b2572c74"
+                "reference": "571323e1f5516a24b94196f10a3cb0e150cdd3e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/value-object/zipball/7213c5213d804acb56bfeb385d963e19b2572c74",
-                "reference": "7213c5213d804acb56bfeb385d963e19b2572c74",
+                "url": "https://api.github.com/repos/daikon-cqrs/value-object/zipball/571323e1f5516a24b94196f10a3cb0e150cdd3e1",
+                "reference": "571323e1f5516a24b94196f10a3cb0e150cdd3e1",
                 "shasum": ""
             },
             "require": {
@@ -225,7 +225,7 @@
             "keywords": [
                 "value-object"
             ],
-            "time": "2019-03-29T12:42:30+00:00"
+            "time": "2019-03-29T17:49:38+00:00"
         },
         {
             "name": "paragonie/random_compat",

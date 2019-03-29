@@ -13,6 +13,7 @@ namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
 use Daikon\EventSourcing\Aggregate\Command\CommandTrait;
+use Daikon\Interop\FromToNativeTrait;
 
 /**
  * @codeCoverageIgnore
@@ -21,6 +22,7 @@ use Daikon\EventSourcing\Aggregate\Command\CommandTrait;
  */
 final class BakePizza implements CommandInterface
 {
+    use FromToNativeTrait;
     use CommandTrait;
 
     /** @var PizzaId */

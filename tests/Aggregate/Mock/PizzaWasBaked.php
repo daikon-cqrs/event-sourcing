@@ -13,6 +13,7 @@ namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventTrait;
+use Daikon\Interop\FromToNativeTrait;
 
 /**
  * @codeCoverageIgnore
@@ -21,6 +22,7 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventTrait;
  */
 final class PizzaWasBaked implements DomainEventInterface
 {
+    use FromToNativeTrait;
     use DomainEventTrait;
 
     /** @var PizzaId */
