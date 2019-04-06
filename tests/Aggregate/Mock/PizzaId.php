@@ -12,39 +12,12 @@ namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
 use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateIdTrait;
 use Daikon\Interop\ValueObjectInterface;
 
 final class PizzaId implements AggregateIdInterface
 {
-    /** @var string */
-    private $id;
+    use AggregateIdTrait;
 
-    /** @param string $id */
-    public static function fromNative($id): AggregateIdInterface
-    {
-        return new self(trim($id));
-    }
-
-    public function toNative(): string
-    {
-        return $this->id;
-    }
-
-    /** @param self $comparator */
-    public function equals($comparator): bool
-    {
-        Assertion::isInstanceOf($comparator, self::class);
-        return $this->id === $comparator->toNative();
-    }
-
-    public function __toString(): string
-    {
-        return $this->id;
-    }
-
-    private function __construct(string $id)
-    {
-        Assertion::notEmpty($id);
-        $this->id = $id;
-    }
+    const PATTERN = '#^pizza-.+$#';
 }
