@@ -37,7 +37,7 @@ final class UnitOfWork implements UnitOfWorkInterface
     /** @var StreamStorageInterface */
     private $streamStorage;
 
-    /** @var ?StreamProcessorInterface */
+    /** @var StreamProcessorInterface|null */
     private $streamProcessor;
 
     /** @var string */
