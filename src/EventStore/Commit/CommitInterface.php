@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -16,6 +17,7 @@ use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\MetadataInterface;
+use DateTimeImmutable;
 
 interface CommitInterface extends MessageInterface
 {
@@ -29,6 +31,8 @@ interface CommitInterface extends MessageInterface
     public function getStreamId(): StreamIdInterface;
 
     public function getStreamRevision(): StreamRevision;
+
+    public function getCommittedAt(): DateTimeImmutable;
 
     public function getAggregateRevision(): AggregateRevision;
 

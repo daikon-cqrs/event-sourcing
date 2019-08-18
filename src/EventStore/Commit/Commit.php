@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -18,14 +19,20 @@ use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\MessageBus\Metadata\MetadataInterface;
+use DateTimeImmutable;
 
 final class Commit implements CommitInterface
 {
+    private const NATIVE_FORMAT = "Y-m-d\TH:i:s.uP";
+
     /** @var StreamIdInterface */
     private $streamId;
 
     /** @var StreamRevision */
     private $streamRevision;
+
+    /** @var DateTimeImmutable */
+    private $committedAt;
 
     /** @var DomainEventSequenceInterface */
     private $eventLog;
@@ -39,7 +46,7 @@ final class Commit implements CommitInterface
         DomainEventSequenceInterface $eventLog,
         MetadataInterface $metadata
     ): CommitInterface {
-        return new self($streamId, $streamRevision, $eventLog, $metadata);
+        return new self($streamId, $streamRevision, new DateTimeImmutable, $eventLog, $metadata);
     }
 
     /** @param array $state */
@@ -47,7 +54,10 @@ final class Commit implements CommitInterface
     {
         return new self(
             StreamId::fromNative($state['streamId']),
-            StreamRevision::fromNative((int)$state['streamRevision']),
+            StreamRevision::fromNative((int) $state['streamRevision']),
+            $state['streamRevision']
+                ? DateTimeImmutable::createFromFormat($state['streamRevision'], self::NATIVE_FORMAT)
+                : new DateTimeImmutable,
             DomainEventSequence::fromNative($state['eventLog']),
             Metadata::fromNative($state['metadata'])
         );
@@ -61,6 +71,11 @@ final class Commit implements CommitInterface
     public function getStreamRevision(): StreamRevision
     {
         return $this->streamRevision;
+    }
+
+    public function getCommittedAt(): DateTimeImmutable
+    {
+        return $this->committedAt;
     }
 
     public function getAggregateRevision(): AggregateRevision
@@ -84,6 +99,7 @@ final class Commit implements CommitInterface
             '@type' => self::class,
             'streamId' => $this->streamId->toNative(),
             'streamRevision' => $this->streamRevision->toNative(),
+            'committedAt' => $this->committedAt->format(self::NATIVE_FORMAT),
             'eventLog' => $this->eventLog->toNative(),
             'metadata' => $this->metadata->toNative()
         ];
@@ -92,11 +108,13 @@ final class Commit implements CommitInterface
     private function __construct(
         StreamIdInterface $streamId,
         StreamRevision $streamRevision,
+        DateTimeImmutable $committedAt,
         DomainEventSequenceInterface $eventLog,
         MetadataInterface $metadata
     ) {
         $this->streamId = $streamId;
         $this->streamRevision = $streamRevision;
+        $this->committedAt = $committedAt;
         $this->eventLog = $eventLog;
         $this->metadata = $metadata;
     }
