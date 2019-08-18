@@ -20,6 +20,7 @@ use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
 use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\MessageBus\Metadata\MetadataInterface;
+use DateTime;
 use DateTimeImmutable;
 
 final class Commit implements CommitInterface
@@ -61,8 +62,8 @@ final class Commit implements CommitInterface
 
         return new self(
             StreamId::fromNative($state['streamId']),
-            StreamRevision::fromNative((int) $state['committedAt']),
-            DateTimeImmutable::createFromFormat($state['committedAt'], self::NATIVE_FORMAT),
+            StreamRevision::fromNative((int) $state['streamRevision']),
+            DateTimeImmutable::createFromFormat(self::NATIVE_FORMAT, $state['committedAt']),
             DomainEventSequence::fromNative($state['eventLog']),
             Metadata::fromNative($state['metadata'])
         );
