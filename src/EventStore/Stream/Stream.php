@@ -43,13 +43,13 @@ final class Stream implements StreamInterface
     /** @param array $state */
     public static function fromNative($state): Stream
     {
-        Assertion::keyExists($state, 'commitAggregateId');
-        Assertion::keyExists($state, 'commitStreamSequence');
+        Assertion::keyExists($state, 'aggregateId');
+        Assertion::keyExists($state, 'commitSequence');
 
         return new self(
-            AggregateId::fromNative($state['commitAggregateId']),
-            CommitSequence::fromNative($state['commitStreamSequence']),
-            $state['commitImplementor'] ?? Commit::class
+            AggregateId::fromNative($state['aggregateId']),
+            CommitSequence::fromNative($state['commitSequence']),
+            $state['commitImplementor'] ?? null
         );
     }
 
@@ -137,10 +137,10 @@ final class Stream implements StreamInterface
     private function __construct(
         AggregateIdInterface $aggregateId,
         CommitSequenceInterface $commitSequence = null,
-        string $commitImplementor = Commit::class
+        string $commitImplementor = null
     ) {
         $this->aggregateId = $aggregateId;
         $this->commitSequence = $commitSequence ?? new CommitSequence;
-        $this->commitImplementor = $commitImplementor;
+        $this->commitImplementor = $commitImplementor ?? Commit::class;
     }
 }
