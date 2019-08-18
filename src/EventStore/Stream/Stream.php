@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
+use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
@@ -42,10 +43,13 @@ final class Stream implements StreamInterface
     /** @param array $state */
     public static function fromNative($state): Stream
     {
+        Assertion::keyExists($state, 'commitAggregateId');
+        Assertion::keyExists($state, 'commitStreamSequence');
+
         return new self(
             AggregateId::fromNative($state['commitAggregateId']),
             CommitSequence::fromNative($state['commitStreamSequence']),
-            $state['commitImplementor']
+            $state['commitImplementor'] ?? Commit::class
         );
     }
 
