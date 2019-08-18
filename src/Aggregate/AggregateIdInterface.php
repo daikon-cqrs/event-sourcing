@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -14,5 +15,5 @@ use Daikon\ValueObject\ValueObjectInterface;
 
 interface AggregateIdInterface extends ValueObjectInterface
 {
-
+    public function __toString(): string;
 }
