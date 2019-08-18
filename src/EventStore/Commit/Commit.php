@@ -54,9 +54,9 @@ final class Commit implements CommitInterface
     {
         return new self(
             StreamId::fromNative($state['streamId']),
-            StreamRevision::fromNative((int) $state['streamRevision']),
-            $state['streamRevision']
-                ? DateTimeImmutable::createFromFormat($state['streamRevision'], self::NATIVE_FORMAT)
+            StreamRevision::fromNative((int) $state['committedAt']),
+            $state['committedAt']
+                ? DateTimeImmutable::createFromFormat($state['committedAt'], self::NATIVE_FORMAT)
                 : new DateTimeImmutable,
             DomainEventSequence::fromNative($state['eventLog']),
             Metadata::fromNative($state['metadata'])
