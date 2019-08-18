@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -10,7 +11,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Commit;
 
-use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
+use Daikon\EventSourcing\EventStore\Stream\Sequence;
 use Ds\Vector;
 
 final class CommitSequence implements CommitSequenceInterface
@@ -77,15 +78,15 @@ final class CommitSequence implements CommitSequenceInterface
         return $this->isEmpty() ? null : $this->compositeVector->last();
     }
 
-    public function get(StreamRevision $streamRevision): ?CommitInterface
+    public function get(Sequence $Sequence): ?CommitInterface
     {
-        if ($this->compositeVector->offsetExists($streamRevision->toNative() - 1)) {
-            $this->compositeVector->get($streamRevision->toNative() - 1);
+        if ($this->compositeVector->offsetExists($Sequence->toNative() - 1)) {
+            $this->compositeVector->get($Sequence->toNative() - 1);
         }
         return null;
     }
 
-    public function getSlice(StreamRevision $start, StreamRevision $end): CommitSequenceInterface
+    public function getSlice(Sequence $start, Sequence $end): CommitSequenceInterface
     {
         return $this->compositeVector->reduce(function (
             CommitSequenceInterface $commits,
@@ -94,7 +95,7 @@ final class CommitSequence implements CommitSequenceInterface
             $start,
             $end
         ): CommitSequenceInterface {
-            if ($commit->getStreamRevision()->isWithinRange($start, $end)) {
+            if ($commit->getSequence()->isWithinRange($start, $end)) {
                 /* @var CommitSequenceInterface $commits */
                 $commits = $commits->push($commit);
                 return $commits;
@@ -108,13 +109,13 @@ final class CommitSequence implements CommitSequenceInterface
         return $this->compositeVector->isEmpty();
     }
 
-    public function revisionOf(CommitInterface $commit): StreamRevision
+    public function revisionOf(CommitInterface $commit): Sequence
     {
         $revision = $this->compositeVector->find($commit);
         if (is_bool($revision)) {
-            return StreamRevision::makeInitial();
+            return Sequence::makeInitial();
         }
-        return StreamRevision::fromNative($revision);
+        return Sequence::fromNative($revision);
     }
 
     public function getLength(): int

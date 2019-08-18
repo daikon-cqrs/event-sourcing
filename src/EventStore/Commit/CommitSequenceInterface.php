@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -10,7 +11,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Commit;
 
-use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
+use Daikon\EventSourcing\EventStore\Stream\Sequence;
 use Daikon\Interop\FromNativeInterface;
 use Daikon\Interop\ToNativeInterface;
 
@@ -24,13 +25,13 @@ interface CommitSequenceInterface extends \IteratorAggregate, \Countable, FromNa
 
     public function getHead(): ?CommitInterface;
 
-    public function get(StreamRevision $streamRevision): ?CommitInterface;
+    public function get(Sequence $Sequence): ?CommitInterface;
 
-    public function getSlice(StreamRevision $start, StreamRevision $end): CommitSequenceInterface;
+    public function getSlice(Sequence $start, Sequence $end): CommitSequenceInterface;
 
     public function isEmpty(): bool;
 
-    public function revisionOf(CommitInterface $commit): StreamRevision;
+    public function revisionOf(CommitInterface $commit): Sequence;
 
     public function getLength(): int;
 }

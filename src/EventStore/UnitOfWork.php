@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -68,7 +69,7 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         $prevStream = $this->getTrackedStream($aggregateRoot);
         $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-        $result = $this->streamStorage->append($updatedStream, $prevStream->getStreamRevision());
+        $result = $this->streamStorage->append($updatedStream, $prevStream->getSequence());
         $raceCount = 0;
         while ($result instanceof StorageError) {
             if (++$raceCount > $this->maxRaceAttempts) {
@@ -80,12 +81,12 @@ final class UnitOfWork implements UnitOfWorkInterface
                 throw new UnresolvableConflict($prevStream->getStreamId(), $conflictingEvents);
             }
             $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-            $result = $this->streamStorage->append($updatedStream, $prevStream->getStreamRevision());
+            $result = $this->streamStorage->append($updatedStream, $prevStream->getSequence());
         }
         $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getStreamId());
         return $updatedStream->getCommitRange(
-            $prevStream->getStreamRevision()->increment(),
-            $updatedStream->getStreamRevision()
+            $prevStream->getSequence()->increment(),
+            $updatedStream->getSequence()
         );
     }
 
@@ -98,7 +99,7 @@ final class UnitOfWork implements UnitOfWorkInterface
             throw new \Exception('Checking out empty streams is not supported.');
         }
         $aggregateRoot = call_user_func(
-            [ $this->aggregateRootType, 'reconstituteFromHistory' ],
+            [$this->aggregateRootType, 'reconstituteFromHistory'],
             $aggregateId,
             $this->prepareHistory(
                 $this->streamProcessor ? $this->streamProcessor->process($stream) : $stream,
@@ -111,12 +112,12 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     private function getTrackedStream(AggregateRootInterface $aggregateRoot): StreamInterface
     {
-        $streamId = StreamId::fromNative((string)$aggregateRoot->getIdentifier());
+        $streamId = StreamId::fromNative((string) $aggregateRoot->getIdentifier());
         $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
-        if ($this->trackedCommitStreams->has((string)$streamId)) {
-            $stream = $this->trackedCommitStreams->get((string)$streamId);
+        if ($this->trackedCommitStreams->has((string) $streamId)) {
+            $stream = $this->trackedCommitStreams->get((string) $streamId);
         } elseif ($tailRevision->isInitial()) {
-            $stream = call_user_func([ $this->streamImplementor, 'fromStreamId' ], $streamId);
+            $stream = call_user_func([$this->streamImplementor, 'fromStreamId'], $streamId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         } else {
             throw new \Exception('AggregateRoot must be checked out before it may be committed.');

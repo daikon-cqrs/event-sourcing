@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -61,9 +62,9 @@ final class Stream implements StreamInterface
         return $this->streamId;
     }
 
-    public function getStreamRevision(): StreamRevision
+    public function getSequence(): Sequence
     {
-        return StreamRevision::fromNative($this->commitSequence->getLength());
+        return Sequence::fromNative($this->commitSequence->getLength());
     }
 
     public function getAggregateRevision(): AggregateRevision
@@ -76,9 +77,9 @@ final class Stream implements StreamInterface
     {
         return $this->appendCommit(
             call_user_func(
-                [ $this->commitImplementor, 'make' ],
+                [$this->commitImplementor, 'make'],
                 $this->streamId,
-                $this->getStreamRevision()->increment(),
+                $this->getSequence()->increment(),
                 $eventLog,
                 $metadata
             )
@@ -97,9 +98,9 @@ final class Stream implements StreamInterface
         return $this->commitSequence->isEmpty() ? null : $this->commitSequence->getHead();
     }
 
-    public function getCommitRange(StreamRevision $fromRev, StreamRevision $toRev = null): CommitSequenceInterface
+    public function getCommitRange(Sequence $fromRev, Sequence $toRev = null): CommitSequenceInterface
     {
-        return $this->commitSequence->getSlice($fromRev, $toRev ?? $this->getStreamRevision());
+        return $this->commitSequence->getSlice($fromRev, $toRev ?? $this->getSequence());
     }
 
     public function count(): int
@@ -132,7 +133,7 @@ final class Stream implements StreamInterface
         $prevCommit = $this->getHead();
         while ($prevCommit && $incomingRevision->isLessThan($prevCommit->getAggregateRevision())) {
             $previousCommits[] = $prevCommit;
-            $prevCommit = $this->commitSequence->get($prevCommit->getStreamRevision()->decrement());
+            $prevCommit = $this->commitSequence->get($prevCommit->getSequence()->decrement());
         }
         return new CommitSequence(array_reverse($previousCommits));
     }

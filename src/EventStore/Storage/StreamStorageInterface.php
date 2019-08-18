@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -13,7 +14,7 @@ namespace Daikon\EventSourcing\EventStore\Storage;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamInterface;
-use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
+use Daikon\EventSourcing\EventStore\Stream\Sequence;
 
 interface StreamStorageInterface
 {
@@ -23,5 +24,5 @@ interface StreamStorageInterface
         AggregateRevision $to = null
     ): StreamInterface;
 
-    public function append(StreamInterface $stream, StreamRevision $knownHead): StorageResultInterface;
+    public function append(StreamInterface $stream, Sequence $knownHead): StorageResultInterface;
 }

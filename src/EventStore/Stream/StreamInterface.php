@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -28,11 +29,11 @@ interface StreamInterface extends \IteratorAggregate, \Countable
 
     public function appendCommit(CommitInterface $commit): StreamInterface;
 
-    public function getCommitRange(StreamRevision $fromRev, StreamRevision $toRev = null): CommitSequenceInterface;
+    public function getCommitRange(Sequence $fromRev, Sequence $toRev = null): CommitSequenceInterface;
 
     public function getStreamId(): StreamIdInterface;
 
-    public function getStreamRevision(): StreamRevision;
+    public function getSequence(): Sequence;
 
     public function getAggregateRevision(): AggregateRevision;
 

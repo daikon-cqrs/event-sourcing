@@ -14,7 +14,7 @@ namespace Daikon\EventSourcing\EventStore\Commit;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
-use Daikon\EventSourcing\EventStore\Stream\StreamRevision;
+use Daikon\EventSourcing\EventStore\Stream\Sequence;
 use Daikon\MessageBus\MessageInterface;
 use Daikon\MessageBus\Metadata\MetadataInterface;
 use DateTimeImmutable;
@@ -23,14 +23,14 @@ interface CommitInterface extends MessageInterface
 {
     public static function make(
         StreamIdInterface $streamId,
-        StreamRevision $streamRevision,
+        Sequence $Sequence,
         DomainEventSequenceInterface $eventLog,
         MetadataInterface $metadata
     ): CommitInterface;
 
     public function getStreamId(): StreamIdInterface;
 
-    public function getStreamRevision(): StreamRevision;
+    public function getSequence(): Sequence;
 
     public function getCommittedAt(): DateTimeImmutable;
 
