@@ -22,7 +22,6 @@ use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\EventSourcing\EventStore\Storage\StorageError;
 use Daikon\EventSourcing\EventStore\Storage\StreamStorageInterface;
 use Daikon\EventSourcing\EventStore\Stream\Stream;
-use Daikon\EventSourcing\EventStore\Stream\StreamId;
 use Daikon\EventSourcing\EventStore\Stream\StreamInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamMap;
 use Daikon\EventSourcing\EventStore\Stream\StreamProcessorInterface;
@@ -73,17 +72,17 @@ final class UnitOfWork implements UnitOfWorkInterface
         $raceCount = 0;
         while ($result instanceof StorageError) {
             if (++$raceCount > $this->maxRaceAttempts) {
-                throw new ConcurrencyRaceLost($prevStream->getStreamId(), $aggregateRoot->getTrackedEvents());
+                throw new ConcurrencyRaceLost($prevStream->getAggregateId(), $aggregateRoot->getTrackedEvents());
             }
-            $prevStream = $this->streamStorage->load($updatedStream->getStreamId());
+            $prevStream = $this->streamStorage->load($updatedStream->getAggregateId());
             $conflictingEvents = $this->determineConflicts($aggregateRoot, $prevStream);
             if (!$conflictingEvents->isEmpty()) {
-                throw new UnresolvableConflict($prevStream->getStreamId(), $conflictingEvents);
+                throw new UnresolvableConflict($prevStream->getAggregateId(), $conflictingEvents);
             }
             $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
             $result = $this->streamStorage->append($updatedStream, $prevStream->getSequence());
         }
-        $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getStreamId());
+        $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getAggregateId());
         return $updatedStream->getCommitRange(
             $prevStream->getSequence()->increment(),
             $updatedStream->getSequence()
@@ -92,9 +91,7 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     public function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface
     {
-        /** @var StreamId $streamId */
-        $streamId = StreamId::fromNative($aggregateId->toNative());
-        $stream = $this->streamStorage->load($streamId, $revision);
+        $stream = $this->streamStorage->load($aggregateId, $revision);
         if ($stream->isEmpty()) {
             throw new \Exception('Checking out empty streams is not supported.');
         }
@@ -112,12 +109,12 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     private function getTrackedStream(AggregateRootInterface $aggregateRoot): StreamInterface
     {
-        $streamId = StreamId::fromNative((string) $aggregateRoot->getIdentifier());
+        $aggregateId = $aggregateRoot->getIdentifier();
         $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
-        if ($this->trackedCommitStreams->has((string) $streamId)) {
-            $stream = $this->trackedCommitStreams->get((string) $streamId);
+        if ($this->trackedCommitStreams->has((string) $aggregateId)) {
+            $stream = $this->trackedCommitStreams->get((string) $aggregateId);
         } elseif ($tailRevision->isInitial()) {
-            $stream = call_user_func([$this->streamImplementor, 'fromStreamId'], $streamId);
+            $stream = call_user_func([$this->streamImplementor, 'fromAggregateId'], $aggregateId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         } else {
             throw new \Exception('AggregateRoot must be checked out before it may be committed.');

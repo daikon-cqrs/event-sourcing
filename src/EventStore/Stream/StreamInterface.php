@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Commit\Commit;
@@ -20,8 +21,8 @@ use Daikon\MessageBus\Metadata\Metadata;
 
 interface StreamInterface extends \IteratorAggregate, \Countable
 {
-    public static function fromStreamId(
-        StreamIdInterface $streamId,
+    public static function fromAggregateId(
+        AggregateIdInterface $aggregateId,
         string $commitImplementor = Commit::class
     ): StreamInterface;
 
@@ -31,7 +32,7 @@ interface StreamInterface extends \IteratorAggregate, \Countable
 
     public function getCommitRange(Sequence $fromRev, Sequence $toRev = null): CommitSequenceInterface;
 
-    public function getStreamId(): StreamIdInterface;
+    public function getAggregateId(): AggregateIdInterface;
 
     public function getSequence(): Sequence;
 

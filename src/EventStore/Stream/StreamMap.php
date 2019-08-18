@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -10,6 +11,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\Interop\ToNativeInterface;
 use Ds\Map;
 
@@ -31,14 +33,14 @@ final class StreamMap implements \IteratorAggregate, \Countable, ToNativeInterfa
     public function register(StreamInterface $commitStream): self
     {
         $copy = clone $this;
-        $copy->compositeMap->put((string)$commitStream->getStreamId(), $commitStream);
+        $copy->compositeMap->put((string) $commitStream->getAggregateId(), $commitStream);
         return $copy;
     }
 
-    public function unregister(StreamIdInterface $streamId): self
+    public function unregister(AggregateIdInterface $aggregateId): self
     {
         $copy = clone $this;
-        $copy->compositeMap->remove((string)$streamId);
+        $copy->compositeMap->remove((string) $aggregateId);
         return $copy;
     }
 

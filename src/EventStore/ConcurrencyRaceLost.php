@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -11,26 +12,26 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
-use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 
 final class ConcurrencyRaceLost extends \Exception
 {
-    /** @var StreamIdInterface */
-    private $streamId;
+    /** @var AggregateIdInterface */
+    private $aggregateId;
 
     /** @var  DomainEventSequenceInterface */
     private $lostEvents;
 
-    public function __construct(StreamIdInterface $streamId, DomainEventSequenceInterface $lostEvents)
+    public function __construct(AggregateIdInterface $aggregateId, DomainEventSequenceInterface $lostEvents)
     {
-        $this->streamId = $streamId;
+        $this->aggregateId = $aggregateId;
         $this->lostEvents = $lostEvents;
-        parent::__construct('Unable to catchup on stream: '.$this->streamId);
+        parent::__construct('Unable to catchup on stream: ' . $this->aggregateId);
     }
 
-    public function getStreamId(): StreamIdInterface
+    public function getAggregateId(): AggregateIdInterface
     {
-        return $this->streamId;
+        return $this->aggregateId;
     }
 
     public function getLostEvents(): DomainEventSequenceInterface

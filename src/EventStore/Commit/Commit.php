@@ -12,12 +12,12 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Assert\Assertion;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
+use Daikon\EventSourcing\EventStore\Stream\AggregateId;
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
-use Daikon\EventSourcing\EventStore\Stream\StreamId;
-use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
 use Daikon\MessageBus\Metadata\Metadata;
 use Daikon\MessageBus\Metadata\MetadataInterface;
 use DateTimeImmutable;
@@ -25,6 +25,9 @@ use DateTimeImmutable;
 final class Commit implements CommitInterface
 {
     private const NATIVE_FORMAT = 'Y-m-d\TH:i:s.uP';
+
+    /** @var AggregateIdInterface */
+    private $aggregateId;
 
     /** @var Sequence */
     private $sequence;
@@ -39,18 +42,18 @@ final class Commit implements CommitInterface
     private $metadata;
 
     public static function make(
-        StreamIdInterface $streamId,
+        AggregateIdInterface $aggregateId,
         Sequence $sequence,
         DomainEventSequenceInterface $eventLog,
         MetadataInterface $metadata
     ): CommitInterface {
-        return new self($streamId, $sequence, new DateTimeImmutable, $eventLog, $metadata);
+        return new self($aggregateId, $sequence, new DateTimeImmutable, $eventLog, $metadata);
     }
 
     /** @param array $state */
     public static function fromNative($state): CommitInterface
     {
-        Assertion::keyExists($state, 'streamId');
+        Assertion::keyExists($state, 'aggregateId');
         Assertion::keyExists($state, 'sequence');
         Assertion::keyExists($state, 'committedAt');
         Assertion::keyExists($state, 'eventLog');
@@ -58,7 +61,7 @@ final class Commit implements CommitInterface
         Assertion::date($state['committedAt'], self::NATIVE_FORMAT);
 
         return new self(
-            StreamId::fromNative($state['streamId']),
+            AggregateId::fromNative($state['aggregateId']),
             Sequence::fromNative((int) $state['sequence']),
             DateTimeImmutable::createFromFormat(self::NATIVE_FORMAT, $state['committedAt']),
             DomainEventSequence::fromNative($state['eventLog']),
@@ -66,9 +69,9 @@ final class Commit implements CommitInterface
         );
     }
 
-    public function getStreamId(): StreamIdInterface
+    public function getAggregateId(): AggregateIdInterface
     {
-        return $this->streamId;
+        return $this->aggregateId;
     }
 
     public function getSequence(): Sequence
@@ -100,7 +103,7 @@ final class Commit implements CommitInterface
     {
         return [
             '@type' => self::class,
-            'streamId' => $this->streamId->toNative(),
+            'aggregateId' => $this->aggregateId->toNative(),
             'sequence' => $this->sequence->toNative(),
             'committedAt' => $this->committedAt->format(self::NATIVE_FORMAT),
             'eventLog' => $this->eventLog->toNative(),
@@ -109,13 +112,13 @@ final class Commit implements CommitInterface
     }
 
     private function __construct(
-        StreamIdInterface $streamId,
+        AggregateIdInterface $aggregateId,
         Sequence $sequence,
         DateTimeImmutable $committedAt,
         DomainEventSequenceInterface $eventLog,
         MetadataInterface $metadata
     ) {
-        $this->streamId = $streamId;
+        $this->aggregateId = $aggregateId;
         $this->sequence = $sequence;
         $this->committedAt = $committedAt;
         $this->eventLog = $eventLog;

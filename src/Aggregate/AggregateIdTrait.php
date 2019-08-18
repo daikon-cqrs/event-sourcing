@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -20,6 +21,7 @@ trait AggregateIdTrait
     /** @param string $id */
     public static function fromNative($id): AggregateIdInterface
     {
+        Assertion::regex($id, static::PATTERN);
         return new static($id);
     }
 
@@ -42,7 +44,6 @@ trait AggregateIdTrait
 
     private function __construct(string $id)
     {
-        Assertion::regex($id, static::PATTERN);
         $this->id = $id;
     }
 }

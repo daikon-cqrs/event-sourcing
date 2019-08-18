@@ -12,14 +12,14 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore\Storage;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamInterface;
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
 
 interface StreamStorageInterface
 {
     public function load(
-        StreamIdInterface $streamId,
+        AggregateIdInterface $aggregateId,
         AggregateRevision $from = null,
         AggregateRevision $to = null
     ): StreamInterface;

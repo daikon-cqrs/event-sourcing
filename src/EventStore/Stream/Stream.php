@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
+use Daikon\EventSourcing\Aggregate\AggregateId;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Commit\Commit;
@@ -21,8 +23,8 @@ use Daikon\MessageBus\Metadata\Metadata;
 
 final class Stream implements StreamInterface
 {
-    /** @var StreamIdInterface */
-    private $streamId;
+    /** @var AggregateIdInterface */
+    private $aggregateId;
 
     /** @var CommitSequenceInterface */
     private $commitSequence;
@@ -30,36 +32,26 @@ final class Stream implements StreamInterface
     /** @var string */
     private $commitImplementor;
 
-    public static function fromStreamId(
-        StreamIdInterface $streamId,
+    public static function fromAggregateId(
+        AggregateIdInterface $aggregateId,
         string $commitImplementor = Commit::class
     ): StreamInterface {
-        return new self($streamId);
+        return new self($aggregateId);
     }
 
     /** @param array $state */
     public static function fromNative($state): Stream
     {
         return new self(
-            StreamId::fromNative($state['commitStreamId']),
+            AggregateId::fromNative($state['commitAggregateId']),
             CommitSequence::fromNative($state['commitStreamSequence']),
             $state['commitImplementor']
         );
     }
 
-    public function __construct(
-        StreamIdInterface $streamId,
-        CommitSequenceInterface $commitSequence = null,
-        string $commitImplementor = Commit::class
-    ) {
-        $this->streamId = $streamId;
-        $this->commitSequence = $commitSequence ?? new CommitSequence;
-        $this->commitImplementor = $commitImplementor;
-    }
-
-    public function getStreamId(): StreamIdInterface
+    public function getAggregateId(): AggregateIdInterface
     {
-        return $this->streamId;
+        return $this->aggregateId;
     }
 
     public function getSequence(): Sequence
@@ -78,7 +70,7 @@ final class Stream implements StreamInterface
         return $this->appendCommit(
             call_user_func(
                 [$this->commitImplementor, 'make'],
-                $this->streamId,
+                $this->aggregateId,
                 $this->getSequence()->increment(),
                 $eventLog,
                 $metadata
@@ -117,7 +109,7 @@ final class Stream implements StreamInterface
     {
         return [
             'commitSequence' => $this->commitSequence->toNative(),
-            'streamId' => $this->streamId->toNative(),
+            'aggregateId' => $this->aggregateId->toNative(),
             'commitImplementor' => $this->commitImplementor
         ];
     }
@@ -136,5 +128,15 @@ final class Stream implements StreamInterface
             $prevCommit = $this->commitSequence->get($prevCommit->getSequence()->decrement());
         }
         return new CommitSequence(array_reverse($previousCommits));
+    }
+
+    private function __construct(
+        AggregateIdInterface $aggregateId,
+        CommitSequenceInterface $commitSequence = null,
+        string $commitImplementor = Commit::class
+    ) {
+        $this->aggregateId = $aggregateId;
+        $this->commitSequence = $commitSequence ?? new CommitSequence;
+        $this->commitImplementor = $commitImplementor;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -11,26 +12,26 @@ declare(strict_types=1);
 namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
-use Daikon\EventSourcing\EventStore\Stream\StreamIdInterface;
+use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 
 final class UnresolvableConflict extends \Exception
 {
-    /** @var StreamIdInterface */
-    private $streamId;
+    /** @var AggregateIdInterface */
+    private $aggregateId;
 
     /** @var DomainEventSequenceInterface */
     private $conflictingEvents;
 
-    public function __construct(StreamIdInterface $streamId, DomainEventSequenceInterface $conflictingEvents)
+    public function __construct(AggregateIdInterface $aggregateId, DomainEventSequenceInterface $conflictingEvents)
     {
-        $this->streamId = $streamId;
+        $this->aggregateId = $aggregateId;
         $this->conflictingEvents = $conflictingEvents;
-        parent::__construct('Unable to resolve conflict for stream: '.$this->streamId);
+        parent::__construct('Unable to resolve conflict for stream: ' . $this->aggregateId);
     }
 
-    public function getStreamId(): StreamIdInterface
+    public function getAggregateId(): AggregateIdInterface
     {
-        return $this->streamId;
+        return $this->aggregateId;
     }
 
     public function getConflictingEvents(): DomainEventSequenceInterface
