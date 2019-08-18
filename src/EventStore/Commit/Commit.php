@@ -24,7 +24,7 @@ use DateTimeImmutable;
 
 final class Commit implements CommitInterface
 {
-    private const NATIVE_FORMAT = "Y-m-d\TH:i:s.uP";
+    private const NATIVE_FORMAT = 'Y-m-d\TH:i:s.uP';
 
     /** @var StreamIdInterface */
     private $streamId;
@@ -53,10 +53,10 @@ final class Commit implements CommitInterface
     /** @param array $state */
     public static function fromNative($state): CommitInterface
     {
-        Assertion::keyExists($state, "streamId");
-        Assertion::keyExists($state, "eventLog");
-        Assertion::keyExists($state, "committedAt");
-        Assertion::keyExists($state, "metadata");
+        Assertion::keyExists($state, 'streamId');
+        Assertion::keyExists($state, 'eventLog');
+        Assertion::keyExists($state, 'committedAt');
+        Assertion::keyExists($state, 'metadata');
         Assertion::date($state['committedAt'], self::NATIVE_FORMAT);
 
         return new self(
