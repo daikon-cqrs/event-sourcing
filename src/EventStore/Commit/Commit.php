@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Commit;
 
+use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
@@ -52,12 +53,16 @@ final class Commit implements CommitInterface
     /** @param array $state */
     public static function fromNative($state): CommitInterface
     {
+        Assertion::keyExists($state, "streamId");
+        Assertion::keyExists($state, "eventLog");
+        Assertion::keyExists($state, "committedAt");
+        Assertion::keyExists($state, "metadata");
+        Assertion::date($state['committedAt'], self::NATIVE_FORMAT);
+
         return new self(
             StreamId::fromNative($state['streamId']),
             StreamRevision::fromNative((int) $state['committedAt']),
-            $state['committedAt']
-                ? DateTimeImmutable::createFromFormat($state['committedAt'], self::NATIVE_FORMAT)
-                : new DateTimeImmutable,
+            DateTimeImmutable::createFromFormat($state['committedAt'], self::NATIVE_FORMAT),
             DomainEventSequence::fromNative($state['eventLog']),
             Metadata::fromNative($state['metadata'])
         );
