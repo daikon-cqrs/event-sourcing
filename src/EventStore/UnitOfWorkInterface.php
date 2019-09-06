@@ -14,11 +14,11 @@ use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
-use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Metadata\MetadataInterface;
 
 interface UnitOfWorkInterface
 {
-    public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequenceInterface;
+    public function commit(AggregateRootInterface $aggregateRoot, MetadataInterface $metadata): CommitSequenceInterface;
 
     public function checkout(AggregateIdInterface $aggregateId, AggregateRevision $revision): AggregateRootInterface;
 }

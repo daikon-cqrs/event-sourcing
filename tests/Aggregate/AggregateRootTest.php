@@ -50,7 +50,7 @@ final class AggregateRootTest extends TestCase
         $domainEventSequenceMock
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([ $pizzaWasBaked ]));
+            ->willReturn(new \ArrayIterator([$pizzaWasBaked]));
 
         /** @var PizzaId $pizzaId */
         $pizza = Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
@@ -78,7 +78,7 @@ final class AggregateRootTest extends TestCase
         $domainEventSequenceMock
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([ $pizzaWasBaked ]));
+            ->willReturn(new \ArrayIterator([$pizzaWasBaked]));
 
         Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
     } // @codeCoverageIgnore
@@ -102,7 +102,7 @@ final class AggregateRootTest extends TestCase
         $domainEventSequenceMock
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([ $pizzaWasBaked ]));
+            ->willReturn(new \ArrayIterator([$pizzaWasBaked]));
 
         Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
     } // @codeCoverageIgnore

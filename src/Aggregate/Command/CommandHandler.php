@@ -17,7 +17,7 @@ use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
-use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Metadata\MetadataInterface;
 
 abstract class CommandHandler implements MessageHandlerInterface
 {
@@ -45,7 +45,7 @@ abstract class CommandHandler implements MessageHandlerInterface
         $this->commit(...call_user_func($handler, $commandMessage, $envelope->getMetadata()));
     }
 
-    protected function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): void
+    protected function commit(AggregateRootInterface $aggregateRoot, MetadataInterface $metadata): void
     {
         foreach ($this->unitOfWork->commit($aggregateRoot, $metadata) as $newCommit) {
             $this->messageBus->publish($newCommit, 'commits', $metadata);

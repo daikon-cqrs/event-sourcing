@@ -25,7 +25,7 @@ use Daikon\EventSourcing\EventStore\Stream\Stream;
 use Daikon\EventSourcing\EventStore\Stream\StreamInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamMap;
 use Daikon\EventSourcing\EventStore\Stream\StreamProcessorInterface;
-use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Metadata\MetadataInterface;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {
@@ -64,7 +64,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         $this->maxRaceAttempts = $maxRaceAttempts;
     }
 
-    public function commit(AggregateRootInterface $aggregateRoot, Metadata $metadata): CommitSequenceInterface
+    public function commit(AggregateRootInterface $aggregateRoot, MetadataInterface $metadata): CommitSequenceInterface
     {
         $prevStream = $this->getTrackedStream($aggregateRoot);
         $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);

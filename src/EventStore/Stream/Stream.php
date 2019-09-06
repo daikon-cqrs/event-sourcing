@@ -20,7 +20,7 @@ use Daikon\EventSourcing\EventStore\Commit\Commit;
 use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequence;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
-use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Metadata\MetadataInterface;
 
 final class Stream implements StreamInterface
 {
@@ -69,7 +69,7 @@ final class Stream implements StreamInterface
         return $head ? $head->getAggregateRevision() : AggregateRevision::makeEmpty();
     }
 
-    public function appendEvents(DomainEventSequenceInterface $eventLog, Metadata $metadata): StreamInterface
+    public function appendEvents(DomainEventSequenceInterface $eventLog, MetadataInterface $metadata): StreamInterface
     {
         return $this->appendCommit(
             call_user_func(

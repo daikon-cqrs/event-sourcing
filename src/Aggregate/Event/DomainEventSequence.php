@@ -23,7 +23,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
     {
         return new self(array_map(function (array $state): DomainEventInterface {
             $eventFqcn = self::resolveEventFqcn($state);
-            return call_user_func([ $eventFqcn, 'fromNative' ], $state);
+            return call_user_func([$eventFqcn, 'fromNative'], $state);
         }, $events));
     }
 

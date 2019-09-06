@@ -16,7 +16,7 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
 use Daikon\MessageBus\MessageInterface;
-use Daikon\MessageBus\Metadata\MetadataInterface;
+use Daikon\Metadata\MetadataInterface;
 use DateTimeImmutable;
 
 interface CommitInterface extends MessageInterface

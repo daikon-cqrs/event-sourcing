@@ -18,8 +18,8 @@ use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
-use Daikon\MessageBus\Metadata\Metadata;
-use Daikon\MessageBus\Metadata\MetadataInterface;
+use Daikon\Metadata\Metadata;
+use Daikon\Metadata\MetadataInterface;
 use DateTimeImmutable;
 
 final class Commit implements CommitInterface
@@ -60,6 +60,7 @@ final class Commit implements CommitInterface
         Assertion::keyExists($state, 'metadata');
         Assertion::date($state['committedAt'], self::NATIVE_FORMAT);
 
+        /** @psalm-suppress PossiblyFalseArgument */
         return new self(
             AggregateId::fromNative($state['aggregateId']),
             Sequence::fromNative((int) $state['sequence']),

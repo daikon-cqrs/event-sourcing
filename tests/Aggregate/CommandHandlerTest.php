@@ -18,7 +18,7 @@ use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
-use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Metadata\Metadata;
 use PHPUnit\Framework\TestCase;
 
 final class CommandHandlerTest extends TestCase
@@ -30,7 +30,7 @@ final class CommandHandlerTest extends TestCase
         $commitSequenceStub
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([ $commitStub ]));
+            ->willReturn(new \ArrayIterator([$commitStub]));
 
         $unitOfWorkStub = $this->createMock(UnitOfWorkInterface::class);
         $unitOfWorkStub
@@ -55,16 +55,16 @@ final class CommandHandlerTest extends TestCase
             ->method('getMessage')
             ->willReturn(
                 $this->getMockBuilder(CommandInterface::class)
-                    ->setMockClassName("FooBar")->getMock()
+                    ->setMockClassName('FooBar')->getMock()
             );
 
         $commandHandler = $this->getMockBuilder(CommandHandler::class)
-            ->setConstructorArgs([ $unitOfWorkStub, $messageBusStub ])
-            ->setMethods([ 'handleFooBar' ])->getMock();
+            ->setConstructorArgs([$unitOfWorkStub, $messageBusStub])
+            ->setMethods(['handleFooBar'])->getMock();
         $commandHandler
             ->expects($this->once())
             ->method('handleFooBar')
-            ->willReturn([ $this->createMock(AggregateRootInterface::class), Metadata::makeEmpty() ]);
+            ->willReturn([$this->createMock(AggregateRootInterface::class), Metadata::makeEmpty()]);
 
         $commandHandler->handle($envelopeStub);
     }

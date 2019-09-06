@@ -20,11 +20,11 @@ final class CommandTest extends TestCase
         /** @var BakePizza $bakePizza */
         $bakePizza = BakePizza::fromNative([
             'pizzaId' => 'pizza-42-6-23',
-            'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
+            'ingredients' => ['mushrooms', 'tomatoes', 'onions']
         ]);
         $this->assertEquals('pizza-42-6-23', $bakePizza->getPizzaId());
         $this->assertEquals(0, $bakePizza->getKnownAggregateRevision()->toNative());
-        $this->assertEquals([ 'mushrooms', 'tomatoes', 'onions' ], $bakePizza->getIngredients());
+        $this->assertEquals(['mushrooms', 'tomatoes', 'onions'], $bakePizza->getIngredients());
     }
 
     public function testToNative()
@@ -32,7 +32,7 @@ final class CommandTest extends TestCase
         $bakePizzaArray = [
             'pizzaId' => 'pizza-42-6-23',
             'revision' => 0,
-            'ingredients' => [ 'mushrooms', 'tomatoes', 'onions' ]
+            'ingredients' => ['mushrooms', 'tomatoes', 'onions']
         ];
         $this->assertEquals($bakePizzaArray, BakePizza::fromNative($bakePizzaArray)->toNative());
     }

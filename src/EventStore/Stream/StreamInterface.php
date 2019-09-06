@@ -17,7 +17,7 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Commit\Commit;
 use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
-use Daikon\MessageBus\Metadata\Metadata;
+use Daikon\Metadata\MetadataInterface;
 
 interface StreamInterface extends \IteratorAggregate, \Countable
 {
@@ -26,7 +26,7 @@ interface StreamInterface extends \IteratorAggregate, \Countable
         string $commitImplementor = Commit::class
     ): StreamInterface;
 
-    public function appendEvents(DomainEventSequenceInterface $eventLog, Metadata $metadata): StreamInterface;
+    public function appendEvents(DomainEventSequenceInterface $eventLog, MetadataInterface $metadata): StreamInterface;
 
     public function appendCommit(CommitInterface $commit): StreamInterface;
 
