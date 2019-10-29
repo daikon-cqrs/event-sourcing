@@ -22,10 +22,11 @@ final class AggregateRevision implements ValueObjectInterface
     /** @var int */
     private $revision;
 
-    /** @param int $revision */
+    /** @param int|string $revision */
     public static function fromNative($revision): AggregateRevision
     {
-        return new self($revision);
+        Assertion::integerish($revision);
+        return new self((int)$revision);
     }
 
     public static function makeEmpty(): AggregateRevision

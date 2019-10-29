@@ -26,6 +26,11 @@ final class AggregateRevisionTest extends TestCase
         $this->assertEquals(42, AggregateRevision::fromNative(42)->toNative());
     }
 
+    public function testFromStringToNative()
+    {
+        $this->assertEquals(42, AggregateRevision::fromNative('42')->toNative());
+    }
+
     public function testToString()
     {
         $this->assertEquals('42', (string)AggregateRevision::fromNative(42));
@@ -96,9 +101,9 @@ final class AggregateRevisionTest extends TestCase
         ));
     }
 
-    public function testMakeFromNonInteger()
+    public function testMakeFromInvalidIntegerish()
     {
-        $this->expectException(\TypeError::class);
-        AggregateRevision::fromNative('not an int');
+        $this->expectException(\InvalidArgumentException::class);
+        AggregateRevision::fromNative('what');
     } // @codeCoverageIgnore
 }

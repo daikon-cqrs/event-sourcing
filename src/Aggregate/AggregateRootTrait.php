@@ -59,14 +59,14 @@ trait AggregateRootTrait
         $this->trackedEvents = DomainEventSequence::makeEmpty();
     }
 
-    protected function reflectThat(DomainEventInterface $eventOccured): AggregateRootInterface
+    protected function reflectThat(DomainEventInterface $eventOccurred): AggregateRootInterface
     {
-        $this->assertExpectedIdentifier($eventOccured, $this->getIdentifier());
+        $this->assertExpectedIdentifier($eventOccurred, $this->getIdentifier());
         $aggRoot = clone $this;
         $aggRoot->revision = $aggRoot->revision->increment();
-        $eventOccured = $eventOccured->withAggregateRevision($aggRoot->revision);
-        $aggRoot->trackedEvents = $aggRoot->trackedEvents->push($eventOccured);
-        $aggRoot->invokeEventHandler($eventOccured);
+        $eventOccurred = $eventOccurred->withAggregateRevision($aggRoot->revision);
+        $aggRoot->trackedEvents = $aggRoot->trackedEvents->push($eventOccurred);
+        $aggRoot->invokeEventHandler($eventOccurred);
         return $aggRoot;
     }
 
