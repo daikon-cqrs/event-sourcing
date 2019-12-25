@@ -20,7 +20,7 @@ trait AnnotatesAggregate
     private static function getAnnotatedId(): string
     {
         $classReflection = new \ReflectionClass(static::class);
-        foreach (self::getInheritanceTree($classReflection, true) as $curClass) {
+        foreach (static::getInheritanceTree($classReflection, true) as $curClass) {
             if (!($docComment = $curClass->getDocComment())) {
                 continue;
             }
@@ -36,7 +36,7 @@ trait AnnotatesAggregate
     private static function getAnnotatedRevision(): string
     {
         $classReflection = new \ReflectionClass(static::class);
-        foreach (self::getInheritanceTree($classReflection, true) as $curClass) {
+        foreach (static::getInheritanceTree($classReflection, true) as $curClass) {
             if (!($docComment = $curClass->getDocComment())) {
                 continue;
             }
