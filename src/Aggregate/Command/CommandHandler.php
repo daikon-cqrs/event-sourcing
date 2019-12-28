@@ -49,7 +49,8 @@ abstract class CommandHandler implements MessageHandlerInterface
 
     protected function commit(AggregateRootInterface $aggregateRoot, MetadataInterface $metadata): void
     {
-        foreach ($this->unitOfWork->commit($aggregateRoot, $metadata) as $newCommit) {
+        $newCommits = $this->unitOfWork->commit($aggregateRoot, $metadata);
+        foreach ($newCommits as $newCommit) {
             $this->messageBus->publish($newCommit, self::COMMITS_CHANNEL, $metadata);
         }
     }

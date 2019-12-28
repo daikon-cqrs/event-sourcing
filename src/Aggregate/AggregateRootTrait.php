@@ -85,7 +85,7 @@ trait AggregateRootTrait
     private function assertExpectedRevision(DomainEventInterface $event, AggregateRevision $expectedRevision): void
     {
         Assertion::true($expectedRevision->equals($event->getAggregateRevision()), sprintf(
-            'Given event-revision %s does not match expected AR revision at %s',
+            'Given event revision %s does not match expected AR revision at %s',
             (string)$event->getAggregateRevision(),
             (string)$expectedRevision
         ));
@@ -94,7 +94,7 @@ trait AggregateRootTrait
     private function assertExpectedIdentifier(DomainEventInterface $event, AggregateIdInterface $expectedId): void
     {
         Assertion::true($expectedId->equals($event->getAggregateId()), sprintf(
-            'Given event-identifier %s does not match expected AR identifier at %s',
+            'Given event identifier %s does not match expected AR identifier at %s',
             (string)$event->getAggregateId(),
             (string)$expectedId
         ));

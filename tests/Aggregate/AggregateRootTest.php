@@ -63,7 +63,7 @@ final class AggregateRootTest extends TestCase
     public function testReconstituteWithUnexpectedRevision(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Given event-revision 2 does not match expected AR revision at 1');
+        $this->expectExceptionMessage('Given event revision 2 does not match expected AR revision at 1');
 
         /** @var PizzaId $pizzaId */
         $pizzaId = PizzaId::fromNative('pizza-42-6-23');
@@ -86,7 +86,7 @@ final class AggregateRootTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            'Given event-identifier pizza-23-22-5 does not match expected AR identifier at pizza-42-6-23'
+            'Given event identifier pizza-23-22-5 does not match expected AR identifier at pizza-42-6-23'
         );
 
         /** @var PizzaId $pizzaId */

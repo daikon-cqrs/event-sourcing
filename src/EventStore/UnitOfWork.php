@@ -64,29 +64,30 @@ final class UnitOfWork implements UnitOfWorkInterface
 
     public function commit(AggregateRootInterface $aggregateRoot, MetadataInterface $metadata): CommitSequenceInterface
     {
-        $prevStream = $this->getTrackedStream($aggregateRoot);
-        $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-        $result = $this->streamStorage->append($updatedStream, $prevStream->getHeadSequence());
         $raceCount = 0;
+        $previousStream = $this->getTrackedStream($aggregateRoot);
+        $trackedEvents = $aggregateRoot->getTrackedEvents();
+        $updatedStream = $previousStream->appendEvents($trackedEvents, $metadata);
+        $result = $this->streamStorage->append($updatedStream, $previousStream->getHeadSequence());
 
         while ($result instanceof StorageError) {
             if (++$raceCount > $this->maxRaceAttempts) {
-                throw new ConcurrencyRaceLost($prevStream->getAggregateId(), $aggregateRoot->getTrackedEvents());
+                throw new ConcurrencyRaceLost($previousStream->getAggregateId(), $aggregateRoot->getTrackedEvents());
             }
-            $prevStream = $this->streamStorage->load($updatedStream->getAggregateId());
-            $conflictingEvents = $this->determineConflicts($aggregateRoot, $prevStream);
+            $previousStream = $this->streamStorage->load($updatedStream->getAggregateId());
+            $conflictingEvents = $this->determineConflicts($aggregateRoot, $previousStream);
             if (!$conflictingEvents->isEmpty()) {
-                throw new UnresolvableConflict($prevStream->getAggregateId(), $conflictingEvents);
+                throw new UnresolvableConflict($previousStream->getAggregateId(), $conflictingEvents);
             }
-            $resequencedEvents = $aggregateRoot->getTrackedEvents()->resequence($prevStream->getHeadRevision());
-            $updatedStream = $prevStream->appendEvents($resequencedEvents, $metadata);
-            $result = $this->streamStorage->append($updatedStream, $prevStream->getHeadSequence());
+            $resequencedEvents = $trackedEvents->resequence($previousStream->getHeadRevision());
+            $updatedStream = $previousStream->appendEvents($resequencedEvents, $metadata);
+            $result = $this->streamStorage->append($updatedStream, $previousStream->getHeadSequence());
         }
 
-        $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getAggregateId());
+        $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($previousStream->getAggregateId());
 
         return $updatedStream->getCommitRange(
-            $prevStream->getHeadSequence()->increment(),
+            $previousStream->getHeadSequence()->increment(),
             $updatedStream->getHeadSequence()
         );
     }
@@ -114,8 +115,8 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         $aggregateId = $aggregateRoot->getIdentifier();
         $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
-        if ($this->trackedCommitStreams->has((string) $aggregateId)) {
-            $stream = $this->trackedCommitStreams->get((string) $aggregateId);
+        if ($this->trackedCommitStreams->has((string)$aggregateId)) {
+            $stream = $this->trackedCommitStreams->get((string)$aggregateId);
         } elseif ($tailRevision->isInitial()) {
             $stream = call_user_func([$this->streamImplementor, 'fromAggregateId'], $aggregateId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
@@ -148,9 +149,10 @@ final class UnitOfWork implements UnitOfWorkInterface
         StreamInterface $stream
     ): DomainEventSequenceInterface {
         $conflictingEvents = DomainEventSequence::makeEmpty();
-        $prevCommits = $stream->findCommitsSince($aggregateRoot->getRevision());
+        $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
+        $previousCommits = $stream->findCommitsSince($tailRevision);
         /** @var CommitInterface $previousCommit */
-        foreach ($prevCommits as $previousCommit) {
+        foreach ($previousCommits as $previousCommit) {
             /** @var DomainEventInterface $previousEvent */
             foreach ($previousCommit->getEventLog() as $previousEvent) {
                 /** @var DomainEventInterface $previousEvent */
@@ -158,6 +160,7 @@ final class UnitOfWork implements UnitOfWorkInterface
                     //All events from the first conflict onwards are considered to be in conflict
                     if (!$conflictingEvents->isEmpty() || $trackedEvent->conflictsWith($previousEvent)) {
                         $conflictingEvents = $conflictingEvents->push($previousEvent);
+                        break;
                     }
                 }
             }
