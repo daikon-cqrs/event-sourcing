@@ -153,11 +153,12 @@ final class UnitOfWork implements UnitOfWorkInterface
         foreach ($prevCommits as $previousCommit) {
             /** @var DomainEventInterface $previousEvent */
             foreach ($previousCommit->getEventLog() as $previousEvent) {
-                //All events from the first conflict onwards are considered to be in conflict
-                if (!$conflictingEvents->isEmpty()
-                    || $previousEvent->conflictsWith($aggregateRoot->getTrackedEvents()->getTail())
-                ) {
-                    $conflictingEvents = $conflictingEvents->push($previousEvent);
+                /** @var DomainEventInterface $previousEvent */
+                foreach ($aggregateRoot->getTrackedEvents() as $trackedEvent) {
+                    //All events from the first conflict onwards are considered to be in conflict
+                    if (!$conflictingEvents->isEmpty() || $trackedEvent->conflictsWith($previousEvent)) {
+                        $conflictingEvents = $conflictingEvents->push($previousEvent);
+                    }
                 }
             }
         }

@@ -74,12 +74,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/data-structure.git",
-                "reference": "f39030ce81637da411955aef7b4108b3e9e3e697"
+                "reference": "c4f42f6e73b64c15317a17daaae4117e0cae2f4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/f39030ce81637da411955aef7b4108b3e9e3e697",
-                "reference": "f39030ce81637da411955aef7b4108b3e9e3e697",
+                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/c4f42f6e73b64c15317a17daaae4117e0cae2f4a",
+                "reference": "c4f42f6e73b64c15317a17daaae4117e0cae2f4a",
                 "shasum": ""
             },
             "require": {
@@ -110,7 +110,7 @@
                 "list",
                 "map"
             ],
-            "time": "2019-12-27T23:39:25+00:00"
+            "time": "2019-12-28T17:22:22+00:00"
         },
         {
             "name": "daikon/interop",
@@ -1244,16 +1244,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "4.3.3",
+            "version": "4.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "2ecaa9fef01634c83bfa8dc1fe35fb5cef223a62"
+                "reference": "da3fd972d6bafd628114f7e7e036f45944b62e9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/2ecaa9fef01634c83bfa8dc1fe35fb5cef223a62",
-                "reference": "2ecaa9fef01634c83bfa8dc1fe35fb5cef223a62",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/da3fd972d6bafd628114f7e7e036f45944b62e9c",
+                "reference": "da3fd972d6bafd628114f7e7e036f45944b62e9c",
                 "shasum": ""
             },
             "require": {
@@ -1265,6 +1265,7 @@
             "require-dev": {
                 "doctrine/instantiator": "^1.0.5",
                 "mockery/mockery": "^1.0",
+                "phpdocumentor/type-resolver": "0.4.*",
                 "phpunit/phpunit": "^6.4"
             },
             "type": "library",
@@ -1291,7 +1292,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2019-12-20T13:40:23+00:00"
+            "time": "2019-12-28T18:55:12+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
