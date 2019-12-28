@@ -1,13 +1,10 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
@@ -21,6 +18,7 @@ use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequence;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\Metadata\MetadataInterface;
+use Traversable;
 
 final class Stream implements StreamInterface
 {
@@ -58,15 +56,20 @@ final class Stream implements StreamInterface
         return $this->aggregateId;
     }
 
-    public function getSequence(): Sequence
+    public function getHeadSequence(): Sequence
     {
-        return Sequence::fromNative($this->commitSequence->getLength());
+        if ($this->isEmpty()) {
+            return Sequence::makeInitial();
+        }
+        return $this->getHead()->getSequence();
     }
 
-    public function getAggregateRevision(): AggregateRevision
+    public function getHeadRevision(): AggregateRevision
     {
-        $head = $this->commitSequence->getHead();
-        return $head ? $head->getAggregateRevision() : AggregateRevision::makeEmpty();
+        if ($this->isEmpty()) {
+            return AggregateRevision::makeEmpty();
+        }
+        return $this->getHead()->getHeadRevision();
     }
 
     public function appendEvents(DomainEventSequenceInterface $eventLog, MetadataInterface $metadata): StreamInterface
@@ -75,7 +78,7 @@ final class Stream implements StreamInterface
             call_user_func(
                 [$this->commitImplementor, 'make'],
                 $this->aggregateId,
-                $this->getSequence()->increment(),
+                $this->getHeadSequence()->increment(),
                 $eventLog,
                 $metadata
             )
@@ -89,14 +92,14 @@ final class Stream implements StreamInterface
         return $stream;
     }
 
-    public function getHead(): ?CommitInterface
+    public function getHead(): CommitInterface
     {
-        return $this->commitSequence->isEmpty() ? null : $this->commitSequence->getHead();
+        return $this->commitSequence->getHead();
     }
 
     public function getCommitRange(Sequence $fromRev, Sequence $toRev = null): CommitSequenceInterface
     {
-        return $this->commitSequence->getSlice($fromRev, $toRev ?? $this->getSequence());
+        return $this->commitSequence->getSlice($fromRev, $toRev ?? $this->getHeadSequence());
     }
 
     public function count(): int
@@ -106,7 +109,7 @@ final class Stream implements StreamInterface
 
     public function isEmpty(): bool
     {
-        return $this->count() === 0;
+        return $this->commitSequence->isEmpty();
     }
 
     public function toNative(): array
@@ -118,7 +121,7 @@ final class Stream implements StreamInterface
         ];
     }
 
-    public function getIterator(): \Traversable
+    public function getIterator(): Traversable
     {
         return $this->commitSequence->getIterator();
     }
@@ -126,12 +129,13 @@ final class Stream implements StreamInterface
     public function findCommitsSince(AggregateRevision $incomingRevision): CommitSequenceInterface
     {
         $previousCommits = [];
-        $prevCommit = $this->getHead();
-        while ($prevCommit && $incomingRevision->isLessThan($prevCommit->getAggregateRevision())) {
-            $previousCommits[] = $prevCommit;
-            $prevCommit = $this->commitSequence->get($prevCommit->getSequence()->decrement());
+        /** @var CommitInterface $commit */
+        foreach ($this as $commit) {
+            if ($commit->getTailRevision()->isGreaterThanOrEqual($incomingRevision)) {
+                $previousCommits[] = clone $commit;
+            }
         }
-        return new CommitSequence(array_reverse($previousCommits));
+        return new CommitSequence($previousCommits);
     }
 
     private function __construct(

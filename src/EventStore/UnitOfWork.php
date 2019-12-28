@@ -1,13 +1,10 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore;
 
@@ -26,10 +23,11 @@ use Daikon\EventSourcing\EventStore\Stream\StreamInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamMap;
 use Daikon\EventSourcing\EventStore\Stream\StreamProcessorInterface;
 use Daikon\Metadata\MetadataInterface;
+use RuntimeException;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {
-    private const MAX_RACE_ATTEMPTS = 5;
+    private const MAX_RACE_ATTEMPTS = 3;
 
     /** @var string */
     private $aggregateRootType;
@@ -68,8 +66,9 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         $prevStream = $this->getTrackedStream($aggregateRoot);
         $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-        $result = $this->streamStorage->append($updatedStream, $prevStream->getSequence());
+        $result = $this->streamStorage->append($updatedStream, $prevStream->getHeadSequence());
         $raceCount = 0;
+
         while ($result instanceof StorageError) {
             if (++$raceCount > $this->maxRaceAttempts) {
                 throw new ConcurrencyRaceLost($prevStream->getAggregateId(), $aggregateRoot->getTrackedEvents());
@@ -79,13 +78,16 @@ final class UnitOfWork implements UnitOfWorkInterface
             if (!$conflictingEvents->isEmpty()) {
                 throw new UnresolvableConflict($prevStream->getAggregateId(), $conflictingEvents);
             }
-            $updatedStream = $prevStream->appendEvents($aggregateRoot->getTrackedEvents(), $metadata);
-            $result = $this->streamStorage->append($updatedStream, $prevStream->getSequence());
+            $resequencedEvents = $aggregateRoot->getTrackedEvents()->resequence($prevStream->getHeadRevision());
+            $updatedStream = $prevStream->appendEvents($resequencedEvents, $metadata);
+            $result = $this->streamStorage->append($updatedStream, $prevStream->getHeadSequence());
         }
+
         $this->trackedCommitStreams = $this->trackedCommitStreams->unregister($prevStream->getAggregateId());
+
         return $updatedStream->getCommitRange(
-            $prevStream->getSequence()->increment(),
-            $updatedStream->getSequence()
+            $prevStream->getHeadSequence()->increment(),
+            $updatedStream->getHeadSequence()
         );
     }
 
@@ -93,8 +95,9 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         $stream = $this->streamStorage->load($aggregateId, $revision);
         if ($stream->isEmpty()) {
-            throw new \Exception('Checking out empty streams is not supported.');
+            throw new RuntimeException('Checking out empty streams is not supported.');
         }
+        /** @var AggregateRootInterface $aggregateRoot */
         $aggregateRoot = call_user_func(
             [$this->aggregateRootType, 'reconstituteFromHistory'],
             $aggregateId,
@@ -117,7 +120,7 @@ final class UnitOfWork implements UnitOfWorkInterface
             $stream = call_user_func([$this->streamImplementor, 'fromAggregateId'], $aggregateId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         } else {
-            throw new \Exception('AggregateRoot must be checked out before it may be committed.');
+            throw new RuntimeException('AggregateRoot must be checked out before it may be committed.');
         }
         return $stream;
     }
@@ -130,9 +133,12 @@ final class UnitOfWork implements UnitOfWorkInterface
         /** @var CommitInterface $commit */
         foreach ($stream as $commit) {
             $history = $history->append($commit->getEventLog());
-            if (!$targetRevision->isEmpty() && $commit->getAggregateRevision()->isGreaterThan($targetRevision)) {
-                break;
-            }
+        }
+        if (!$targetRevision->isEmpty() && !$history->getHeadRevision()->equals($targetRevision)) {
+            throw new RuntimeException(sprintf(
+                'AggregateRoot cannot be reconstituted to revision %s.',
+                (string)$targetRevision
+            ));
         }
         return $history;
     }
@@ -147,11 +153,11 @@ final class UnitOfWork implements UnitOfWorkInterface
         foreach ($prevCommits as $previousCommit) {
             /** @var DomainEventInterface $previousEvent */
             foreach ($previousCommit->getEventLog() as $previousEvent) {
-                /** @var DomainEventInterface $newEvent */
-                foreach ($aggregateRoot->getTrackedEvents() as $newEvent) {
-                    if ($newEvent->conflictsWith($previousEvent)) {
-                        $conflictingEvents = $conflictingEvents->push($newEvent);
-                    }
+                //All events from the first conflict onwards are considered to be in conflict
+                if (!$conflictingEvents->isEmpty()
+                    || $previousEvent->conflictsWith($aggregateRoot->getTrackedEvents()->getTail())
+                ) {
+                    $conflictingEvents = $conflictingEvents->push($previousEvent);
                 }
             }
         }

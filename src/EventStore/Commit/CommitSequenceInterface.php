@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -7,25 +6,27 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\EventStore\Commit;
 
+use Countable;
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
 use Daikon\Interop\FromNativeInterface;
 use Daikon\Interop\ToNativeInterface;
+use IteratorAggregate;
 
-interface CommitSequenceInterface extends \IteratorAggregate, \Countable, FromNativeInterface, ToNativeInterface
+interface CommitSequenceInterface extends IteratorAggregate, Countable, FromNativeInterface, ToNativeInterface
 {
     public static function makeEmpty(): CommitSequenceInterface;
 
     public function push(CommitInterface $commit): CommitSequenceInterface;
 
-    public function getTail(): ?CommitInterface;
+    public function getTail(): CommitInterface;
 
-    public function getHead(): ?CommitInterface;
+    public function getHead(): CommitInterface;
 
-    public function get(Sequence $Sequence): ?CommitInterface;
+    public function get(Sequence $Sequence): CommitInterface;
+
+    public function has(Sequence $Sequence): bool;
 
     public function getSlice(Sequence $start, Sequence $end): CommitSequenceInterface;
 

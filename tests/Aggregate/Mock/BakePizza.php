@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/cqrs project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
@@ -32,7 +30,7 @@ final class BakePizza implements CommandInterface
     private $revision;
 
     /** @var string[] */
-    private $ingredients;
+    private $ingredients = [];
 
     public function getPizzaId(): PizzaId
     {
@@ -44,7 +42,6 @@ final class BakePizza implements CommandInterface
         return $this->revision;
     }
 
-    /** @return string[] */
     public function getIngredients(): array
     {
         return $this->ingredients;
@@ -53,7 +50,9 @@ final class BakePizza implements CommandInterface
     /** @param array $state */
     public static function fromNative($state): self
     {
-        $bakePizza = new self(PizzaId::fromNative($state['pizzaId']));
+        /** @var PizzaId $pizzaId */
+        $pizzaId = PizzaId::fromNative($state['pizzaId']);
+        $bakePizza = new self($pizzaId);
         $bakePizza->ingredients = $state['ingredients'];
         return $bakePizza;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -6,15 +6,15 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\Aggregate\Event;
 
+use Countable;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\Interop\FromNativeInterface;
 use Daikon\Interop\ToNativeInterface;
+use IteratorAggregate;
 
-interface DomainEventSequenceInterface extends \IteratorAggregate, \Countable, FromNativeInterface, ToNativeInterface
+interface DomainEventSequenceInterface extends IteratorAggregate, Countable, FromNativeInterface, ToNativeInterface
 {
     public static function makeEmpty(): DomainEventSequenceInterface;
 
@@ -22,17 +22,20 @@ interface DomainEventSequenceInterface extends \IteratorAggregate, \Countable, F
 
     public function append(DomainEventSequenceInterface $events): DomainEventSequenceInterface;
 
+    public function resequence(AggregateRevision $aggregateRevision): DomainEventSequenceInterface;
+
     public function getHeadRevision(): AggregateRevision;
 
     public function getTailRevision(): AggregateRevision;
 
-    public function getTail(): ?DomainEventInterface;
+    public function getTail(): DomainEventInterface;
 
-    public function getHead(): ?DomainEventInterface;
+    public function getHead(): DomainEventInterface;
 
     public function getLength(): int;
 
     public function isEmpty(): bool;
 
-    public function indexOf(DomainEventInterface $event): int;
+    /** @return int|bool */
+    public function indexOf(DomainEventInterface $event);
 }

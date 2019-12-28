@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -6,11 +6,8 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\EventStore\Storage;
 
 final class StorageError implements StorageResultInterface
 {
-
 }

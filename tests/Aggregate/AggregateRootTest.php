@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/cqrs project.
  *
@@ -6,10 +6,9 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\Tests\EventSourcing;
 
+use ArrayIterator;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\Pizza;
@@ -19,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 final class AggregateRootTest extends TestCase
 {
-    public function testStartAggregateRootLifecycle()
+    public function testStartAggregateRootLifecycle(): void
     {
         $ingredients = ['mushrooms', 'tomatoes', 'onions'];
         /** @var BakePizza $bakePizza */
@@ -35,7 +34,7 @@ final class AggregateRootTest extends TestCase
         $this->assertCount(1, $pizza->getTrackedEvents());
     }
 
-    public function testReconstituteFromHistory()
+    public function testReconstituteFromHistory(): void
     {
         /** @var PizzaId $pizzaId */
         $pizzaId = PizzaId::fromNative('pizza-42-6-23');
@@ -50,9 +49,9 @@ final class AggregateRootTest extends TestCase
         $domainEventSequenceMock
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$pizzaWasBaked]));
+            ->willReturn(new ArrayIterator([$pizzaWasBaked]));
 
-        /** @var PizzaId $pizzaId */
+        /** @var Pizza $pizza */
         $pizza = Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
 
         $this->assertEquals($pizzaId, $pizza->getIdentifier());
@@ -61,7 +60,7 @@ final class AggregateRootTest extends TestCase
         $this->assertCount(0, $pizza->getTrackedEvents());
     }
 
-    public function testReconstituteWithUnexpectedRevision()
+    public function testReconstituteWithUnexpectedRevision(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Given event-revision 2 does not match expected AR revision at 1');
@@ -83,7 +82,7 @@ final class AggregateRootTest extends TestCase
         Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
     } // @codeCoverageIgnore
 
-    public function testReconstituteWithUnexpectedId()
+    public function testReconstituteWithUnexpectedId(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
@@ -102,7 +101,7 @@ final class AggregateRootTest extends TestCase
         $domainEventSequenceMock
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$pizzaWasBaked]));
+            ->willReturn(new ArrayIterator([$pizzaWasBaked]));
 
         Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
     } // @codeCoverageIgnore

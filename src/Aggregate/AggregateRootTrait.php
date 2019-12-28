@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -6,14 +6,14 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
+use ReflectionClass;
+use RuntimeException;
 
 trait AggregateRootTrait
 {
@@ -30,11 +30,12 @@ trait AggregateRootTrait
         AggregateIdInterface $aggregateId,
         DomainEventSequenceInterface $history
     ): AggregateRootInterface {
-        $aggRoot = new static($aggregateId);
+        $aggregateRoot = new static($aggregateId);
         foreach ($history as $historicalEvent) {
-            $aggRoot = $aggRoot->reconstitute($historicalEvent);
+            /** @psalm-suppress PossiblyUndefinedMethod */
+            $aggregateRoot = $aggregateRoot->reconstitute($historicalEvent);
         }
-        return $aggRoot;
+        return $aggregateRoot;
     }
 
     public function getIdentifier(): AggregateIdInterface
@@ -62,31 +63,31 @@ trait AggregateRootTrait
     protected function reflectThat(DomainEventInterface $eventOccurred): AggregateRootInterface
     {
         $this->assertExpectedIdentifier($eventOccurred, $this->getIdentifier());
-        $aggRoot = clone $this;
-        $aggRoot->revision = $aggRoot->revision->increment();
-        $eventOccurred = $eventOccurred->withAggregateRevision($aggRoot->revision);
-        $aggRoot->trackedEvents = $aggRoot->trackedEvents->push($eventOccurred);
-        $aggRoot->invokeEventHandler($eventOccurred);
-        return $aggRoot;
+        $aggregateRoot = clone $this;
+        $aggregateRoot->revision = $aggregateRoot->revision->increment();
+        $eventOccurred = $eventOccurred->withAggregateRevision($aggregateRoot->revision);
+        $aggregateRoot->trackedEvents = $aggregateRoot->trackedEvents->push($eventOccurred);
+        $aggregateRoot->invokeEventHandler($eventOccurred);
+        return $aggregateRoot;
     }
 
     private function reconstitute(DomainEventInterface $historicalEvent): AggregateRootInterface
     {
         $this->assertExpectedIdentifier($historicalEvent, $this->getIdentifier());
-        $aggRoot = clone $this;
-        $expectedAggregateRevision = $aggRoot->revision->increment();
+        $aggregateRoot = clone $this;
+        $expectedAggregateRevision = $aggregateRoot->revision->increment();
         $this->assertExpectedRevision($historicalEvent, $expectedAggregateRevision);
-        $aggRoot->revision = $expectedAggregateRevision;
-        $aggRoot->invokeEventHandler($historicalEvent);
-        return $aggRoot;
+        $aggregateRoot->revision = $expectedAggregateRevision;
+        $aggregateRoot->invokeEventHandler($historicalEvent);
+        return $aggregateRoot;
     }
 
     private function assertExpectedRevision(DomainEventInterface $event, AggregateRevision $expectedRevision): void
     {
         Assertion::true($expectedRevision->equals($event->getAggregateRevision()), sprintf(
             'Given event-revision %s does not match expected AR revision at %s',
-            $event->getAggregateRevision(),
-            $expectedRevision
+            (string)$event->getAggregateRevision(),
+            (string)$expectedRevision
         ));
     }
 
@@ -94,18 +95,18 @@ trait AggregateRootTrait
     {
         Assertion::true($expectedId->equals($event->getAggregateId()), sprintf(
             'Given event-identifier %s does not match expected AR identifier at %s',
-            $event->getAggregateId(),
-            $expectedId
+            (string)$event->getAggregateId(),
+            (string)$expectedId
         ));
     }
 
     private function invokeEventHandler(DomainEventInterface $event): void
     {
-        $handlerName = preg_replace('/Event$/', '', (new \ReflectionClass($event))->getShortName());
+        $handlerName = preg_replace('/Event$/', '', (new ReflectionClass($event))->getShortName());
         $handlerMethod = 'when'.ucfirst($handlerName);
         $handler = [ $this, $handlerMethod ];
         if (!is_callable($handler)) {
-            throw new \Exception(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
+            throw new RuntimeException(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
         }
         call_user_func($handler, $event);
     }

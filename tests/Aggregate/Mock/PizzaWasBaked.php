@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/cqrs project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
@@ -32,7 +30,7 @@ final class PizzaWasBaked implements DomainEventInterface
     private $revision;
 
     /** @var string[] */
-    private $ingredients;
+    private $ingredients = [];
 
     public static function withIngredients(BakePizza $bakePizza): self
     {
@@ -56,7 +54,6 @@ final class PizzaWasBaked implements DomainEventInterface
         return $this->revision;
     }
 
-    /** @return string[] */
     public function getIngredients(): array
     {
         return $this->ingredients;

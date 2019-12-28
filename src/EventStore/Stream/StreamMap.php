@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -7,15 +6,15 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\EventStore\Stream;
 
+use Countable;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\Interop\ToNativeInterface;
 use Ds\Map;
+use IteratorAggregate;
 
-final class StreamMap implements \IteratorAggregate, \Countable, ToNativeInterface
+final class StreamMap implements IteratorAggregate, Countable, ToNativeInterface
 {
     /** @var Map */
     private $compositeMap;

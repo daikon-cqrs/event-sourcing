@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -7,12 +6,12 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
 use Ds\Vector;
+use RuntimeException;
+use Traversable;
 
 final class CommitSequence implements CommitSequenceInterface
 {
@@ -32,7 +31,7 @@ final class CommitSequence implements CommitSequenceInterface
         return new self;
     }
 
-    public function __construct(array $commits = [])
+    public function __construct(iterable $commits = [])
     {
         $this->compositeVector = (function (CommitInterface ...$commits): Vector {
             return new Vector($commits);
@@ -42,15 +41,12 @@ final class CommitSequence implements CommitSequenceInterface
     public function push(CommitInterface $commit): CommitSequenceInterface
     {
         if (!$this->isEmpty()) {
-            if (!$head = $this->getHead()) {
-                throw new \RuntimeException("Corrupt sequence! Head not retrieveable for non-empty seq.");
-            }
-            $nextRevision = $head->getAggregateRevision()->increment();
-            if (!$nextRevision->equals($commit->getEventLog()->getTailRevision())) {
-                throw new \Exception(sprintf(
+            $nextRevision = $this->getHead()->getHeadRevision()->increment();
+            if (!$nextRevision->equals($commit->getTailRevision())) {
+                throw new RuntimeException(sprintf(
                     'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
-                    $commit->getEventLog()->getTailRevision(),
-                    $nextRevision
+                    (string)$commit->getHeadRevision(),
+                    (string)$nextRevision
                 ));
             }
         }
@@ -68,22 +64,26 @@ final class CommitSequence implements CommitSequenceInterface
         }, $this->compositeVector->toArray());
     }
 
-    public function getTail(): ?CommitInterface
+    public function getTail(): CommitInterface
     {
-        return $this->isEmpty() ? null : $this->compositeVector->first();
+        return $this->compositeVector->first();
     }
 
-    public function getHead(): ?CommitInterface
+    public function getHead(): CommitInterface
     {
-        return $this->isEmpty() ? null : $this->compositeVector->last();
+        return $this->compositeVector->last();
     }
 
-    public function get(Sequence $Sequence): ?CommitInterface
+    public function has(Sequence $sequence): bool
     {
-        if ($this->compositeVector->offsetExists($Sequence->toNative() - 1)) {
-            $this->compositeVector->get($Sequence->toNative() - 1);
-        }
-        return null;
+        $offset = $sequence->toNative() - 1;
+        return $this->compositeVector->offsetExists($offset);
+    }
+
+    public function get(Sequence $sequence): CommitInterface
+    {
+        $offset = $sequence->toNative() - 1;
+        return $this->compositeVector->get($offset);
     }
 
     public function getSlice(Sequence $start, Sequence $end): CommitSequenceInterface
@@ -96,7 +96,6 @@ final class CommitSequence implements CommitSequenceInterface
             $end
         ): CommitSequenceInterface {
             if ($commit->getSequence()->isWithinRange($start, $end)) {
-                /* @var CommitSequenceInterface $commits */
                 $commits = $commits->push($commit);
                 return $commits;
             }
@@ -128,7 +127,7 @@ final class CommitSequence implements CommitSequenceInterface
         return $this->compositeVector->count();
     }
 
-    public function getIterator(): \Traversable
+    public function getIterator(): Traversable
     {
         return $this->compositeVector->getIterator();
     }

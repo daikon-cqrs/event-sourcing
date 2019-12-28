@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/cqrs project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\Tests\EventSourcing;
 
@@ -15,9 +13,9 @@ use PHPUnit\Framework\TestCase;
 
 final class DomainEventTest extends TestCase
 {
-    public function testFromNative()
+    public function testFromNative(): void
     {
-        /** @var $pizzaWasBaked PizzaWasBaked */
+        /** @var PizzaWasBaked $pizzaWasBaked */
         $pizzaWasBaked = PizzaWasBaked::fromNative([
             'pizzaId' => 'pizza-42-6-23',
             'revision' => 1,
@@ -28,7 +26,7 @@ final class DomainEventTest extends TestCase
         $this->assertEquals(['mushrooms', 'tomatoes', 'onions'], $pizzaWasBaked->getIngredients());
     }
 
-    public function testToNative()
+    public function testToNative(): void
     {
         $pizzaWasBakedArray = [
             'pizzaId' => 'pizza-42-6-23',

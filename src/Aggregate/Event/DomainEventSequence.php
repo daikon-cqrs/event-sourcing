@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -6,12 +6,13 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\Aggregate\Event;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Ds\Vector;
+use InvalidArgumentException;
+use RuntimeException;
+use Traversable;
 
 final class DomainEventSequence implements DomainEventSequenceInterface
 {
@@ -32,7 +33,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return new self;
     }
 
-    public function __construct(array $events = [])
+    public function __construct(iterable $events = [])
     {
         $this->compositeVector = (function (DomainEventInterface ...$events): Vector {
             return new Vector($events);
@@ -43,10 +44,10 @@ final class DomainEventSequence implements DomainEventSequenceInterface
     {
         $expectedRevision = $this->getHeadRevision()->increment();
         if (!$this->isEmpty() && !$expectedRevision->equals($event->getAggregateRevision())) {
-            throw new \Exception(sprintf(
+            throw new RuntimeException(sprintf(
                 'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
-                $event->getAggregateRevision(),
-                $expectedRevision
+                (string)$event->getAggregateRevision(),
+                (string)$expectedRevision
             ));
         }
         $eventSequence = clone $this;
@@ -59,6 +60,17 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         $eventSequence = $this;
         foreach ($events as $event) {
             $eventSequence = $eventSequence->push($event);
+        }
+        return $eventSequence;
+    }
+
+    public function resequence(AggregateRevision $aggregateRevision): DomainEventSequenceInterface
+    {
+        /** @var self $eventSequence */
+        $eventSequence = self::makeEmpty();
+        foreach ($this as $event) {
+            $aggregateRevision = $aggregateRevision->increment();
+            $eventSequence->compositeVector->push($event->withAggregateRevision($aggregateRevision));
         }
         return $eventSequence;
     }
@@ -79,10 +91,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         if ($this->isEmpty()) {
             return AggregateRevision::makeEmpty();
         }
-        if (!$head = $this->getHead()) {
-            throw new \RuntimeException("Corrupt sequence! Head not retrieveable for non-empty seq.");
-        }
-        return $head->getAggregateRevision();
+        return $this->getHead()->getAggregateRevision();
     }
 
     public function getTailRevision(): AggregateRevision
@@ -90,18 +99,15 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         if ($this->isEmpty()) {
             return AggregateRevision::makeEmpty();
         }
-        if (!$tail = $this->getTail()) {
-            throw new \RuntimeException("Corrupt sequence! Tail not retrieveable for non-empty seq.");
-        }
-        return $tail->getAggregateRevision();
+        return $this->getTail()->getAggregateRevision();
     }
 
-    public function getTail(): ?DomainEventInterface
+    public function getTail(): DomainEventInterface
     {
         return $this->compositeVector->first();
     }
 
-    public function getHead(): ?DomainEventInterface
+    public function getHead(): DomainEventInterface
     {
         return $this->compositeVector->last();
     }
@@ -116,10 +122,9 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return $this->compositeVector->isEmpty();
     }
 
-    public function indexOf(DomainEventInterface $event): int
+    public function indexOf(DomainEventInterface $event)
     {
-        $index = $this->compositeVector->find($event);
-        return is_bool($index) ? -1 : $index;
+        return $this->compositeVector->find($event);
     }
 
     public function count(): int
@@ -127,7 +132,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return $this->compositeVector->count();
     }
 
-    public function getIterator(): \Traversable
+    public function getIterator(): Traversable
     {
         return $this->compositeVector->getIterator();
     }
@@ -135,11 +140,11 @@ final class DomainEventSequence implements DomainEventSequenceInterface
     private static function resolveEventFqcn(array $eventState): string
     {
         if (!isset($eventState['@type'])) {
-            throw new \Exception('Missing expected typeinfo for event at key "@type" within given state-array.');
+            throw new InvalidArgumentException("Missing expected key '@type' within given state array.");
         }
         $eventFqcn = $eventState['@type'];
         if (!class_exists($eventFqcn)) {
-            throw new \Exception(sprintf('Can not load event-class "%s" given within state-array.', $eventFqcn));
+            throw new InvalidArgumentException("Cannot find event class '$eventFqcn' given within state array.");
         }
         return $eventFqcn;
     }

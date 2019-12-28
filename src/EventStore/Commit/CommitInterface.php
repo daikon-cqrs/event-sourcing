@@ -1,13 +1,10 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Commit;
 
@@ -34,7 +31,9 @@ interface CommitInterface extends MessageInterface
 
     public function getCommittedAt(): DateTimeImmutable;
 
-    public function getAggregateRevision(): AggregateRevision;
+    public function getHeadRevision(): AggregateRevision;
+
+    public function getTailRevision(): AggregateRevision;
 
     public function getEventLog(): DomainEventSequenceInterface;
 

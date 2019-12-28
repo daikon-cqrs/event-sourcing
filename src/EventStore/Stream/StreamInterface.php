@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -7,10 +6,9 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\EventStore\Stream;
 
+use Countable;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
@@ -18,8 +16,9 @@ use Daikon\EventSourcing\EventStore\Commit\Commit;
 use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\Metadata\MetadataInterface;
+use IteratorAggregate;
 
-interface StreamInterface extends \IteratorAggregate, \Countable
+interface StreamInterface extends IteratorAggregate, Countable
 {
     public static function fromAggregateId(
         AggregateIdInterface $aggregateId,
@@ -34,11 +33,11 @@ interface StreamInterface extends \IteratorAggregate, \Countable
 
     public function getAggregateId(): AggregateIdInterface;
 
-    public function getSequence(): Sequence;
+    public function getHeadSequence(): Sequence;
 
-    public function getAggregateRevision(): AggregateRevision;
+    public function getHeadRevision(): AggregateRevision;
 
-    public function getHead(): ?CommitInterface;
+    public function getHead(): CommitInterface;
 
     public function findCommitsSince(AggregateRevision $incomingRevision): CommitSequenceInterface;
 

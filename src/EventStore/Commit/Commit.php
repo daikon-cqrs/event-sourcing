@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -85,9 +84,14 @@ final class Commit implements CommitInterface
         return $this->committedAt;
     }
 
-    public function getAggregateRevision(): AggregateRevision
+    public function getHeadRevision(): AggregateRevision
     {
         return $this->eventLog->getHeadRevision();
+    }
+
+    public function getTailRevision(): AggregateRevision
+    {
+        return $this->eventLog->getTailRevision();
     }
 
     public function getEventLog(): DomainEventSequenceInterface

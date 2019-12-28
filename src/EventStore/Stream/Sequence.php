@@ -1,13 +1,10 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
@@ -55,7 +52,7 @@ final class Sequence implements FromNativeInterface, ToNativeInterface
 
     public function equals(Sequence $seqNumber): bool
     {
-        return $seqNumber->toNative() === $this->seqNumber;
+        return $this->seqNumber === $seqNumber->toNative();
     }
 
     public function isInitial(): bool
@@ -80,7 +77,7 @@ final class Sequence implements FromNativeInterface, ToNativeInterface
 
     public function __toString(): string
     {
-        return (string) $this->seqNumber;
+        return (string)$this->seqNumber;
     }
 
     private function __construct(int $seqNumber)

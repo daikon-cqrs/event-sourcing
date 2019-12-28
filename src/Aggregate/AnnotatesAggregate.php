@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * This file is part of the daikon-cqrs/event-sourcing project.
  *
@@ -6,9 +6,10 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Daikon\EventSourcing\Aggregate;
+
+use ReflectionClass;
+use RuntimeException;
 
 trait AnnotatesAggregate
 {
@@ -19,7 +20,7 @@ trait AnnotatesAggregate
 
     private static function getAnnotatedId(): string
     {
-        $classReflection = new \ReflectionClass(static::class);
+        $classReflection = new ReflectionClass(static::class);
         foreach (static::getInheritanceTree($classReflection, true) as $curClass) {
             if (!($docComment = $curClass->getDocComment())) {
                 continue;
@@ -30,12 +31,12 @@ trait AnnotatesAggregate
             }
         }
 
-        throw new \RuntimeException('Missing @id annotation on '.static::class);
+        throw new RuntimeException('Missing @id annotation on '.static::class);
     }
 
     private static function getAnnotatedRevision(): string
     {
-        $classReflection = new \ReflectionClass(static::class);
+        $classReflection = new ReflectionClass(static::class);
         foreach (static::getInheritanceTree($classReflection, true) as $curClass) {
             if (!($docComment = $curClass->getDocComment())) {
                 continue;
@@ -46,6 +47,6 @@ trait AnnotatesAggregate
             }
         }
 
-        throw new \RuntimeException('Missing @rev annotation on '.static::class);
+        throw new RuntimeException('Missing @rev annotation on '.static::class);
     }
 }
