@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -51,7 +51,6 @@ final class AggregateRevisionTest extends TestCase
 
     public function testIsGreaterThan(): void
     {
-        /** @var AggregateRevision $revision */
         $revision = AggregateRevision::fromNative(42);
         $this->assertTrue($revision->isGreaterThan(AggregateRevision::fromNative(41)));
         $this->assertFalse($revision->isGreaterThan(AggregateRevision::fromNative(42)));
@@ -60,7 +59,6 @@ final class AggregateRevisionTest extends TestCase
 
     public function testIsGreaterThanOrEqual(): void
     {
-        /** @var AggregateRevision $revision */
         $revision = AggregateRevision::fromNative(42);
         $this->assertTrue($revision->isGreaterThanOrEqual(AggregateRevision::fromNative(41)));
         $this->assertTrue($revision->isGreaterThanOrEqual(AggregateRevision::fromNative(42)));
@@ -69,7 +67,6 @@ final class AggregateRevisionTest extends TestCase
 
     public function testIsLessThan(): void
     {
-        /** @var AggregateRevision $revision */
         $revision = AggregateRevision::fromNative(42);
         $this->assertTrue($revision->isLessThan(AggregateRevision::fromNative(43)));
         $this->assertFalse($revision->isLessThan(AggregateRevision::fromNative(42)));
@@ -78,7 +75,6 @@ final class AggregateRevisionTest extends TestCase
 
     public function testIsLessThanOrEqual(): void
     {
-        /** @var AggregateRevision $revision */
         $revision = AggregateRevision::fromNative(42);
         $this->assertTrue($revision->isLessThanOrEqual(AggregateRevision::fromNative(43)));
         $this->assertTrue($revision->isLessThanOrEqual(AggregateRevision::fromNative(42)));
@@ -87,7 +83,6 @@ final class AggregateRevisionTest extends TestCase
 
     public function testIsWithinRange(): void
     {
-        /** @var AggregateRevision $revision */
         $revision = AggregateRevision::fromNative(42);
 
         $this->assertTrue($revision->isWithinRange(

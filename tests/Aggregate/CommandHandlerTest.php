@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -8,12 +8,14 @@
 
 namespace Daikon\Tests\EventSourcing;
 
+use ArrayIterator;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\Aggregate\Command\CommandHandler;
 use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
+use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
 use Daikon\Metadata\Metadata;
@@ -28,7 +30,7 @@ final class CommandHandlerTest extends TestCase
         $commitSequenceStub
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$commitStub]));
+            ->willReturn(new ArrayIterator([$commitStub]));
 
         $unitOfWorkStub = $this->createMock(UnitOfWorkInterface::class);
         $unitOfWorkStub
@@ -52,8 +54,7 @@ final class CommandHandlerTest extends TestCase
             ->expects($this->once())
             ->method('getMessage')
             ->willReturn(
-                $this->getMockBuilder(CommandInterface::class)
-                    ->setMockClassName('FooBar')->getMock()
+                $this->getMockBuilder(CommandInterface::class)->setMockClassName('FooBar')->getMock()
             );
 
         $commandHandler = $this->getMockBuilder(CommandHandler::class)

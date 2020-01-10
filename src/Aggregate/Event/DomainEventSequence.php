@@ -12,15 +12,13 @@ use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Ds\Vector;
 use InvalidArgumentException;
 use RuntimeException;
-use Traversable;
 
 final class DomainEventSequence implements DomainEventSequenceInterface
 {
-    /** @var Vector */
-    private $compositeVector;
+    private Vector $compositeVector;
 
     /** @param array $events */
-    public static function fromNative($events): DomainEventSequenceInterface
+    public static function fromNative($events): self
     {
         return new self(array_map(function (array $state): DomainEventInterface {
             $eventFqcn = self::resolveEventFqcn($state);
@@ -28,7 +26,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         }, $events));
     }
 
-    public static function makeEmpty(): DomainEventSequenceInterface
+    public static function makeEmpty(): self
     {
         return new self;
     }
@@ -40,12 +38,12 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         })(...$events);
     }
 
-    public function push(DomainEventInterface $event): DomainEventSequenceInterface
+    public function push(DomainEventInterface $event): self
     {
         $expectedRevision = $this->getHeadRevision()->increment();
         if (!$this->isEmpty() && !$expectedRevision->equals($event->getAggregateRevision())) {
             throw new RuntimeException(sprintf(
-                'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
+                'Trying to add invalid revision %s to event-sequence, expected revision is %s',
                 (string)$event->getAggregateRevision(),
                 (string)$expectedRevision
             ));
@@ -55,7 +53,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return $eventSequence;
     }
 
-    public function append(DomainEventSequenceInterface $events): DomainEventSequenceInterface
+    public function append(DomainEventSequenceInterface $events): self
     {
         $eventSequence = $this;
         foreach ($events as $event) {
@@ -64,7 +62,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return $eventSequence;
     }
 
-    public function resequence(AggregateRevision $aggregateRevision): DomainEventSequenceInterface
+    public function resequence(AggregateRevision $aggregateRevision): self
     {
         /** @var self $eventSequence */
         $eventSequence = self::makeEmpty();
@@ -112,11 +110,6 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return $this->compositeVector->last();
     }
 
-    public function getLength(): int
-    {
-        return $this->count();
-    }
-
     public function isEmpty(): bool
     {
         return $this->compositeVector->isEmpty();
@@ -132,9 +125,9 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         return $this->compositeVector->count();
     }
 
-    public function getIterator(): Traversable
+    public function getIterator(): Vector
     {
-        return $this->compositeVector->getIterator();
+        return $this->compositeVector;
     }
 
     private static function resolveEventFqcn(array $eventState): string

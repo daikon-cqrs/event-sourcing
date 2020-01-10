@@ -17,16 +17,15 @@ final class Sequence implements FromNativeInterface, ToNativeInterface
 
     private const NONE = 0;
 
-    /** @var int */
-    private $seqNumber;
+    private int $seqNumber;
 
     /** @param int $seqNumber */
-    public static function fromNative($seqNumber): Sequence
+    public static function fromNative($seqNumber): self
     {
         return new self($seqNumber);
     }
 
-    public static function makeInitial(): Sequence
+    public static function makeInitial(): self
     {
         return new self(self::NONE);
     }
@@ -36,14 +35,14 @@ final class Sequence implements FromNativeInterface, ToNativeInterface
         return $this->seqNumber;
     }
 
-    public function increment(): Sequence
+    public function increment(): self
     {
         $copy = clone $this;
         $copy->seqNumber++;
         return $copy;
     }
 
-    public function decrement(): Sequence
+    public function decrement(): self
     {
         $copy = clone $this;
         $copy->seqNumber--;

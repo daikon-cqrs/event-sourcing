@@ -23,7 +23,7 @@ interface CommitInterface extends MessageInterface
         Sequence $Sequence,
         DomainEventSequenceInterface $eventLog,
         MetadataInterface $metadata
-    ): CommitInterface;
+    ): self;
 
     public function getAggregateId(): AggregateIdInterface;
 

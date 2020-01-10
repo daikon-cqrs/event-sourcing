@@ -12,11 +12,10 @@ use Assert\Assertion;
 
 trait AggregateIdTrait
 {
-    /** @var string */
-    private $id;
+    private string $id;
 
     /** @param string $id */
-    public static function fromNative($id): AggregateIdInterface
+    public static function fromNative($id): self
     {
         Assertion::regex($id, static::PATTERN);
         return new static($id);

@@ -8,7 +8,7 @@
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.2",
+        "php": "^7.4",
         "beberlei/assert": "^3.0",
         "daikon/interop": "master@dev",
         "daikon/message-bus": "master@dev",
@@ -35,9 +35,9 @@
     },
     "scripts": {
         "build": [ "@sniff", "@tests" ],
-        "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' src/ tests/",
-        "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 src/ tests/",
-        "copy-paste-detector": "phpcpd src/ tests/ || true",
+        "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' src tests",
+        "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 src tests",
+        "copy-paste-detector": "phpcpd src tests || true",
         "sniff": [
             "@code-sniffer",
             "@copy-paste-detector",

@@ -15,7 +15,7 @@ interface AggregateRootInterface
     public static function reconstituteFromHistory(
         AggregateIdInterface $aggregateId,
         DomainEventSequenceInterface $history
-    ): AggregateRootInterface;
+    ): self;
 
     public function getIdentifier(): AggregateIdInterface;
 

@@ -35,7 +35,7 @@
         <InvalidDocblock errorLevel="error" />
         <MisplacedRequiredParam errorLevel="info" />
 
-        <PropertyNotSetInConstructor errorLevel="info" />
+        <PropertyNotSetInConstructor errorLevel="suppress" />
         <MissingConstructor errorLevel="info" />
         <MissingClosureParamType errorLevel="info" />
         <MissingParamType errorLevel="info" />
@@ -54,8 +54,8 @@
         <!-- level 4 issues - points to possible deficiencies in logic, higher false-positives -->
 
         <MoreSpecificImplementedParamType errorLevel="info" />
-        <MoreSpecificReturnType errorLevel="info" />
-        <LessSpecificReturnStatement errorLevel="info" />
+        <MoreSpecificReturnType errorLevel="suppress" />
+        <LessSpecificReturnStatement errorLevel="suppress" />
         <TypeCoercion errorLevel="info" />
 
         <PossiblyFalseArgument errorLevel="info" />
@@ -106,6 +106,6 @@
         <MissingDocblockType errorLevel="info" />
         <ImplementedReturnTypeMismatch errorLevel="info" />
         <ImplementedParamTypeMismatch errorLevel="info" />
-        <MethodSignatureMismatch errorLevel="info" />
+        <MethodSignatureMismatch errorLevel="suppress" />
     </issueHandlers>
 </psalm>

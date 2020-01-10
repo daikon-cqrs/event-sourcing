@@ -20,5 +20,5 @@ interface DomainEventInterface extends MessageInterface
 
     public function getAggregateRevision(): AggregateRevision;
 
-    public function withAggregateRevision(AggregateRevision $aggregateRevision): DomainEventInterface;
+    public function withAggregateRevision(AggregateRevision $aggregateRevision): self;
 }

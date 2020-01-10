@@ -23,11 +23,11 @@ interface StreamInterface extends IteratorAggregate, Countable
     public static function fromAggregateId(
         AggregateIdInterface $aggregateId,
         string $commitImplementor = Commit::class
-    ): StreamInterface;
+    ): self;
 
-    public function appendEvents(DomainEventSequenceInterface $eventLog, MetadataInterface $metadata): StreamInterface;
+    public function appendEvents(DomainEventSequenceInterface $eventLog, MetadataInterface $metadata): self;
 
-    public function appendCommit(CommitInterface $commit): StreamInterface;
+    public function appendCommit(CommitInterface $commit): self;
 
     public function getCommitRange(Sequence $fromRev, Sequence $toRev = null): CommitSequenceInterface;
 

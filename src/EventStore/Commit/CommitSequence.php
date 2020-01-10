@@ -11,22 +11,20 @@ namespace Daikon\EventSourcing\EventStore\Commit;
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
 use Ds\Vector;
 use RuntimeException;
-use Traversable;
 
 final class CommitSequence implements CommitSequenceInterface
 {
-    /** @var Vector */
-    private $compositeVector;
+    private Vector $compositeVector;
 
     /** @param array $commits */
-    public static function fromNative($commits): CommitSequenceInterface
+    public static function fromNative($commits): self
     {
         return new self(array_map(function (array $state): CommitInterface {
             return Commit::fromNative($state);
         }, $commits));
     }
 
-    public static function makeEmpty(): CommitSequenceInterface
+    public static function makeEmpty(): self
     {
         return new self;
     }
@@ -38,13 +36,13 @@ final class CommitSequence implements CommitSequenceInterface
         })(...$commits);
     }
 
-    public function push(CommitInterface $commit): CommitSequenceInterface
+    public function push(CommitInterface $commit): self
     {
         if (!$this->isEmpty()) {
             $nextRevision = $this->getHead()->getHeadRevision()->increment();
             if (!$nextRevision->equals($commit->getTailRevision())) {
                 throw new RuntimeException(sprintf(
-                    'Trying to add unexpected revision %s to event-sequence. Expected revision is %s',
+                    'Trying to add invalid revision %s to event-sequence, expected revision is %s',
                     (string)$commit->getHeadRevision(),
                     (string)$nextRevision
                 ));
@@ -57,11 +55,13 @@ final class CommitSequence implements CommitSequenceInterface
 
     public function toNative(): array
     {
-        return array_map(function (CommitInterface $commit): array {
+        $nativeList = [];
+        foreach ($this as $commit) {
             $nativeRep = $commit->toNative();
             $nativeRep['@type'] = get_class($commit);
-            return $nativeRep;
-        }, $this->compositeVector->toArray());
+            $nativeList[] = $nativeRep;
+        }
+        return $nativeList;
     }
 
     public function getTail(): CommitInterface
@@ -86,21 +86,17 @@ final class CommitSequence implements CommitSequenceInterface
         return $this->compositeVector->get($offset);
     }
 
-    public function getSlice(Sequence $start, Sequence $end): CommitSequenceInterface
+    public function getSlice(Sequence $start, Sequence $end): self
     {
-        return $this->compositeVector->reduce(function (
-            CommitSequenceInterface $commits,
-            CommitInterface $commit
-        ) use (
-            $start,
-            $end
-        ): CommitSequenceInterface {
-            if ($commit->getSequence()->isWithinRange($start, $end)) {
-                $commits = $commits->push($commit);
+        return $this->compositeVector->reduce(
+            function (CommitSequenceInterface $commits, CommitInterface $commit) use ($start, $end): self {
+                if ($commit->getSequence()->isWithinRange($start, $end)) {
+                    $commits = $commits->push($commit);
+                }
                 return $commits;
-            }
-            return $commits;
-        }, new self);
+            },
+            new self
+        );
     }
 
     public function isEmpty(): bool
@@ -117,19 +113,14 @@ final class CommitSequence implements CommitSequenceInterface
         return Sequence::fromNative($revision);
     }
 
-    public function getLength(): int
-    {
-        return $this->count();
-    }
-
     public function count(): int
     {
         return $this->compositeVector->count();
     }
 
-    public function getIterator(): Traversable
+    public function getIterator(): Vector
     {
-        return $this->compositeVector->getIterator();
+        return $this->compositeVector;
     }
 
     private function __clone()

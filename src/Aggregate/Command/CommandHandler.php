@@ -23,11 +23,9 @@ abstract class CommandHandler implements MessageHandlerInterface
 {
     private const COMMITS_CHANNEL = 'commits';
 
-    /** @var MessageBusInterface */
-    private $messageBus;
+    private MessageBusInterface $messageBus;
 
-    /** @var UnitOfWorkInterface */
-    private $unitOfWork;
+    private UnitOfWorkInterface $unitOfWork;
 
     public function __construct(UnitOfWorkInterface $unitOfWork, MessageBusInterface $messageBus)
     {

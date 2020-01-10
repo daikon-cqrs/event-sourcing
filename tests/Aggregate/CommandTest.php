@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * This file is part of the daikon-cqrs/cqrs project.
+ * This file is part of the daikon-cqrs/event-sourcing project.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,6 @@ final class CommandTest extends TestCase
 {
     public function testFromNative(): void
     {
-        /** @var BakePizza $bakePizza */
         $bakePizza = BakePizza::fromNative([
             'pizzaId' => 'pizza-42-6-23',
             'ingredients' => ['mushrooms', 'tomatoes', 'onions']

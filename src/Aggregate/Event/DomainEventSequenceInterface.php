@@ -16,13 +16,13 @@ use IteratorAggregate;
 
 interface DomainEventSequenceInterface extends IteratorAggregate, Countable, FromNativeInterface, ToNativeInterface
 {
-    public static function makeEmpty(): DomainEventSequenceInterface;
+    public static function makeEmpty(): self;
 
-    public function push(DomainEventInterface $event): DomainEventSequenceInterface;
+    public function push(DomainEventInterface $event): self;
 
-    public function append(DomainEventSequenceInterface $events): DomainEventSequenceInterface;
+    public function append(DomainEventSequenceInterface $events): self;
 
-    public function resequence(AggregateRevision $aggregateRevision): DomainEventSequenceInterface;
+    public function resequence(AggregateRevision $aggregateRevision): self;
 
     public function getHeadRevision(): AggregateRevision;
 
@@ -31,8 +31,6 @@ interface DomainEventSequenceInterface extends IteratorAggregate, Countable, Fro
     public function getTail(): DomainEventInterface;
 
     public function getHead(): DomainEventInterface;
-
-    public function getLength(): int;
 
     public function isEmpty(): bool;
 

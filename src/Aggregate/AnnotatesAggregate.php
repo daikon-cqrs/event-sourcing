@@ -20,33 +20,27 @@ trait AnnotatesAggregate
 
     private static function getAnnotatedId(): string
     {
-        $classReflection = new ReflectionClass(static::class);
-        foreach (static::getInheritanceTree($classReflection, true) as $curClass) {
-            if (!($docComment = $curClass->getDocComment())) {
-                continue;
-            }
-            preg_match("#@id\((?<id>\w+)#", $docComment, $matches);
-            if (isset($matches['id'])) {
-                return trim($matches['id']);
-            }
-        }
-
-        throw new RuntimeException('Missing @id annotation on '.static::class);
+        return static::getAnnotation('id');
     }
 
     private static function getAnnotatedRevision(): string
+    {
+        return static::getAnnotation('rev');
+    }
+
+    private static function getAnnotation(string $key): string
     {
         $classReflection = new ReflectionClass(static::class);
         foreach (static::getInheritanceTree($classReflection, true) as $curClass) {
             if (!($docComment = $curClass->getDocComment())) {
                 continue;
             }
-            preg_match('#@rev\((?<rev>\w+)#', $docComment, $matches);
-            if (isset($matches['rev'])) {
-                return trim($matches['rev']);
+            preg_match("#@$key\((?<$key>\w+)#", $docComment, $matches);
+            if (isset($matches[$key])) {
+                return trim($matches[$key]);
             }
         }
 
-        throw new RuntimeException('Missing @rev annotation on '.static::class);
+        throw new RuntimeException("Missing @$key annotation on ".static::class);
     }
 }

@@ -10,7 +10,6 @@ namespace Daikon\EventSourcing\Aggregate\Event;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\AnnotatesAggregate;
-use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 
 trait DomainEventTrait
 {
@@ -21,7 +20,7 @@ trait DomainEventTrait
         return $this->{static::getAnnotatedRevision()};
     }
 
-    public function withAggregateRevision(AggregateRevision $aggregateRevision): DomainEventInterface
+    public function withAggregateRevision(AggregateRevision $aggregateRevision): self
     {
         $copy = clone $this;
         $copy->{static::getAnnotatedRevision()} = $aggregateRevision;

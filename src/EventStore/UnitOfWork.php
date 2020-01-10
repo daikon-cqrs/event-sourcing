@@ -29,23 +29,17 @@ final class UnitOfWork implements UnitOfWorkInterface
 {
     private const MAX_RACE_ATTEMPTS = 3;
 
-    /** @var string */
-    private $aggregateRootType;
+    private string $aggregateRootType;
 
-    /** @var StreamStorageInterface */
-    private $streamStorage;
+    private StreamStorageInterface $streamStorage;
 
-    /** @var StreamProcessorInterface|null */
-    private $streamProcessor;
+    private ?StreamProcessorInterface $streamProcessor;
 
-    /** @var string */
-    private $streamImplementor;
+    private string $streamImplementor;
 
-    /** @var StreamMap */
-    private $trackedCommitStreams;
+    private StreamMap $trackedCommitStreams;
 
-    /** @var int */
-    private $maxRaceAttempts;
+    private int $maxRaceAttempts;
 
     public function __construct(
         string $aggregateRootType,
@@ -96,7 +90,7 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         $stream = $this->streamStorage->load($aggregateId, $revision);
         if ($stream->isEmpty()) {
-            throw new RuntimeException('Checking out empty streams is not supported.');
+            throw new RuntimeException('Checking out empty streams is not supported');
         }
         /** @var AggregateRootInterface $aggregateRoot */
         $aggregateRoot = call_user_func(
@@ -116,12 +110,13 @@ final class UnitOfWork implements UnitOfWorkInterface
         $aggregateId = $aggregateRoot->getIdentifier();
         $tailRevision = $aggregateRoot->getTrackedEvents()->getTailRevision();
         if ($this->trackedCommitStreams->has((string)$aggregateId)) {
+            /** @var StreamInterface $stream */
             $stream = $this->trackedCommitStreams->get((string)$aggregateId);
         } elseif ($tailRevision->isInitial()) {
             $stream = call_user_func([$this->streamImplementor, 'fromAggregateId'], $aggregateId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         } else {
-            throw new RuntimeException('AggregateRoot must be checked out before it may be committed.');
+            throw new RuntimeException('AggregateRoot must be checked out before it may be committed');
         }
         return $stream;
     }
@@ -137,7 +132,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         }
         if (!$targetRevision->isEmpty() && !$history->getHeadRevision()->equals($targetRevision)) {
             throw new RuntimeException(sprintf(
-                'AggregateRoot cannot be reconstituted to revision %s.',
+                'AggregateRoot cannot be reconstituted to revision %s',
                 (string)$targetRevision
             ));
         }

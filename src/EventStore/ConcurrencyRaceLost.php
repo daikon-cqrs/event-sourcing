@@ -14,11 +14,9 @@ use Exception;
 
 final class ConcurrencyRaceLost extends Exception
 {
-    /** @var AggregateIdInterface */
-    private $aggregateId;
+    private AggregateIdInterface $aggregateId;
 
-    /** @var DomainEventSequenceInterface */
-    private $lostEvents;
+    private DomainEventSequenceInterface $lostEvents;
 
     public function __construct(AggregateIdInterface $aggregateId, DomainEventSequenceInterface $lostEvents)
     {

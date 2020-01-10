@@ -14,11 +14,9 @@ use Exception;
 
 final class UnresolvableConflict extends Exception
 {
-    /** @var AggregateIdInterface */
-    private $aggregateId;
+    private AggregateIdInterface $aggregateId;
 
-    /** @var DomainEventSequenceInterface */
-    private $conflictingEvents;
+    private DomainEventSequenceInterface $conflictingEvents;
 
     public function __construct(AggregateIdInterface $aggregateId, DomainEventSequenceInterface $conflictingEvents)
     {

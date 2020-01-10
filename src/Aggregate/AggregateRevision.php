@@ -17,17 +17,16 @@ final class AggregateRevision implements ValueObjectInterface
 
     private const NONE = 0;
 
-    /** @var int */
-    private $revision;
+    private int $revision;
 
     /** @param int|string $revision */
-    public static function fromNative($revision): AggregateRevision
+    public static function fromNative($revision): self
     {
         Assertion::integerish($revision);
         return new self((int)$revision);
     }
 
-    public static function makeEmpty(): AggregateRevision
+    public static function makeEmpty(): self
     {
         return new self(self::NONE);
     }
@@ -37,7 +36,7 @@ final class AggregateRevision implements ValueObjectInterface
         return $this->revision;
     }
 
-    public function increment(): AggregateRevision
+    public function increment(): self
     {
         $copy = clone $this;
         $copy->revision++;
@@ -61,27 +60,27 @@ final class AggregateRevision implements ValueObjectInterface
         return $this->revision === self::NONE;
     }
 
-    public function isWithinRange(AggregateRevision $from, AggregateRevision $to): bool
+    public function isWithinRange(self $from, self $to): bool
     {
         return $this->isGreaterThanOrEqual($from) && $this->isLessThanOrEqual($to);
     }
 
-    public function isGreaterThanOrEqual(AggregateRevision $revision): bool
+    public function isGreaterThanOrEqual(self $revision): bool
     {
         return $this->revision >= $revision->toNative();
     }
 
-    public function isGreaterThan(AggregateRevision $revision): bool
+    public function isGreaterThan(self $revision): bool
     {
         return $this->revision > $revision->toNative();
     }
 
-    public function isLessThanOrEqual(AggregateRevision $revision): bool
+    public function isLessThanOrEqual(self $revision): bool
     {
         return $this->revision <= $revision->toNative();
     }
 
-    public function isLessThan(AggregateRevision $revision): bool
+    public function isLessThan(self $revision): bool
     {
         return $this->revision < $revision->toNative();
     }

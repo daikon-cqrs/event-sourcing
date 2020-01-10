@@ -18,28 +18,25 @@ use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequence;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\Metadata\MetadataInterface;
-use Traversable;
+use Ds\Vector;
 
 final class Stream implements StreamInterface
 {
-    /** @var AggregateIdInterface */
-    private $aggregateId;
+    private AggregateIdInterface $aggregateId;
 
-    /** @var CommitSequenceInterface */
-    private $commitSequence;
+    private CommitSequenceInterface $commitSequence;
 
-    /** @var string */
-    private $commitImplementor;
+    private string $commitImplementor;
 
     public static function fromAggregateId(
         AggregateIdInterface $aggregateId,
         string $commitImplementor = Commit::class
-    ): StreamInterface {
+    ): self {
         return new self($aggregateId);
     }
 
     /** @param array $state */
-    public static function fromNative($state): Stream
+    public static function fromNative($state): self
     {
         Assertion::keyExists($state, 'aggregateId');
         Assertion::keyExists($state, 'commitSequence');
@@ -72,7 +69,7 @@ final class Stream implements StreamInterface
         return $this->getHead()->getHeadRevision();
     }
 
-    public function appendEvents(DomainEventSequenceInterface $eventLog, MetadataInterface $metadata): StreamInterface
+    public function appendEvents(DomainEventSequenceInterface $eventLog, MetadataInterface $metadata): self
     {
         return $this->appendCommit(
             call_user_func(
@@ -85,7 +82,7 @@ final class Stream implements StreamInterface
         );
     }
 
-    public function appendCommit(CommitInterface $commit): StreamInterface
+    public function appendCommit(CommitInterface $commit): self
     {
         $stream = clone $this;
         $stream->commitSequence = $this->commitSequence->push($commit);
@@ -121,7 +118,7 @@ final class Stream implements StreamInterface
         ];
     }
 
-    public function getIterator(): Traversable
+    public function getIterator(): Vector
     {
         return $this->commitSequence->getIterator();
     }

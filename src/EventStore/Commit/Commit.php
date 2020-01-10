@@ -25,32 +25,27 @@ final class Commit implements CommitInterface
 {
     private const NATIVE_FORMAT = 'Y-m-d\TH:i:s.uP';
 
-    /** @var AggregateIdInterface */
-    private $aggregateId;
+    private AggregateIdInterface $aggregateId;
 
-    /** @var Sequence */
-    private $sequence;
+    private Sequence $sequence;
 
-    /** @var DateTimeImmutable */
-    private $committedAt;
+    private DateTimeImmutable $committedAt;
 
-    /** @var DomainEventSequenceInterface */
-    private $eventLog;
+    private DomainEventSequenceInterface $eventLog;
 
-    /** @var MetadataInterface */
-    private $metadata;
+    private MetadataInterface $metadata;
 
     public static function make(
         AggregateIdInterface $aggregateId,
         Sequence $sequence,
         DomainEventSequenceInterface $eventLog,
         MetadataInterface $metadata
-    ): CommitInterface {
+    ): self {
         return new self($aggregateId, $sequence, new DateTimeImmutable, $eventLog, $metadata);
     }
 
     /** @param array $state */
-    public static function fromNative($state): CommitInterface
+    public static function fromNative($state): self
     {
         Assertion::keyExists($state, 'aggregateId');
         Assertion::keyExists($state, 'sequence');
@@ -59,7 +54,6 @@ final class Commit implements CommitInterface
         Assertion::keyExists($state, 'metadata');
         Assertion::date($state['committedAt'], self::NATIVE_FORMAT);
 
-        /** @psalm-suppress PossiblyFalseArgument */
         return new self(
             AggregateId::fromNative($state['aggregateId']),
             Sequence::fromNative((int) $state['sequence']),

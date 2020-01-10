@@ -17,22 +17,18 @@ use RuntimeException;
 
 trait AggregateRootTrait
 {
-    /** @var AggregateIdInterface */
-    private $identifier;
+    private AggregateIdInterface $identifier;
 
-    /** @var AggregateRevision */
-    private $revision;
+    private AggregateRevision $revision;
 
-    /** @var DomainEventSequenceInterface */
-    private $trackedEvents;
+    private DomainEventSequenceInterface $trackedEvents;
 
     public static function reconstituteFromHistory(
         AggregateIdInterface $aggregateId,
         DomainEventSequenceInterface $history
-    ): AggregateRootInterface {
+    ): self {
         $aggregateRoot = new static($aggregateId);
         foreach ($history as $historicalEvent) {
-            /** @psalm-suppress PossiblyUndefinedMethod */
             $aggregateRoot = $aggregateRoot->reconstitute($historicalEvent);
         }
         return $aggregateRoot;
@@ -60,7 +56,7 @@ trait AggregateRootTrait
         $this->trackedEvents = DomainEventSequence::makeEmpty();
     }
 
-    protected function reflectThat(DomainEventInterface $eventOccurred): AggregateRootInterface
+    protected function reflectThat(DomainEventInterface $eventOccurred): self
     {
         $this->assertExpectedIdentifier($eventOccurred, $this->getIdentifier());
         $aggregateRoot = clone $this;
@@ -71,7 +67,7 @@ trait AggregateRootTrait
         return $aggregateRoot;
     }
 
-    private function reconstitute(DomainEventInterface $historicalEvent): AggregateRootInterface
+    private function reconstitute(DomainEventInterface $historicalEvent): self
     {
         $this->assertExpectedIdentifier($historicalEvent, $this->getIdentifier());
         $aggregateRoot = clone $this;
