@@ -33,9 +33,9 @@ final class DomainEventSequence implements DomainEventSequenceInterface
 
     public function __construct(iterable $events = [])
     {
-        $this->compositeVector = (function (DomainEventInterface ...$events): Vector {
-            return new Vector($events);
-        })(...$events);
+        $this->compositeVector = (
+            fn(DomainEventInterface ...$events): Vector => new Vector($events)
+        )(...$events);
     }
 
     public function push(DomainEventInterface $event): self
@@ -64,7 +64,6 @@ final class DomainEventSequence implements DomainEventSequenceInterface
 
     public function resequence(AggregateRevision $aggregateRevision): self
     {
-        /** @var self $eventSequence */
         $eventSequence = self::makeEmpty();
         foreach ($this as $event) {
             $aggregateRevision = $aggregateRevision->increment();

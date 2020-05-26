@@ -141,7 +141,7 @@ final class Stream implements StreamInterface
         string $commitImplementor = null
     ) {
         $this->aggregateId = $aggregateId;
-        $this->commitSequence = $commitSequence ?? new CommitSequence;
+        $this->commitSequence = $commitSequence ?? CommitSequence::makeEmpty();
         $this->commitImplementor = $commitImplementor ?? Commit::class;
     }
 }

@@ -19,9 +19,10 @@ final class CommitSequence implements CommitSequenceInterface
     /** @param array $commits */
     public static function fromNative($commits): self
     {
-        return new self(array_map(function (array $state): CommitInterface {
-            return Commit::fromNative($state);
-        }, $commits));
+        return new self(array_map(
+            fn(array $state): CommitInterface => Commit::fromNative($state),
+            $commits
+        ));
     }
 
     public static function makeEmpty(): self
@@ -31,9 +32,9 @@ final class CommitSequence implements CommitSequenceInterface
 
     public function __construct(iterable $commits = [])
     {
-        $this->compositeVector = (function (CommitInterface ...$commits): Vector {
-            return new Vector($commits);
-        })(...$commits);
+        $this->compositeVector = (
+            fn(CommitInterface ...$commits): Vector => new Vector($commits)
+        )(...$commits);
     }
 
     public function push(CommitInterface $commit): self
@@ -77,7 +78,8 @@ final class CommitSequence implements CommitSequenceInterface
     public function has(Sequence $sequence): bool
     {
         $offset = $sequence->toNative() - 1;
-        return $this->compositeVector->offsetExists($offset);
+        /** @psalm-suppress UndefinedMethod */
+        return isset($this->compositeVector[$offset]);
     }
 
     public function get(Sequence $sequence): CommitInterface
@@ -88,6 +90,7 @@ final class CommitSequence implements CommitSequenceInterface
 
     public function getSlice(Sequence $start, Sequence $end): self
     {
+        /** @psalm-suppress InvalidArgument */
         return $this->compositeVector->reduce(
             function (CommitSequenceInterface $commits, CommitInterface $commit) use ($start, $end): self {
                 if ($commit->getSequence()->isWithinRange($start, $end)) {

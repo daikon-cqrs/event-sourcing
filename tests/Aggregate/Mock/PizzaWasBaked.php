@@ -12,73 +12,23 @@ use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventTrait;
 use Daikon\Interop\FromToNativeTrait;
+use Daikon\ValueObject\TextList;
 
 /**
  * @codeCoverageIgnore
- * @id(pizzaId)
- * @rev(revision)
  */
 final class PizzaWasBaked implements DomainEventInterface
 {
-    use FromToNativeTrait;
     use DomainEventTrait;
+    use BakeMessageTrait;
 
-    private PizzaId $pizzaId;
-
-    private AggregateRevision $revision;
-
-    private array $ingredients = [];
-
-    public static function withIngredients(BakePizza $bakePizza): self
+    public static function fromCommand(BakePizza $bakePizza): self
     {
-        $pizzaBaked = new static($bakePizza->getPizzaId());
-        $pizzaBaked->ingredients = $bakePizza->getIngredients();
-        return $pizzaBaked;
+        return self::fromNative($bakePizza->toNative());
     }
 
     public function conflictsWith(DomainEventInterface $otherEvent): bool
     {
         return false;
-    }
-
-    public function getPizzaId(): PizzaId
-    {
-        return $this->pizzaId;
-    }
-
-    public function getRevision(): AggregateRevision
-    {
-        return $this->revision;
-    }
-
-    public function getIngredients(): array
-    {
-        return $this->ingredients;
-    }
-
-    /** @param array $state */
-    public static function fromNative($state): self
-    {
-        $pizzaWasBaked = new self(
-            PizzaId::fromNative($state['pizzaId']),
-            AggregateRevision::fromNative($state['revision'])
-        );
-        $pizzaWasBaked->ingredients = $state['ingredients'];
-        return $pizzaWasBaked;
-    }
-
-    public function toNative(): array
-    {
-        return [
-            'pizzaId' => (string)$this->pizzaId,
-            'revision' => $this->revision->toNative(),
-            'ingredients' => $this->ingredients
-        ];
-    }
-
-    protected function __construct(PizzaId $pizzaId, AggregateRevision $revision = null)
-    {
-        $this->pizzaId = $pizzaId;
-        $this->revision = $revision ?? AggregateRevision::makeEmpty();
     }
 }

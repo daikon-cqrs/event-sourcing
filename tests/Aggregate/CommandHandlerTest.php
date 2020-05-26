@@ -15,7 +15,6 @@ use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
-use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
 use Daikon\Metadata\Metadata;

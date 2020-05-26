@@ -22,15 +22,16 @@ final class AggregateRootTest extends TestCase
     public function testStartAggregateRootLifecycle(): void
     {
         $ingredients = ['mushrooms', 'tomatoes', 'onions'];
+        /** @var BakePizza $bakePizza */
         $bakePizza = BakePizza::fromNative([
             'pizzaId' => 'pizza-42-6-23',
             'ingredients' => $ingredients
         ]);
-        $pizza = Pizza::bake(PizzaWasBaked::withIngredients($bakePizza));
+        $pizza = Pizza::bake(PizzaWasBaked::fromCommand($bakePizza));
 
         $this->assertEquals('pizza-42-6-23', $pizza->getIdentifier());
         $this->assertEquals(1, $pizza->getRevision()->toNative());
-        $this->assertEquals($ingredients, $pizza->getIngredients());
+        $this->assertEquals($ingredients, $pizza->getIngredients()->toNative());
         $this->assertCount(1, $pizza->getTrackedEvents());
     }
 
@@ -54,7 +55,7 @@ final class AggregateRootTest extends TestCase
 
         $this->assertEquals($pizzaId, $pizza->getIdentifier());
         $this->assertEquals(1, $pizza->getRevision()->toNative());
-        $this->assertEquals($ingredients, $pizza->getIngredients());
+        $this->assertEquals($ingredients, $pizza->getIngredients()->toNative());
         $this->assertCount(0, $pizza->getTrackedEvents());
     }
 

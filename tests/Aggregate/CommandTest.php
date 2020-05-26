@@ -15,13 +15,14 @@ final class CommandTest extends TestCase
 {
     public function testFromNative(): void
     {
+        $ingredients = ['mushrooms', 'tomatoes', 'onions'];
         $bakePizza = BakePizza::fromNative([
             'pizzaId' => 'pizza-42-6-23',
-            'ingredients' => ['mushrooms', 'tomatoes', 'onions']
+            'ingredients' => $ingredients
         ]);
         $this->assertEquals('pizza-42-6-23', $bakePizza->getPizzaId());
         $this->assertEquals(0, $bakePizza->getKnownAggregateRevision()->toNative());
-        $this->assertEquals(['mushrooms', 'tomatoes', 'onions'], $bakePizza->getIngredients());
+        $this->assertEquals($ingredients, $bakePizza->getIngredients()->toNative());
     }
 
     public function testToNative(): void

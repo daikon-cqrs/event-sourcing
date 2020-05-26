@@ -8,63 +8,14 @@
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
-use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
 use Daikon\EventSourcing\Aggregate\Command\CommandTrait;
-use Daikon\Interop\FromToNativeTrait;
 
 /**
  * @codeCoverageIgnore
- * @id(pizzaId)
- * @rev(revision)
  */
 final class BakePizza implements CommandInterface
 {
-    use FromToNativeTrait;
     use CommandTrait;
-
-    private PizzaId $pizzaId;
-
-    private AggregateRevision $revision;
-
-    private array $ingredients = [];
-
-    public function getPizzaId(): PizzaId
-    {
-        return $this->pizzaId;
-    }
-
-    public function getRevision(): AggregateRevision
-    {
-        return $this->revision;
-    }
-
-    public function getIngredients(): array
-    {
-        return $this->ingredients;
-    }
-
-    /** @param array $state */
-    public static function fromNative($state): self
-    {
-        $pizzaId = PizzaId::fromNative($state['pizzaId']);
-        $bakePizza = new self($pizzaId);
-        $bakePizza->ingredients = $state['ingredients'];
-        return $bakePizza;
-    }
-
-    public function toNative(): array
-    {
-        return [
-            'pizzaId' => (string)$this->pizzaId,
-            'revision' => $this->revision->toNative(),
-            'ingredients' => $this->ingredients
-        ];
-    }
-
-    protected function __construct(PizzaId $pizzaId, AggregateRevision $knownRevision = null)
-    {
-        $this->pizzaId = $pizzaId;
-        $this->revision = $knownRevision ?? AggregateRevision::makeEmpty();
-    }
+    use BakeMessageTrait;
 }

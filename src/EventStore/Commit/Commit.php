@@ -54,6 +54,7 @@ final class Commit implements CommitInterface
         Assertion::keyExists($state, 'metadata');
         Assertion::date($state['committedAt'], self::NATIVE_FORMAT);
 
+        /** @psalm-suppress PossiblyFalseArgument */
         return new self(
             AggregateId::fromNative($state['aggregateId']),
             Sequence::fromNative((int) $state['sequence']),

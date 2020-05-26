@@ -10,6 +10,7 @@ namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRootTrait;
+use Daikon\ValueObject\TextList;
 
 /**
  * @codeCoverageIgnore
@@ -18,7 +19,7 @@ final class Pizza implements AggregateRootInterface
 {
     use AggregateRootTrait;
 
-    private array $ingredients = [];
+    private TextList $ingredients;
 
     public static function bake(PizzaWasBaked $pizzaWasBaked): self
     {
@@ -26,7 +27,7 @@ final class Pizza implements AggregateRootInterface
             ->reflectThat($pizzaWasBaked);
     }
 
-    public function getIngredients(): array
+    public function getIngredients(): TextList
     {
         return $this->ingredients;
     }

@@ -15,14 +15,15 @@ final class DomainEventTest extends TestCase
 {
     public function testFromNative(): void
     {
+        $ingredients = ['mushrooms', 'tomatoes', 'onions'];
         $pizzaWasBaked = PizzaWasBaked::fromNative([
             'pizzaId' => 'pizza-42-6-23',
             'revision' => 1,
-            'ingredients' => ['mushrooms', 'tomatoes', 'onions']
+            'ingredients' => $ingredients
         ]);
         $this->assertEquals('pizza-42-6-23', $pizzaWasBaked->getPizzaId());
         $this->assertEquals(1, $pizzaWasBaked->getRevision()->toNative());
-        $this->assertEquals(['mushrooms', 'tomatoes', 'onions'], $pizzaWasBaked->getIngredients());
+        $this->assertEquals($ingredients, $pizzaWasBaked->getIngredients()->toNative());
     }
 
     public function testToNative(): void
