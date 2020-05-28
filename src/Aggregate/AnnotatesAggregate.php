@@ -8,8 +8,8 @@
 
 namespace Daikon\EventSourcing\Aggregate;
 
+use Daikon\Interop\RuntimeException;
 use ReflectionClass;
-use RuntimeException;
 
 trait AnnotatesAggregate
 {

@@ -1,7 +1,14 @@
 # Event Sourcing
 
-[![Build Status](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/badges/build.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/?branch=master)
-[![Code Quality](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/?branch=master)
+![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/daikon/event-sourcing)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/daikon-cqrs/event-sourcing)
+![Packagist License](https://img.shields.io/packagist/l/daikon/event-sourcing)
 
-Immutable CQRS and Event-Sourcing library for PHP7.
+[![Build Status](https://travis-ci.com/daikon-cqrs/event-sourcing.svg?branch=master)](https://travis-ci.com/daikon-cqrs/event-sourcing)
+[![Code Coverage](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/?branch=master)
+[![Type Coverage](https://shepherd.dev/github/daikon-cqrs/event-sourcing/coverage.svg)](https://shepherd.dev/github/daikon-cqrs/event-sourcing)
+[![Libraries.io dependency status](https://img.shields.io/librariesio/github/daikon-cqrs/event-sourcing)](https://libraries.io/github/daikon-cqrs/event-sourcing)
+[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/daikon-cqrs/event-sourcing/master)](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/?branch=master)
+[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/daikon-cqrs/event-sourcing)](https://codeclimate.com/github/daikon-cqrs/event-sourcing/maintainability)
+
+Immutable CQRS/ES library for Daikon-CQRS projects.

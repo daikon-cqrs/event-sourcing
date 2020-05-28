@@ -22,8 +22,8 @@ use Daikon\EventSourcing\EventStore\Stream\Stream;
 use Daikon\EventSourcing\EventStore\Stream\StreamInterface;
 use Daikon\EventSourcing\EventStore\Stream\StreamMap;
 use Daikon\EventSourcing\EventStore\Stream\StreamProcessorInterface;
+use Daikon\Interop\RuntimeException;
 use Daikon\Metadata\MetadataInterface;
-use RuntimeException;
 
 final class UnitOfWork implements UnitOfWorkInterface
 {

@@ -12,12 +12,12 @@ use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\EventStore\UnitOfWorkInterface;
+use Daikon\Interop\RuntimeException;
 use Daikon\MessageBus\Channel\Subscription\MessageHandler\MessageHandlerInterface;
 use Daikon\MessageBus\EnvelopeInterface;
 use Daikon\MessageBus\MessageBusInterface;
 use Daikon\Metadata\MetadataInterface;
 use ReflectionClass;
-use RuntimeException;
 
 abstract class CommandHandler implements MessageHandlerInterface
 {

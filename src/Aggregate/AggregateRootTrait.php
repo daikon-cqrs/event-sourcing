@@ -12,8 +12,8 @@ use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
+use Daikon\Interop\RuntimeException;
 use ReflectionClass;
-use RuntimeException;
 
 trait AggregateRootTrait
 {

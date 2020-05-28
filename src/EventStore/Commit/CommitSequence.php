@@ -9,8 +9,8 @@
 namespace Daikon\EventSourcing\EventStore\Commit;
 
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
+use Daikon\Interop\RuntimeException;
 use Ds\Vector;
-use RuntimeException;
 
 final class CommitSequence implements CommitSequenceInterface
 {

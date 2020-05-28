@@ -1,7 +1,7 @@
 {
     "name": "daikon/event-sourcing",
     "type": "library",
-    "description": "Immutable CQRS and Event-Sourcing library for PHP7.",
+    "description": "Immutable CQRS/ES library for Daikon-CQRS projects.",
     "keywords": [ "cqrs", "event-sourcing", "immutable" ],
     "homepage": "https://github.com/daikon-cqrs/event-sourcing",
     "license": "MPL-2.0",
@@ -16,8 +16,8 @@
         "daikon/value-object": "master@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0",
-        "sebastian/phpcpd": "^4.1",
+        "phpunit/phpunit": "^9.0",
+        "sebastian/phpcpd": "^5.0",
         "squizlabs/php_codesniffer": "^3.3",
         "vimeo/psalm": "^3.0"
     },
@@ -38,7 +38,7 @@
         "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' src tests",
         "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 src tests",
         "copy-paste-detector": "phpcpd src tests || true",
-        "psalm": "psalm --show-info=true",
+        "psalm": "psalm --shepherd --show-info=true",
         "sniff": [
             "@code-sniffer",
             "@copy-paste-detector",

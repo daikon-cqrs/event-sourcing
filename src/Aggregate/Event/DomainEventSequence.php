@@ -9,9 +9,9 @@
 namespace Daikon\EventSourcing\Aggregate\Event;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\Interop\RuntimeException;
 use Ds\Vector;
 use InvalidArgumentException;
-use RuntimeException;
 
 final class DomainEventSequence implements DomainEventSequenceInterface
 {
