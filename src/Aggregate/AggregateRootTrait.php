@@ -8,10 +8,10 @@
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
+use Daikon\Interop\Assertion;
 use Daikon\Interop\RuntimeException;
 use ReflectionClass;
 
@@ -81,7 +81,7 @@ trait AggregateRootTrait
     private function assertExpectedRevision(DomainEventInterface $event, AggregateRevision $expectedRevision): void
     {
         Assertion::true($expectedRevision->equals($event->getAggregateRevision()), sprintf(
-            'Given event revision %s does not match expected AR revision at %s',
+            'Given event revision %s does not match expected AR revision at %s.',
             (string)$event->getAggregateRevision(),
             (string)$expectedRevision
         ));
@@ -90,7 +90,7 @@ trait AggregateRootTrait
     private function assertExpectedIdentifier(DomainEventInterface $event, AggregateIdInterface $expectedId): void
     {
         Assertion::true($expectedId->equals($event->getAggregateId()), sprintf(
-            'Given event identifier %s does not match expected AR identifier at %s',
+            'Given event identifier %s does not match expected AR identifier at %s.',
             (string)$event->getAggregateId(),
             (string)$expectedId
         ));
@@ -100,10 +100,12 @@ trait AggregateRootTrait
     {
         $handlerName = preg_replace('/Event$/', '', (new ReflectionClass($event))->getShortName());
         $handlerMethod = 'when'.ucfirst($handlerName);
-        $handler = [ $this, $handlerMethod ];
+        $handler = [$this, $handlerMethod];
         if (!is_callable($handler)) {
-            throw new RuntimeException(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
+            throw new RuntimeException(
+                sprintf("Handler '%s' is not callable on '%s'.", $handlerMethod, static::class)
+            );
         }
-        call_user_func($handler, $event);
+        $handler($event);
     }
 }

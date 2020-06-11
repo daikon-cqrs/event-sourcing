@@ -8,7 +8,6 @@
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
-use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
@@ -17,6 +16,7 @@ use Daikon\EventSourcing\EventStore\Commit\Commit;
 use Daikon\EventSourcing\EventStore\Commit\CommitInterface;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequence;
 use Daikon\EventSourcing\EventStore\Commit\CommitSequenceInterface;
+use Daikon\Interop\Assertion;
 use Daikon\Metadata\MetadataInterface;
 use Ds\Vector;
 
@@ -72,8 +72,7 @@ final class Stream implements StreamInterface
     public function appendEvents(DomainEventSequenceInterface $eventLog, MetadataInterface $metadata): self
     {
         return $this->appendCommit(
-            call_user_func(
-                [$this->commitImplementor, 'make'],
+            ([$this->commitImplementor, 'make'])(
                 $this->aggregateId,
                 $this->getHeadSequence()->increment(),
                 $eventLog,

@@ -40,9 +40,11 @@ abstract class CommandHandler implements MessageHandlerInterface
         $handlerMethod = 'handle'.ucfirst($handlerName);
         $handler = [$this, $handlerMethod];
         if (!is_callable($handler)) {
-            throw new RuntimeException(sprintf('Handler "%s" is not callable on '.static::class, $handlerMethod));
+            throw new RuntimeException(
+                sprintf("Handler '%s' is not callable on '%s'.", $handlerMethod, static::class)
+            );
         }
-        $this->commit(...call_user_func($handler, $commandMessage, $envelope->getMetadata()));
+        $this->commit(...$handler($commandMessage, $envelope->getMetadata()));
     }
 
     protected function commit(AggregateRootInterface $aggregateRoot, MetadataInterface $metadata): void

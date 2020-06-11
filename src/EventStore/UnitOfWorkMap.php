@@ -8,13 +8,10 @@
 
 namespace Daikon\EventSourcing\EventStore;
 
-use Daikon\DataStructure\TypedMapInterface;
-use Daikon\DataStructure\TypedMapTrait;
+use Daikon\DataStructure\TypedMap;
 
-final class UnitOfWorkMap implements TypedMapInterface
+final class UnitOfWorkMap extends TypedMap
 {
-    use TypedMapTrait;
-
     public function __construct(iterable $unitsOfWork = [])
     {
         $this->init($unitsOfWork, [UnitOfWorkInterface::class]);

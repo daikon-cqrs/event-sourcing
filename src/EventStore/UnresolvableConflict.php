@@ -10,9 +10,9 @@ namespace Daikon\EventSourcing\EventStore;
 
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
-use Exception;
+use Daikon\Interop\RuntimeException;
 
-final class UnresolvableConflict extends Exception
+final class UnresolvableConflict extends RuntimeException
 {
     private AggregateIdInterface $aggregateId;
 
@@ -22,7 +22,7 @@ final class UnresolvableConflict extends Exception
     {
         $this->aggregateId = $aggregateId;
         $this->conflictingEvents = $conflictingEvents;
-        parent::__construct('Unable to resolve conflict for stream: ' . $this->aggregateId);
+        parent::__construct('Unable to resolve conflict for stream '.$this->aggregateId);
     }
 
     public function getAggregateId(): AggregateIdInterface

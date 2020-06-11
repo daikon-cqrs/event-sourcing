@@ -9,9 +9,10 @@
 namespace Daikon\EventSourcing\Aggregate;
 
 use Assert\Assertion;
+use Daikon\Interop\MakeEmptyInterface;
 use Daikon\ValueObject\ValueObjectInterface;
 
-final class AggregateRevision implements ValueObjectInterface
+final class AggregateRevision implements MakeEmptyInterface, ValueObjectInterface
 {
     private const INITIAL = 1;
 

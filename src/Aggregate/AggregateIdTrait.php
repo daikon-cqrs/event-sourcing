@@ -8,7 +8,7 @@
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Assert\Assertion;
+use Daikon\Interop\Assertion;
 
 trait AggregateIdTrait
 {
@@ -17,7 +17,9 @@ trait AggregateIdTrait
     /** @param string $id */
     public static function fromNative($id): self
     {
-        Assertion::regex($id, static::PATTERN);
+        if (defined('static::PATTERN')) {
+            Assertion::regex($id, static::PATTERN);
+        }
         return new static($id);
     }
 
@@ -26,7 +28,7 @@ trait AggregateIdTrait
         return $this->id;
     }
 
-    /** @param self $comparator */
+    /** @param static $comparator */
     public function equals($comparator): bool
     {
         Assertion::isInstanceOf($comparator, static::class);

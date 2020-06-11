@@ -11,13 +11,17 @@ namespace Daikon\EventSourcing\EventStore\Commit;
 use Countable;
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
 use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\MakeEmptyInterface;
 use Daikon\Interop\ToNativeInterface;
 use IteratorAggregate;
 
-interface CommitSequenceInterface extends IteratorAggregate, Countable, FromNativeInterface, ToNativeInterface
+interface CommitSequenceInterface extends
+    IteratorAggregate,
+    Countable,
+    MakeEmptyInterface,
+    FromNativeInterface,
+    ToNativeInterface
 {
-    public static function makeEmpty(): self;
-
     public function push(CommitInterface $commit): self;
 
     public function getTail(): CommitInterface;
@@ -29,8 +33,6 @@ interface CommitSequenceInterface extends IteratorAggregate, Countable, FromNati
     public function has(Sequence $Sequence): bool;
 
     public function getSlice(Sequence $start, Sequence $end): self;
-
-    public function isEmpty(): bool;
 
     public function revisionOf(CommitInterface $commit): Sequence;
 }

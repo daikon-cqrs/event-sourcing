@@ -8,13 +8,10 @@
 
 namespace Daikon\EventSourcing\EventStore\Storage;
 
-use Daikon\DataStructure\TypedMapInterface;
-use Daikon\DataStructure\TypedMapTrait;
+use Daikon\DataStructure\TypedMap;
 
-final class StreamStorageMap implements TypedMapInterface
+final class StreamStorageMap extends TypedMap
 {
-    use TypedMapTrait;
-
     public function __construct(iterable $streamStores = [])
     {
         $this->init($streamStores, [StreamStorageInterface::class]);

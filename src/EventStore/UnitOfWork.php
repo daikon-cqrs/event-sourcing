@@ -90,13 +90,12 @@ final class UnitOfWork implements UnitOfWorkInterface
     {
         $stream = $this->streamStorage->load($aggregateId, $revision);
         if ($stream->isEmpty()) {
-            throw new RuntimeException('Checking out empty streams is not supported');
+            throw new RuntimeException('Checking out empty streams is not supported.');
         }
         /** @var AggregateRootInterface $aggregateRoot */
-        $aggregateRoot = call_user_func(
-            [$this->aggregateRootType, 'reconstituteFromHistory'],
+        $aggregateRoot = ([$this->aggregateRootType, 'reconstituteFromHistory'])(
             $aggregateId,
-            $this->prepareHistory(
+            $this->buildHistory(
                 $this->streamProcessor ? $this->streamProcessor->process($stream) : $stream,
                 $revision
             )
@@ -113,15 +112,15 @@ final class UnitOfWork implements UnitOfWorkInterface
             /** @var StreamInterface $stream */
             $stream = $this->trackedCommitStreams->get((string)$aggregateId);
         } elseif ($tailRevision->isInitial()) {
-            $stream = call_user_func([$this->streamImplementor, 'fromAggregateId'], $aggregateId);
+            $stream = ([$this->streamImplementor, 'fromAggregateId'])($aggregateId);
             $this->trackedCommitStreams = $this->trackedCommitStreams->register($stream);
         } else {
-            throw new RuntimeException('AggregateRoot must be checked out before it may be committed');
+            throw new RuntimeException('AggregateRoot must be checked out before it can be committed.');
         }
         return $stream;
     }
 
-    private function prepareHistory(
+    private function buildHistory(
         StreamInterface $stream,
         AggregateRevision $targetRevision
     ): DomainEventSequenceInterface {
@@ -132,7 +131,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         }
         if (!$targetRevision->isEmpty() && !$history->getHeadRevision()->equals($targetRevision)) {
             throw new RuntimeException(sprintf(
-                'AggregateRoot cannot be reconstituted to revision %s',
+                'AggregateRoot cannot be reconstituted to revision %s.',
                 (string)$targetRevision
             ));
         }
@@ -150,7 +149,7 @@ final class UnitOfWork implements UnitOfWorkInterface
         foreach ($previousCommits as $previousCommit) {
             /** @var DomainEventInterface $previousEvent */
             foreach ($previousCommit->getEventLog() as $previousEvent) {
-                /** @var DomainEventInterface $previousEvent */
+                /** @var DomainEventInterface $trackedEvent */
                 foreach ($aggregateRoot->getTrackedEvents() as $trackedEvent) {
                     //All events from the first conflict onwards are considered to be in conflict
                     if (!$conflictingEvents->isEmpty() || $trackedEvent->conflictsWith($previousEvent)) {

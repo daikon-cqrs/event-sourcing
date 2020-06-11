@@ -11,13 +11,17 @@ namespace Daikon\EventSourcing\Aggregate\Event;
 use Countable;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\Interop\FromNativeInterface;
+use Daikon\Interop\MakeEmptyInterface;
 use Daikon\Interop\ToNativeInterface;
 use IteratorAggregate;
 
-interface DomainEventSequenceInterface extends IteratorAggregate, Countable, FromNativeInterface, ToNativeInterface
+interface DomainEventSequenceInterface extends
+    IteratorAggregate,
+    Countable,
+    MakeEmptyInterface,
+    FromNativeInterface,
+    ToNativeInterface
 {
-    public static function makeEmpty(): self;
-
     public function push(DomainEventInterface $event): self;
 
     public function append(DomainEventSequenceInterface $events): self;
@@ -31,8 +35,6 @@ interface DomainEventSequenceInterface extends IteratorAggregate, Countable, Fro
     public function getTail(): DomainEventInterface;
 
     public function getHead(): DomainEventInterface;
-
-    public function isEmpty(): bool;
 
     /** @return int|bool */
     public function indexOf(DomainEventInterface $event);

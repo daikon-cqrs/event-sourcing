@@ -20,6 +20,7 @@ trait DomainEventTrait
         return $this->{static::getAnnotatedRevision()};
     }
 
+    /** @return static */
     public function withAggregateRevision(AggregateRevision $aggregateRevision): self
     {
         $copy = clone $this;

@@ -12,5 +12,4 @@ use Daikon\ValueObject\ValueObjectInterface;
 
 interface AggregateIdInterface extends ValueObjectInterface
 {
-    public function __toString(): string;
 }

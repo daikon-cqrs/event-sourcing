@@ -8,7 +8,7 @@
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Daikon\Interop\RuntimeException;
+use Daikon\Interop\InvalidArgumentException;
 use ReflectionClass;
 
 trait AnnotatesAggregate
@@ -41,6 +41,6 @@ trait AnnotatesAggregate
             }
         }
 
-        throw new RuntimeException("Missing @$key annotation on ".static::class);
+        throw new InvalidArgumentException(sprintf("Missing @%s annotation on '%s'.", $key, static::class));
     }
 }

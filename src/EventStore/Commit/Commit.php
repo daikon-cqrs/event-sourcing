@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace Daikon\EventSourcing\EventStore\Commit;
 
-use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\AggregateId;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequence;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 use Daikon\EventSourcing\EventStore\Stream\Sequence;
+use Daikon\Interop\Assertion;
 use Daikon\Metadata\Metadata;
 use Daikon\Metadata\MetadataInterface;
 use DateTimeImmutable;

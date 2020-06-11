@@ -43,7 +43,7 @@ final class CommitSequence implements CommitSequenceInterface
             $nextRevision = $this->getHead()->getHeadRevision()->increment();
             if (!$nextRevision->equals($commit->getTailRevision())) {
                 throw new RuntimeException(sprintf(
-                    'Trying to add invalid revision %s to event-sequence, expected revision is %s',
+                    'Trying to add invalid revision %s to event-sequence, expected revision is %s.',
                     (string)$commit->getHeadRevision(),
                     (string)$nextRevision
                 ));
@@ -78,8 +78,7 @@ final class CommitSequence implements CommitSequenceInterface
     public function has(Sequence $sequence): bool
     {
         $offset = $sequence->toNative() - 1;
-        /** @psalm-suppress UndefinedMethod */
-        return isset($this->compositeVector[$offset]);
+        return isset($this->compositeVector->{$offset});
     }
 
     public function get(Sequence $sequence): CommitInterface

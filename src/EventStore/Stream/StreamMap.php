@@ -8,15 +8,13 @@
 
 namespace Daikon\EventSourcing\EventStore\Stream;
 
-use Daikon\DataStructure\TypedMapInterface;
-use Daikon\DataStructure\TypedMapTrait;
+use Daikon\DataStructure\TypedMap;
 use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
+use Daikon\Interop\MakeEmptyInterface;
 use Daikon\Interop\ToNativeInterface;
 
-final class StreamMap implements TypedMapInterface, ToNativeInterface
+final class StreamMap extends TypedMap implements MakeEmptyInterface, ToNativeInterface
 {
-    use TypedMapTrait;
-
     public function __construct(iterable $streams = [])
     {
         $this->init($streams, [StreamInterface::class]);

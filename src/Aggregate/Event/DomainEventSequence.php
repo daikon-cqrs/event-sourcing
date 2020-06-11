@@ -9,9 +9,9 @@
 namespace Daikon\EventSourcing\Aggregate\Event;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\Interop\Assertion;
 use Daikon\Interop\RuntimeException;
 use Ds\Vector;
-use InvalidArgumentException;
 
 final class DomainEventSequence implements DomainEventSequenceInterface
 {
@@ -20,10 +20,10 @@ final class DomainEventSequence implements DomainEventSequenceInterface
     /** @param array $events */
     public static function fromNative($events): self
     {
-        return new self(array_map(function (array $state): DomainEventInterface {
-            $eventFqcn = self::resolveEventFqcn($state);
-            return call_user_func([$eventFqcn, 'fromNative'], $state);
-        }, $events));
+        return new self(array_map(
+            fn(array $state): DomainEventInterface => ([self::resolveEventFqcn($state), 'fromNative'])($state),
+            $events
+        ));
     }
 
     public static function makeEmpty(): self
@@ -43,7 +43,7 @@ final class DomainEventSequence implements DomainEventSequenceInterface
         $expectedRevision = $this->getHeadRevision()->increment();
         if (!$this->isEmpty() && !$expectedRevision->equals($event->getAggregateRevision())) {
             throw new RuntimeException(sprintf(
-                'Trying to add invalid revision %s to event-sequence, expected revision is %s',
+                'Trying to add invalid revision %s to event-sequence, expected revision is %s.',
                 (string)$event->getAggregateRevision(),
                 (string)$expectedRevision
             ));
@@ -131,13 +131,9 @@ final class DomainEventSequence implements DomainEventSequenceInterface
 
     private static function resolveEventFqcn(array $eventState): string
     {
-        if (!isset($eventState['@type'])) {
-            throw new InvalidArgumentException("Missing expected key '@type' within given state array.");
-        }
+        Assertion::keyIsset($eventState, '@type', "Missing expected key '@type' within given state array.");
         $eventFqcn = $eventState['@type'];
-        if (!class_exists($eventFqcn)) {
-            throw new InvalidArgumentException("Cannot find event class '$eventFqcn' given within state array.");
-        }
+        Assertion::classExists($eventFqcn, "Cannot find event class '$eventFqcn' given within state array.");
         return $eventFqcn;
     }
 
