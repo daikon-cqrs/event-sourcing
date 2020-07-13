@@ -25,10 +25,10 @@ abstract class AggregateRoot implements AggregateRootInterface
 
     /** @return static */
     public static function reconstituteFromHistory(
-        AggregateIdInterface $aggregateId,
+        AggregateIdInterface $identifier,
         DomainEventSequenceInterface $history
     ): self {
-        $aggregateRoot = new static($aggregateId);
+        $aggregateRoot = new static($identifier);
         foreach ($history as $historicalEvent) {
             $aggregateRoot = $aggregateRoot->reconstitute($historicalEvent);
         }
@@ -50,9 +50,9 @@ abstract class AggregateRoot implements AggregateRootInterface
         return $this->trackedEvents;
     }
 
-    protected function __construct(AggregateIdInterface $aggregateId)
+    protected function __construct(AggregateIdInterface $identifier)
     {
-        $this->identifier = $aggregateId;
+        $this->identifier = $identifier;
         $this->revision = AggregateRevision::makeEmpty();
         $this->trackedEvents = DomainEventSequence::makeEmpty();
     }

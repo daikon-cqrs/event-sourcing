@@ -38,7 +38,7 @@ trait AggregateAnnotated
             if (!($docComment = $curClass->getDocComment())) {
                 continue;
             }
-            preg_match("#@$key\((?<$key>\w+)#", $docComment, $matches);
+            preg_match("/@$key\((?<$key>\w+)/", $docComment, $matches);
             if (isset($matches[$key])) {
                 return trim($matches[$key]);
             }

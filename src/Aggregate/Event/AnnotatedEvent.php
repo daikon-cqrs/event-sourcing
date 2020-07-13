@@ -25,7 +25,6 @@ trait AnnotatedEvent
     /** @return static */
     public function withAggregateRevision(AggregateRevision $aggregateRevision): self
     {
-        /** @var DomainEventInterface $copy */
         $copy = clone $this;
         $copy->{static::getAnnotatedRevision()} = $aggregateRevision;
         return $copy;

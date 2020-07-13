@@ -13,7 +13,7 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
 interface AggregateRootInterface
 {
     public static function reconstituteFromHistory(
-        AggregateIdInterface $aggregateId,
+        AggregateIdInterface $identifier,
         DomainEventSequenceInterface $history
     ): self;
 

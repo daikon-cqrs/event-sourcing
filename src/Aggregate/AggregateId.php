@@ -12,23 +12,23 @@ use Daikon\Interop\Assertion;
 
 class AggregateId implements AggregateIdInterface
 {
-    public const PATTERN = '/^.*$/';
+    public const PATTERN = '/^\S$|\S.*\S$/';
 
-    private string $id;
+    private string $identifier;
 
     /**
-     * @param string $id
+     * @param string $identifier
      * @return static
      */
-    public static function fromNative($id): self
+    public static function fromNative($identifier): self
     {
-        Assertion::regex($id, static::PATTERN, 'Invalid id format.');
-        return new static($id);
+        Assertion::regex($identifier, static::PATTERN, 'Invalid id format.');
+        return new static($identifier);
     }
 
     public function toNative(): string
     {
-        return $this->id;
+        return $this->identifier;
     }
 
     /** @param static $comparator */
@@ -40,11 +40,11 @@ class AggregateId implements AggregateIdInterface
 
     public function __toString(): string
     {
-        return $this->id;
+        return $this->identifier;
     }
 
-    private function __construct(string $id)
+    private function __construct(string $identifier)
     {
-        $this->id = $id;
+        $this->identifier = $identifier;
     }
 }

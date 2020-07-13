@@ -213,12 +213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/message-bus.git",
-                "reference": "43a47ba5292424cdcc189b87533cd056cb495bd0"
+                "reference": "54f73ddb754336379ae5dfae49a3233ffabd9413"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/43a47ba5292424cdcc189b87533cd056cb495bd0",
-                "reference": "43a47ba5292424cdcc189b87533cd056cb495bd0",
+                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/54f73ddb754336379ae5dfae49a3233ffabd9413",
+                "reference": "54f73ddb754336379ae5dfae49a3233ffabd9413",
                 "shasum": ""
             },
             "require": {
@@ -250,7 +250,7 @@
                 "message-bus",
                 "messaging"
             ],
-            "time": "2020-07-13T18:32:33+00:00"
+            "time": "2020-07-13T21:54:38+00:00"
         },
         {
             "name": "daikon/metadata",
