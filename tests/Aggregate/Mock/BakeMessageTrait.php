@@ -9,19 +9,16 @@
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\Interop\FromToNativeTrait;
 use Daikon\ValueObject\TextList;
 
 /**
  * @codeCoverageIgnore
- * @id(pizzaId, Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaId::fromNative)
- * @rev(revision, Daikon\EventSourcing\Aggregate\AggregateRevision::fromNative)
+ * @id(pizzaId, Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaId)
+ * @rev(revision, Daikon\EventSourcing\Aggregate\AggregateRevision)
  * @map(ingredients, Daikon\ValueObject\TextList::fromNative)
  */
 trait BakeMessageTrait
 {
-    use FromToNativeTrait;
-
     private PizzaId $pizzaId;
 
     private AggregateRevision $revision;

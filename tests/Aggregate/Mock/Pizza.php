@@ -8,23 +8,19 @@
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
-use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
-use Daikon\EventSourcing\Aggregate\AggregateRootTrait;
+use Daikon\EventSourcing\Aggregate\AggregateRoot;
 use Daikon\ValueObject\TextList;
 
 /**
  * @codeCoverageIgnore
  */
-final class Pizza implements AggregateRootInterface
+final class Pizza extends AggregateRoot
 {
-    use AggregateRootTrait;
-
     private TextList $ingredients;
 
     public static function bake(PizzaWasBaked $pizzaWasBaked): self
     {
-        return (new self($pizzaWasBaked->getAggregateId()))
-            ->reflectThat($pizzaWasBaked);
+        return (new self($pizzaWasBaked->getAggregateId()))->reflectThat($pizzaWasBaked);
     }
 
     public function getIngredients(): TextList

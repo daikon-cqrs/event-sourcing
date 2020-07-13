@@ -9,7 +9,7 @@
 namespace Daikon\Tests\EventSourcing;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use InvalidArgumentException;
+use Daikon\Interop\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 final class AggregateRevisionTest extends TestCase
@@ -99,5 +99,5 @@ final class AggregateRevisionTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         AggregateRevision::fromNative('what');
-    } // @codeCoverageIgnore
+    }
 }

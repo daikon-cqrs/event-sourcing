@@ -8,11 +8,14 @@
 
 namespace Daikon\EventSourcing\Aggregate;
 
+use Daikon\Interop\InheritanceReader;
 use Daikon\Interop\InvalidArgumentException;
 use ReflectionClass;
 
-trait AnnotatesAggregate
+trait AggregateAnnotated
 {
+    use InheritanceReader;
+
     public function getAggregateId(): AggregateIdInterface
     {
         return $this->{static::getAnnotatedId()};
@@ -31,7 +34,7 @@ trait AnnotatesAggregate
     private static function getAnnotation(string $key): string
     {
         $classReflection = new ReflectionClass(static::class);
-        foreach (static::getInheritanceTree($classReflection, true) as $curClass) {
+        foreach (static::getInheritance($classReflection, true) as $curClass) {
             if (!($docComment = $curClass->getDocComment())) {
                 continue;
             }

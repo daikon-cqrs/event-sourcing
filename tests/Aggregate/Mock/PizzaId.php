@@ -8,12 +8,12 @@
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
-use Daikon\EventSourcing\Aggregate\AggregateIdInterface;
-use Daikon\EventSourcing\Aggregate\AggregateIdTrait;
+use Daikon\EventSourcing\Aggregate\AggregateId;
 
-final class PizzaId implements AggregateIdInterface
+/**
+ * @codeCoverageIgnore
+ */
+final class PizzaId extends AggregateId
 {
-    use AggregateIdTrait;
-
-    const PATTERN = '#^pizza-.+$#';
+    public const PATTERN = '/^pizza-.+$/';
 }

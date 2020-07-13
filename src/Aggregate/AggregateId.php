@@ -8,13 +8,43 @@
 
 namespace Daikon\EventSourcing\Aggregate;
 
-final class AggregateId implements AggregateIdInterface
-{
-    use AggregateIdTrait;
+use Daikon\Interop\Assertion;
 
-    /** @param string $id */
+class AggregateId implements AggregateIdInterface
+{
+    public const PATTERN = '/^.*$/';
+
+    private string $id;
+
+    /**
+     * @param string $id
+     * @return static
+     */
     public static function fromNative($id): self
     {
-        return new self($id);
+        Assertion::regex($id, static::PATTERN, 'Invalid id format.');
+        return new static($id);
+    }
+
+    public function toNative(): string
+    {
+        return $this->id;
+    }
+
+    /** @param static $comparator */
+    public function equals($comparator): bool
+    {
+        Assertion::isInstanceOf($comparator, static::class);
+        return $this->toNative() === $comparator->toNative();
+    }
+
+    public function __toString(): string
+    {
+        return $this->id;
+    }
+
+    private function __construct(string $id)
+    {
+        $this->id = $id;
     }
 }

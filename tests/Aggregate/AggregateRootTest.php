@@ -10,11 +10,11 @@ namespace Daikon\Tests\EventSourcing;
 
 use ArrayIterator;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventSequenceInterface;
+use Daikon\Interop\InvalidArgumentException;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\BakePizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\Pizza;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaId;
 use Daikon\Tests\EventSourcing\Aggregate\Mock\PizzaWasBaked;
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 final class AggregateRootTest extends TestCase
@@ -51,6 +51,7 @@ final class AggregateRootTest extends TestCase
             ->method('getIterator')
             ->willReturn(new ArrayIterator([$pizzaWasBaked]));
 
+        /** @var DomainEventSequenceInterface $domainEventSequenceMock */
         $pizza = Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
 
         $this->assertEquals($pizzaId, $pizza->getIdentifier());
@@ -61,8 +62,8 @@ final class AggregateRootTest extends TestCase
 
     public function testReconstituteWithUnexpectedRevision(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Given event revision 2 does not match expected AR revision at 1');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Given event revision '2' does not match expected AR revision at '1'.");
 
         $pizzaId = PizzaId::fromNative('pizza-42-6-23');
         $pizzaWasBaked = PizzaWasBaked::fromNative([
@@ -77,14 +78,15 @@ final class AggregateRootTest extends TestCase
             ->method('getIterator')
             ->willReturn(new ArrayIterator([$pizzaWasBaked]));
 
+        /** @var DomainEventSequenceInterface $domainEventSequenceMock */
         Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
-    } // @codeCoverageIgnore
+    }
 
     public function testReconstituteWithUnexpectedId(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Given event identifier pizza-23-22-5 does not match expected AR identifier at pizza-42-6-23'
+            "Given event identifier 'pizza-23-22-5' does not match expected AR identifier at 'pizza-42-6-23'."
         );
 
         $pizzaId = PizzaId::fromNative('pizza-42-6-23');
@@ -100,6 +102,7 @@ final class AggregateRootTest extends TestCase
             ->method('getIterator')
             ->willReturn(new ArrayIterator([$pizzaWasBaked]));
 
+        /** @var DomainEventSequenceInterface $domainEventSequenceMock */
         Pizza::reconstituteFromHistory($pizzaId, $domainEventSequenceMock);
-    } // @codeCoverageIgnore
+    }
 }

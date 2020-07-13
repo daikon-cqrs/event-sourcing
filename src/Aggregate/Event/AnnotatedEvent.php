@@ -8,12 +8,14 @@
 
 namespace Daikon\EventSourcing\Aggregate\Event;
 
+use Daikon\EventSourcing\Aggregate\AggregateAnnotated;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\EventSourcing\Aggregate\AnnotatesAggregate;
+use Daikon\Interop\FromToNativeTrait;
 
-trait DomainEventTrait
+trait AnnotatedEvent
 {
-    use AnnotatesAggregate;
+    use AggregateAnnotated;
+    use FromToNativeTrait;
 
     public function getAggregateRevision(): AggregateRevision
     {
@@ -23,6 +25,7 @@ trait DomainEventTrait
     /** @return static */
     public function withAggregateRevision(AggregateRevision $aggregateRevision): self
     {
+        /** @var DomainEventInterface $copy */
         $copy = clone $this;
         $copy->{static::getAnnotatedRevision()} = $aggregateRevision;
         return $copy;

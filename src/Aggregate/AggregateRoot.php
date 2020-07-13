@@ -15,7 +15,7 @@ use Daikon\Interop\Assertion;
 use Daikon\Interop\RuntimeException;
 use ReflectionClass;
 
-trait AggregateRootTrait
+abstract class AggregateRoot implements AggregateRootInterface
 {
     private AggregateIdInterface $identifier;
 
@@ -23,6 +23,7 @@ trait AggregateRootTrait
 
     private DomainEventSequenceInterface $trackedEvents;
 
+    /** @return static */
     public static function reconstituteFromHistory(
         AggregateIdInterface $aggregateId,
         DomainEventSequenceInterface $history
@@ -81,7 +82,7 @@ trait AggregateRootTrait
     private function assertExpectedRevision(DomainEventInterface $event, AggregateRevision $expectedRevision): void
     {
         Assertion::true($expectedRevision->equals($event->getAggregateRevision()), sprintf(
-            'Given event revision %s does not match expected AR revision at %s.',
+            "Given event revision '%s' does not match expected AR revision at '%s'.",
             (string)$event->getAggregateRevision(),
             (string)$expectedRevision
         ));
@@ -90,7 +91,7 @@ trait AggregateRootTrait
     private function assertExpectedIdentifier(DomainEventInterface $event, AggregateIdInterface $expectedId): void
     {
         Assertion::true($expectedId->equals($event->getAggregateId()), sprintf(
-            'Given event identifier %s does not match expected AR identifier at %s.',
+            "Given event identifier '%s' does not match expected AR identifier at '%s'.",
             (string)$event->getAggregateId(),
             (string)$expectedId
         ));
@@ -98,7 +99,7 @@ trait AggregateRootTrait
 
     private function invokeEventHandler(DomainEventInterface $event): void
     {
-        $handlerName = preg_replace('/Event$/', '', (new ReflectionClass($event))->getShortName());
+        $handlerName = (new ReflectionClass($event))->getShortName();
         $handlerMethod = 'when'.ucfirst($handlerName);
         $handler = [$this, $handlerMethod];
         if (!is_callable($handler)) {

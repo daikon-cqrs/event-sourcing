@@ -8,7 +8,7 @@
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Assert\Assertion;
+use Daikon\Interop\Assertion;
 use Daikon\Interop\MakeEmptyInterface;
 use Daikon\ValueObject\ValueObjectInterface;
 
