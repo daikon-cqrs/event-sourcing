@@ -126,12 +126,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/data-structure.git",
-                "reference": "5c1ecd04f5c764d6711472008e79a33a3797f94d"
+                "reference": "eb8e1b5760cbcc38db990f5710579e3a0209e7a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/5c1ecd04f5c764d6711472008e79a33a3797f94d",
-                "reference": "5c1ecd04f5c764d6711472008e79a33a3797f94d",
+                "url": "https://api.github.com/repos/daikon-cqrs/data-structure/zipball/eb8e1b5760cbcc38db990f5710579e3a0209e7a1",
+                "reference": "eb8e1b5760cbcc38db990f5710579e3a0209e7a1",
                 "shasum": ""
             },
             "require": {
@@ -167,7 +167,7 @@
                 "map",
                 "vector"
             ],
-            "time": "2020-07-13T18:07:21+00:00"
+            "time": "2020-07-14T21:01:37+00:00"
         },
         {
             "name": "daikon/interop",
@@ -175,12 +175,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/interop.git",
-                "reference": "66a85ad9b93010134206ee77ee52682348470ef4"
+                "reference": "99a21b736d28f79071d80fff6540836373b5b6b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/66a85ad9b93010134206ee77ee52682348470ef4",
-                "reference": "66a85ad9b93010134206ee77ee52682348470ef4",
+                "url": "https://api.github.com/repos/daikon-cqrs/interop/zipball/99a21b736d28f79071d80fff6540836373b5b6b7",
+                "reference": "99a21b736d28f79071d80fff6540836373b5b6b7",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
             ],
             "description": "Interoperability code used across Daikon-CQRS components.",
             "homepage": "https://github.com/daikon-cqrs/interop",
-            "time": "2020-07-13T20:13:39+00:00"
+            "time": "2020-07-14T20:10:48+00:00"
         },
         {
             "name": "daikon/message-bus",
@@ -213,12 +213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/message-bus.git",
-                "reference": "54f73ddb754336379ae5dfae49a3233ffabd9413"
+                "reference": "b6b36bbdddf53757ac527ede21d61157457ca0a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/54f73ddb754336379ae5dfae49a3233ffabd9413",
-                "reference": "54f73ddb754336379ae5dfae49a3233ffabd9413",
+                "url": "https://api.github.com/repos/daikon-cqrs/message-bus/zipball/b6b36bbdddf53757ac527ede21d61157457ca0a7",
+                "reference": "b6b36bbdddf53757ac527ede21d61157457ca0a7",
                 "shasum": ""
             },
             "require": {
@@ -250,7 +250,7 @@
                 "message-bus",
                 "messaging"
             ],
-            "time": "2020-07-13T21:54:38+00:00"
+            "time": "2020-07-14T21:12:36+00:00"
         },
         {
             "name": "daikon/metadata",
@@ -258,12 +258,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/metadata.git",
-                "reference": "806ad9f9f8b072960daac6f1704d747fef13ddbd"
+                "reference": "bc19dcb8c77fbf31a441eaf6c69d267213de48e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/metadata/zipball/806ad9f9f8b072960daac6f1704d747fef13ddbd",
-                "reference": "806ad9f9f8b072960daac6f1704d747fef13ddbd",
+                "url": "https://api.github.com/repos/daikon-cqrs/metadata/zipball/bc19dcb8c77fbf31a441eaf6c69d267213de48e2",
+                "reference": "bc19dcb8c77fbf31a441eaf6c69d267213de48e2",
                 "shasum": ""
             },
             "require": {
@@ -293,7 +293,7 @@
                 "enricher",
                 "metadata"
             ],
-            "time": "2020-07-13T18:17:33+00:00"
+            "time": "2020-07-14T21:05:31+00:00"
         },
         {
             "name": "daikon/value-object",
@@ -301,12 +301,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/value-object.git",
-                "reference": "5613e1c54ac37aeb58d13594b7ff6e30202adf78"
+                "reference": "3c05f787a8fd2292a90a9ebb1935cd72ba87cd17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/value-object/zipball/5613e1c54ac37aeb58d13594b7ff6e30202adf78",
-                "reference": "5613e1c54ac37aeb58d13594b7ff6e30202adf78",
+                "url": "https://api.github.com/repos/daikon-cqrs/value-object/zipball/3c05f787a8fd2292a90a9ebb1935cd72ba87cd17",
+                "reference": "3c05f787a8fd2292a90a9ebb1935cd72ba87cd17",
                 "shasum": ""
             },
             "require": {
@@ -336,7 +336,7 @@
             "keywords": [
                 "value-object"
             ],
-            "time": "2020-07-13T18:28:06+00:00"
+            "time": "2020-07-14T20:44:05+00:00"
         },
         {
             "name": "php-ds/php-ds",

@@ -8,7 +8,7 @@
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
-use Daikon\EventSourcing\Aggregate\Event\AnnotatedEvent;
+use Daikon\EventSourcing\Aggregate\Event\AnnotatesDomainEvent;
 use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 
 /**
@@ -16,7 +16,7 @@ use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
  */
 final class PizzaWasBaked implements DomainEventInterface
 {
-    use AnnotatedEvent;
+    use AnnotatesDomainEvent;
     use BakeMessageTrait;
 
     public static function fromCommand(BakePizza $bakePizza): self

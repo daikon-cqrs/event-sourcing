@@ -8,13 +8,11 @@
 
 namespace Daikon\EventSourcing\Aggregate;
 
-use Daikon\Interop\InheritanceReader;
-use Daikon\Interop\InvalidArgumentException;
-use ReflectionClass;
+use Daikon\Interop\SupportsAnnotations;
 
-trait AggregateAnnotated
+trait AnnotatesForAggregate
 {
-    use InheritanceReader;
+    use SupportsAnnotations;
 
     public function getAggregateId(): AggregateIdInterface
     {
@@ -33,17 +31,7 @@ trait AggregateAnnotated
 
     private static function getAnnotation(string $key): string
     {
-        $classReflection = new ReflectionClass(static::class);
-        foreach (static::getInheritance($classReflection, true) as $curClass) {
-            if (!($docComment = $curClass->getDocComment())) {
-                continue;
-            }
-            preg_match("/@$key\((?<$key>\w+)/", $docComment, $matches);
-            if (isset($matches[$key])) {
-                return trim($matches[$key]);
-            }
-        }
-
-        throw new InvalidArgumentException(sprintf("Missing @%s annotation on '%s'.", $key, static::class));
+        //yield first seen
+        return key(static::inferValueFactories($key));
     }
 }

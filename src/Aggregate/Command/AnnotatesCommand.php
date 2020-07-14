@@ -8,14 +8,12 @@
 
 namespace Daikon\EventSourcing\Aggregate\Command;
 
-use Daikon\EventSourcing\Aggregate\AggregateAnnotated;
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
-use Daikon\Interop\FromToNativeTrait;
+use Daikon\EventSourcing\Aggregate\AnnotatesForAggregate;
 
-trait AnnotatedCommand
+trait AnnotatesCommand
 {
-    use AggregateAnnotated;
-    use FromToNativeTrait;
+    use AnnotatesForAggregate;
 
     public function getKnownAggregateRevision(): AggregateRevision
     {

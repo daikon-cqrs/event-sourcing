@@ -9,6 +9,7 @@
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
 use Daikon\EventSourcing\Aggregate\AggregateRevision;
+use Daikon\Interop\FromToNativeTrait;
 use Daikon\ValueObject\TextList;
 
 /**
@@ -19,6 +20,8 @@ use Daikon\ValueObject\TextList;
  */
 trait BakeMessageTrait
 {
+    use FromToNativeTrait;
+
     private PizzaId $pizzaId;
 
     private AggregateRevision $revision;

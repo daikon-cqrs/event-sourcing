@@ -8,7 +8,7 @@
 
 namespace Daikon\Tests\EventSourcing\Aggregate\Mock;
 
-use Daikon\EventSourcing\Aggregate\Command\AnnotatedCommand;
+use Daikon\EventSourcing\Aggregate\Command\AnnotatesCommand;
 use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
 
 /**
@@ -16,6 +16,6 @@ use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
  */
 final class BakePizza implements CommandInterface
 {
-    use AnnotatedCommand;
+    use AnnotatesCommand;
     use BakeMessageTrait;
 }
