@@ -5,7 +5,7 @@
 ![Packagist License](https://img.shields.io/packagist/l/daikon/event-sourcing)
 
 [![Build Status](https://travis-ci.com/daikon-cqrs/event-sourcing.svg?branch=master)](https://travis-ci.com/daikon-cqrs/event-sourcing)
-[![Code Coverage](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/?branch=master)
+[![Code Coverage](https://img.shields.io/codecov/c/github/daikon-cqrs/event-sourcing)](https://codecov.io/gh/daikon-cqrs/event-sourcing)
 [![Type Coverage](https://shepherd.dev/github/daikon-cqrs/event-sourcing/coverage.svg)](https://shepherd.dev/github/daikon-cqrs/event-sourcing)
 [![Libraries.io dependency status](https://img.shields.io/librariesio/github/daikon-cqrs/event-sourcing)](https://libraries.io/github/daikon-cqrs/event-sourcing)
 [![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/daikon-cqrs/event-sourcing/master)](https://scrutinizer-ci.com/g/daikon-cqrs/event-sourcing/?branch=master)

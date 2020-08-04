@@ -27,3 +27,6 @@ script:
 after_script:
   - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
