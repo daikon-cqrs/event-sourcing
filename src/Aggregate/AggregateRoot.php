@@ -50,7 +50,7 @@ abstract class AggregateRoot implements AggregateRootInterface
         return $this->trackedEvents;
     }
 
-    protected function __construct(AggregateIdInterface $identifier)
+    final protected function __construct(AggregateIdInterface $identifier)
     {
         $this->identifier = $identifier;
         $this->revision = AggregateRevision::makeEmpty();

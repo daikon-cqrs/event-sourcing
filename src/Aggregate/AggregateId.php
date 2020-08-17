@@ -43,7 +43,7 @@ class AggregateId implements AggregateIdInterface
         return $this->identifier;
     }
 
-    private function __construct(string $identifier)
+    final protected function __construct(string $identifier)
     {
         $this->identifier = $identifier;
     }
