@@ -20,7 +20,7 @@ interface CommitInterface extends MessageInterface
 {
     public static function make(
         AggregateIdInterface $aggregateId,
-        Sequence $Sequence,
+        Sequence $sequence,
         DomainEventSequenceInterface $eventLog,
         MetadataInterface $metadata
     ): self;

@@ -17,11 +17,11 @@ use ReflectionClass;
 
 abstract class AggregateRoot implements AggregateRootInterface
 {
-    private AggregateIdInterface $identifier;
+    protected AggregateIdInterface $identifier;
 
-    private AggregateRevision $revision;
+    protected AggregateRevision $revision;
 
-    private DomainEventSequenceInterface $trackedEvents;
+    protected DomainEventSequenceInterface $trackedEvents;
 
     /** @return static */
     public static function reconstituteFromHistory(
