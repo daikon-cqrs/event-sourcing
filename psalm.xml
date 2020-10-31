@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <psalm
-    useAssertForType="false"
-    totallyTyped="false"
+    errorLevel="2"
+    reportMixedIssues="false"
     resolveFromConfigFile="true"
     allowStringToStandInForClass="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -34,7 +34,6 @@
         <MissingReturnType errorLevel="error" />
         <MissingPropertyType errorLevel="error" />
         <InvalidDocblock errorLevel="error" />
-        <MisplacedRequiredParam errorLevel="info" />
 
         <ParamNameMismatch errorLevel="info" />
         <PropertyNotSetInConstructor errorLevel="suppress" />
@@ -59,7 +58,8 @@
         <MoreSpecificImplementedParamType errorLevel="info" />
         <MoreSpecificReturnType errorLevel="suppress" />
         <LessSpecificReturnStatement errorLevel="suppress" />
-        <TypeCoercion errorLevel="info" />
+        <ArgumentTypeCoercion errorLevel="info" />
+        <PropertyTypeCoercion errorLevel="info" />
 
         <PossiblyFalseArgument errorLevel="info" />
         <PossiblyFalseIterator errorLevel="info" />
